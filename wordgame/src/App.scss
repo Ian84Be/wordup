@@ -1,0 +1,86 @@
+
+@import './reset.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background:slategray;
+  color:white;
+}
+
+h2 {
+  font-size:2rem;
+  margin:12px;
+}
+
+.container {
+  align-items: center;
+  border:1px solid red;
+  display:flex;
+  // flex-direction: column;
+  width:100%;
+}
+
+.left-side {
+  align-items: center;
+  border:5px solid paleturquoise;
+  // background:orangered;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin:8px;
+}
+
+.myLetters {
+  align-items: center;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width:140px;
+
+  .letter {
+    align-items: center;
+    background: peachpuff;
+    border:1px solid white;
+    color:palevioletred;
+    display:flex;
+    font-size:3rem;
+    justify-content: center;
+    margin:4px;
+    padding:8px;
+    width:60px;
+    height:60px;
+    &:hover {
+      cursor: pointer;
+      background:white;
+      color:black;
+    }
+  }
+}
+
+section.board {
+  align-items: center;
+  background: papayawhip;
+  border:1px solid magenta;
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin:8px;
+  width:770px;
+
+  .tile {
+    align-items: center;
+    background:palevioletred;
+    border:1px solid white;
+    display:flex;
+    font-size:4rem;
+    justify-content: center;
+    margin:4px;
+    padding:8px;
+    width:80px;
+    height:80px;
+  }
+}
