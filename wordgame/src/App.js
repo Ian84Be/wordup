@@ -5,16 +5,14 @@ const myGrid = boardMaker(8);
 
 export default class App extends React.Component {
   state = { 
-    myLetters:['A','Z','T','G','Qu','X','M','Y'],
+    myLetters:['A','Z','E','Qu','E','E','Z','Y'],
     myScore:0,
     gameBoard: myGrid
   };
 
   render() { 
-    console.log('reRENDER')
     return ( 
       <div className="container">
-
       <section className="left-side">
         <h2>myLetters</h2>
         <div className="myLetters">
@@ -39,6 +37,7 @@ export default class App extends React.Component {
                 className="tile"
                 key={tile.id} 
                 onDragOver={e => this.onDragOver(e)}
+                onClick={e => this.boardClick(e, tile.id)}
                 onDrop={e => this.onDrop(e, tile.id)}
               >
                 {tile.face}
@@ -46,15 +45,33 @@ export default class App extends React.Component {
             )
           })}
       </section>
-
-    </div>
+    </div> 
     );
   } // render() END
 
+  boardClick = (e, tileId) => {
+    e.preventDefault();
+    let indexNo = this.state.gameBoard.findIndex(tile => tile.id === tileId);
+    let newBoard = [...this.state.gameBoard];
+    let thisTile = newBoard[indexNo];
+    let thisLetter = thisTile.face;
+    if (!thisLetter) return;
+
+    let myNewLetters = [...this.state.myLetters, thisLetter];
+    if (thisTile.stack.length > 0) {
+      let newFace = thisTile.stack.shift();
+      thisTile.face = newFace;
+    } else thisTile.face = '';
+
+    this.setState(prevState => ({
+      ...prevState,
+      gameBoard: newBoard,
+      myLetters: myNewLetters
+    }));
+  }
+
 	onDragStart = (e, letter) => {
-    console.log('dragstart on div: ', e.target, letter);
     e.dataTransfer.setData("letter", letter);
-    console.log('onDragStarte END',e.dataTransfer.getData("letter"));
   }
 
   onDragOver = e => {
@@ -62,19 +79,22 @@ export default class App extends React.Component {
   }
 
   onDrop = (e, tileId) => {
-    console.log('onDrop',tileId);
     let letter = e.dataTransfer.getData("letter");
     let indexNo = this.state.gameBoard.findIndex(tile => tile.id === tileId);
-    
     let newBoard = [...this.state.gameBoard];
     let thisTile = newBoard[indexNo];
+    let oldFace = `${thisTile.face}`;
     thisTile.face = letter;
-    thisTile.stack = Number(thisTile.stack + 1);
-    console.log(thisTile);
+    if (oldFace !== '') thisTile.stack.unshift(oldFace);
+
+    // remove data from myLetters
+    let myNewLetters = [...this.state.myLetters];
+    myNewLetters.splice(myNewLetters.indexOf(letter),1)
 
     this.setState(prevState => ({
       ...prevState,
-      gameBoard: newBoard
+      gameBoard: newBoard,
+      myLetters: myNewLetters
     }));
   } // onDrop() END
 } // App COMPONENT END
@@ -86,7 +106,7 @@ function boardMaker(gridsize) {
       myGrid.push({
           id: `${i}${j}`,
           face: '',
-          stack: '0',
+          stack: [],
       })
     }
   }

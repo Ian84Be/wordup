@@ -17,7 +17,7 @@ h2 {
 
 .container {
   align-items: center;
-  border:1px solid red;
+  // border:1px solid red;
   display:flex;
   // flex-direction: column;
   width:100%;
@@ -25,7 +25,7 @@ h2 {
 
 .left-side {
   align-items: center;
-  border:5px solid paleturquoise;
+  align-self: flex-start;
   // background:orangered;
   display: flex;
   flex-direction: column;
@@ -43,9 +43,9 @@ h2 {
 
   .letter {
     align-items: center;
-    background: peachpuff;
+    background: rgba(255, 218, 185, 0.527);
     border:1px solid white;
-    color:palevioletred;
+    color:rgba(216, 112, 147, 0.74);
     display:flex;
     font-size:3rem;
     justify-content: center;
@@ -63,8 +63,8 @@ h2 {
 
 section.board {
   align-items: center;
-  background: papayawhip;
-  border:1px solid magenta;
+  // background: papayawhip;
+  // border:1px solid magenta;
   display:flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -73,7 +73,7 @@ section.board {
 
   .tile {
     align-items: center;
-    background:palevioletred;
+    background:rgba(216, 112, 147, 0.425);
     border:1px solid white;
     display:flex;
     font-size:4rem;
