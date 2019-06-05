@@ -1,29 +1,27 @@
 import React from 'react';
 import './App.scss';
 
-const myGrid = boardMaker(8);
-
 export default class App extends React.Component {
   state = { 
     activeTiles:[],
+    gameBoard:[],
     myLetters:[],
     myScore:0,
-    myWord:'',
-    gameBoard: myGrid
   };
 
   componentDidMount() {
-    console.log('componentDidMount');
+    const myGrid = boardMaker(8);
     const myNewLetters = drawLetters(8).split('');
     this.setState(prevState => ({
       ...prevState,
+      gameBoard: myGrid,
       myLetters: myNewLetters
     }))
   }
 
   render() { 
     const {activeTiles, myLetters, gameBoard} = this.state;
-    console.log('reRender ACTIVE TILES',activeTiles);
+    // console.log('reRender ACTIVE TILES',activeTiles);
     return ( 
       <div className="container">
       <section className="left-side">
@@ -33,9 +31,10 @@ export default class App extends React.Component {
               return (
                 <div 
                   className="letter"
-                  onDragStart={e => this.onDragStart(e, letter)}
+                  draggable
                   key={(Math.random() * 100)}
-                draggable>
+                  onDragStart={e => this.onDragStart(e, letter)}
+                >
                   {letter}
                 </div>
               )
@@ -47,16 +46,16 @@ export default class App extends React.Component {
       </section>
 
       <section className="board">
-        {gameBoard.map(tile => {
+        {gameBoard.map((tile, index) => {
             return (
               <div 
                 className="tile"
                 key={tile.id} 
+                onClick={e => this.boardClick(e, index)}
                 onDragOver={e => e.preventDefault()}
-                onClick={e => this.boardClick(e, tile.id)}
-                onDrop={e => this.onDrop(e, tile.id)}
+                onDrop={e => this.onDrop(e, index)}
               >
-                {tile.face}
+                {tile.stack[0] || ''}
               </div>
             )
           })}
@@ -65,26 +64,17 @@ export default class App extends React.Component {
     );
   } // render() END
 
-  boardClick = (e, tileId) => {
+  boardClick = (e, index) => {
     e.preventDefault();
     const {activeTiles, myLetters, gameBoard} = this.state;
-
-    const indexNo = gameBoard.findIndex(tile => tile.id === tileId);
     const newBoard = [...gameBoard];
-    const thisTile = newBoard[indexNo];
-    console.log(thisTile);
-    const thisLetter = thisTile.face;
+    const thisTile = newBoard[index];
+    const thisLetter = thisTile.stack.shift();
     if (!thisLetter) return;
 
     const myNewLetters = [...myLetters, thisLetter];
-    if (thisTile.stack.length > 0) {
-      const newFace = thisTile.stack.shift();
-      thisTile.face = newFace;
-    } else thisTile.face = '';
-
-    const activeIndex = activeTiles.findIndex(tile => tile.id === tileId);
     const newActive = [...activeTiles];
-    newActive.splice(activeIndex,1);
+    newActive.splice(newActive.findIndex(tile => tile.id === thisTile.id),1);
 
     this.setState(prevState => ({
       ...prevState,
@@ -98,18 +88,17 @@ export default class App extends React.Component {
     e.dataTransfer.setData("letter", letter);
   }
 
-  onDrop = (e, tileId) => {
+  onDrop = (e, index) => {
     const {activeTiles, myLetters, gameBoard} = this.state;
-    const letter = e.dataTransfer.getData("letter");
-    const indexNo = gameBoard.findIndex(tile => tile.id === tileId);
     const newBoard = [...gameBoard];
-    const thisTile = newBoard[indexNo];
+    const thisTile = newBoard[index];
+    // this controls whether you can drop more than one letter per tile
     if (activeTiles.includes(thisTile)) return;
-    const oldFace = `${thisTile.face}`;
-    thisTile.face = letter;
-    if (oldFace !== '') thisTile.stack.unshift(oldFace);
+
+    const letter = e.dataTransfer.getData("letter");
     const myNewLetters = [...myLetters];
     myNewLetters.splice(myNewLetters.indexOf(letter),1)
+    thisTile.stack.unshift(letter);
 
     this.setState(prevState => ({
       ...prevState,
@@ -121,17 +110,39 @@ export default class App extends React.Component {
 
   submitWord = (activeTiles) => {
     const sorted = [...activeTiles].sort((a,b) => a.id-b.id);
-    // console.log('sorted',sorted);
     this.tabScore(sorted);
   }
 
   tabScore = (sortedTiles) => {
+    // console.log('sortedTiles',sortedTiles);
     if (sortedTiles.length<1) return;
-    console.log('sortedTiles',sortedTiles);
-    let myScore = 0;
+    const newBoard = [...this.state.gameBoard];
+    const startTile = sortedTiles[0];
+    const myWord = [startTile.stack[0]];
+    let myScore = startTile.stack.length;
+    console.log('myWord:',myWord.join(''),'myScore',myScore);
     // if (sortedTiles[0].id < 20) console.log('first row')
-    if (sortedTiles[0].id % 10 === 0) {
-      console.log('first column');
+
+    // FIRST COLUMN look ABOVE, BELOW, RIGHT
+    if (startTile.id % 10 === 0) {
+      // look ABOVE
+      let above = newBoard.find(tile => tile.id === startTile.id - 10);
+      if (above && above.stack.length>0) console.log(above.stack[0], 'is above');
+      else console.log('nothing above');
+
+      startLook('right', startTile);
+
+      function startLook(direction,startTile) {
+        let next;
+        if (direction === 'right') next = newBoard.find(tile => tile.id === startTile.id + 1 );
+        if (next && next.stack.length>0) {
+          myWord.push(next.stack[0]);
+          myScore = myScore + (next.stack.length);
+          console.log('myWord:',myWord.join(''),'myScore',myScore,'RECURSE');
+          startLook('right', next);
+        }
+        else console.log('endLook');
+      }
 
     }
   }
@@ -145,21 +156,27 @@ function drawLetters(num) {
       random_ascii = Math.floor((Math.random() * (ascii_high - ascii_low)) + ascii_low);
       random_string += String.fromCharCode(random_ascii)
   }
-  return random_string
+  // TODO
+  // add function to guarantee ONE VOWEL && ONE CONSONANT
+  // add function to combine Q+u
+  return random_string;
 }
-// console.log(drawLetters(8))
 
+// TODO
+// custom boards
+// 3 square with non-playable center, outer-wall only
+// standard 8
+// scrabble 16
 function boardMaker(gridsize) {
   const myGrid = [];
   for (let i=1;i<=gridsize;i++) {
     for (let j=0;j<gridsize;j++) {
       myGrid.push({
-          id: `${i}${j}`,
-          face: '',
+          id: Number(`${i}${j}`),
+          // face: '',
           stack: [],
       })
     }
   }
   return myGrid;
 }
-// console.log(boardMaker(8));
