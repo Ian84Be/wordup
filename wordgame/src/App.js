@@ -5,18 +5,31 @@ const myGrid = boardMaker(8);
 
 export default class App extends React.Component {
   state = { 
-    myLetters:['A','Z','E','Qu','E','E','Z','Y'],
+    activeTiles:[],
+    myLetters:[],
     myScore:0,
+    myWord:'',
     gameBoard: myGrid
   };
 
+  componentDidMount() {
+    console.log('componentDidMount');
+    const myNewLetters = drawLetters(8).split('');
+    this.setState(prevState => ({
+      ...prevState,
+      myLetters: myNewLetters
+    }))
+  }
+
   render() { 
+    const {activeTiles, myLetters, gameBoard} = this.state;
+    console.log('reRender ACTIVE TILES',activeTiles);
     return ( 
       <div className="container">
       <section className="left-side">
         <h2>myLetters</h2>
         <div className="myLetters">
-          {this.state.myLetters.map(letter => {
+          {myLetters.map(letter => {
               return (
                 <div 
                   className="letter"
@@ -28,15 +41,18 @@ export default class App extends React.Component {
               )
             })}
         </div>
+        <div className="controls">
+          <button onClick={() => this.submitWord(activeTiles)}>Submit</button>
+        </div>
       </section>
 
       <section className="board">
-        {this.state.gameBoard.map(tile => {
+        {gameBoard.map(tile => {
             return (
               <div 
                 className="tile"
                 key={tile.id} 
-                onDragOver={e => this.onDragOver(e)}
+                onDragOver={e => e.preventDefault()}
                 onClick={e => this.boardClick(e, tile.id)}
                 onDrop={e => this.onDrop(e, tile.id)}
               >
@@ -51,20 +67,28 @@ export default class App extends React.Component {
 
   boardClick = (e, tileId) => {
     e.preventDefault();
-    let indexNo = this.state.gameBoard.findIndex(tile => tile.id === tileId);
-    let newBoard = [...this.state.gameBoard];
-    let thisTile = newBoard[indexNo];
-    let thisLetter = thisTile.face;
+    const {activeTiles, myLetters, gameBoard} = this.state;
+
+    const indexNo = gameBoard.findIndex(tile => tile.id === tileId);
+    const newBoard = [...gameBoard];
+    const thisTile = newBoard[indexNo];
+    console.log(thisTile);
+    const thisLetter = thisTile.face;
     if (!thisLetter) return;
 
-    let myNewLetters = [...this.state.myLetters, thisLetter];
+    const myNewLetters = [...myLetters, thisLetter];
     if (thisTile.stack.length > 0) {
-      let newFace = thisTile.stack.shift();
+      const newFace = thisTile.stack.shift();
       thisTile.face = newFace;
     } else thisTile.face = '';
 
+    const activeIndex = activeTiles.findIndex(tile => tile.id === tileId);
+    const newActive = [...activeTiles];
+    newActive.splice(activeIndex,1);
+
     this.setState(prevState => ({
       ...prevState,
+      activeTiles: newActive,
       gameBoard: newBoard,
       myLetters: myNewLetters
     }));
@@ -74,34 +98,60 @@ export default class App extends React.Component {
     e.dataTransfer.setData("letter", letter);
   }
 
-  onDragOver = e => {
-      e.preventDefault();
-  }
-
   onDrop = (e, tileId) => {
-    let letter = e.dataTransfer.getData("letter");
-    let indexNo = this.state.gameBoard.findIndex(tile => tile.id === tileId);
-    let newBoard = [...this.state.gameBoard];
-    let thisTile = newBoard[indexNo];
-    let oldFace = `${thisTile.face}`;
+    const {activeTiles, myLetters, gameBoard} = this.state;
+    const letter = e.dataTransfer.getData("letter");
+    const indexNo = gameBoard.findIndex(tile => tile.id === tileId);
+    const newBoard = [...gameBoard];
+    const thisTile = newBoard[indexNo];
+    if (activeTiles.includes(thisTile)) return;
+    const oldFace = `${thisTile.face}`;
     thisTile.face = letter;
     if (oldFace !== '') thisTile.stack.unshift(oldFace);
-
-    // remove data from myLetters
-    let myNewLetters = [...this.state.myLetters];
+    const myNewLetters = [...myLetters];
     myNewLetters.splice(myNewLetters.indexOf(letter),1)
 
     this.setState(prevState => ({
       ...prevState,
+      activeTiles: [...prevState.activeTiles, thisTile],
       gameBoard: newBoard,
       myLetters: myNewLetters
     }));
   } // onDrop() END
+
+  submitWord = (activeTiles) => {
+    const sorted = [...activeTiles].sort((a,b) => a.id-b.id);
+    // console.log('sorted',sorted);
+    this.tabScore(sorted);
+  }
+
+  tabScore = (sortedTiles) => {
+    if (sortedTiles.length<1) return;
+    console.log('sortedTiles',sortedTiles);
+    let myScore = 0;
+    // if (sortedTiles[0].id < 20) console.log('first row')
+    if (sortedTiles[0].id % 10 === 0) {
+      console.log('first column');
+
+    }
+  }
 } // App COMPONENT END
 
+// from https://codehandbook.org/generate-random-string-characters-in-javascript/
+function drawLetters(num) {
+  let random_string = '', random_ascii;
+  let ascii_low = 65, ascii_high = 90;
+  for(let i = 0; i < num; i++) {
+      random_ascii = Math.floor((Math.random() * (ascii_high - ascii_low)) + ascii_low);
+      random_string += String.fromCharCode(random_ascii)
+  }
+  return random_string
+}
+// console.log(drawLetters(8))
+
 function boardMaker(gridsize) {
-  let myGrid = [];
-  for (let i=0;i<gridsize;i++) {
+  const myGrid = [];
+  for (let i=1;i<=gridsize;i++) {
     for (let j=0;j<gridsize;j++) {
       myGrid.push({
           id: `${i}${j}`,
@@ -112,4 +162,4 @@ function boardMaker(gridsize) {
   }
   return myGrid;
 }
-// console.log(boardMaker(2));
+// console.log(boardMaker(8));

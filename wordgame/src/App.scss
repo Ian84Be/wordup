@@ -47,12 +47,12 @@ h2 {
     border:1px solid white;
     color:rgba(216, 112, 147, 0.74);
     display:flex;
-    font-size:3rem;
+    font-size:2rem;
     justify-content: center;
     margin:4px;
     padding:8px;
-    width:60px;
-    height:60px;
+    width:3rem;
+    height:3rem;
     &:hover {
       cursor: pointer;
       background:white;
@@ -68,19 +68,20 @@ section.board {
   display:flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin:8px;
-  width:770px;
+  margin:4px;
+  min-width: 500px;
+  max-width:28rem;
 
   .tile {
     align-items: center;
     background:rgba(216, 112, 147, 0.425);
     border:1px solid white;
     display:flex;
-    font-size:4rem;
+    font-size:2rem;
     justify-content: center;
     margin:4px;
     padding:8px;
-    width:80px;
-    height:80px;
+    width:3rem;
+    height:3rem;
   }
 }
