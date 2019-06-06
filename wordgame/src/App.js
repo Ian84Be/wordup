@@ -62,6 +62,17 @@ export default class App extends React.Component {
     }));
   }
 
+  nextPlayer = (newScore,newBoard) => {
+    let newLetters = drawLetters(8-this.state.myLetters.length);
+    this.setState(prevState => ({
+      ...prevState,
+      activeTiles:[],
+      gameBoard:newBoard,
+      myLetters: [...prevState.myLetters,...newLetters],
+      myScore: prevState.myScore + newScore
+    }))
+  }
+
 	onDragStart = (e, letter) => {
     e.dataTransfer.setData("letter", letter);
   }
@@ -87,63 +98,59 @@ export default class App extends React.Component {
 
   submitWord = (activeTiles) => {
     const sorted = [...activeTiles].sort((a,b) => a.id-b.id);
-    this.tabScore(sorted);
-  }
-
-  nextPlayer = (newScore,newBoard) => {
-    let newLetters = drawLetters(8-this.state.myLetters.length);
-    this.setState(prevState => ({
-      ...prevState,
-      activeTiles:[],
-      gameBoard:newBoard,
-      myLetters: [...prevState.myLetters,...newLetters],
-      myScore: prevState.myScore + newScore
-    }))
+    if (sorted.length<1) return console.log('error: no active tiles');
+    else this.tabScore(sorted);
   }
 
   tabScore = (sortedTiles) => {
-    // console.log('sortedTiles',sortedTiles);
-    if (sortedTiles.length<1) return;
     const activeTiles = [...this.state.activeTiles];
     const newBoard = [...this.state.gameBoard];
     const startTile = sortedTiles[0];
     const myWord = [startTile.stack[0]];
     const id = startTile.id;
     let myScore = startTile.stack.length;
+
     let tempScore = 0;
     let tempWord = [];
-    // console.log('start tileId',id,'letter',myWord[0],'myScore',myScore);
 
     //top row
     let above = (id < 19) ? null : startLook('above', startTile);
     console.log('above END',above);
+    if (above) {
+      addLetters(above[0],above[1]);
+      return this.nextPlayer(myScore,newBoard);
+    }
 
     //bottom row
     let below = (id > 79) ? null : startLook('below', startTile);
     console.log('below END',below);
     if (below) {
-      myWord.push(below[0]);
-      const newWord = myWord.join('');
-      myScore = myScore + below[1];
-      console.log('if below',newWord,myScore);
-      if (newWord.length < activeTiles.length) return console.log('error: loose tiles');
+      addLetters(below[0],below[1]);
       return this.nextPlayer(myScore,newBoard);
     }
 
     //first column
     let left = (id % 10 === 0) ? null : startLook('left', startTile);
     console.log('left END',left);
+    if (left) {
+      addLetters(left[0],left[1]);
+      return this.nextPlayer(myScore,newBoard);
+    }
 
     //last column
     let right = (id-7 % 10 === 0) ? null : startLook('right', startTile);
     console.log('right END',right);
     if (right) {
-      myWord.push(right[0]);
-      const newWord = myWord.join('');
-      myScore = myScore + right[1];
-      console.log('if right',newWord,myScore);
-      if (newWord.length < activeTiles.length) return console.log('error: loose tiles');
+      addLetters(right[0],right[1]);
       return this.nextPlayer(myScore,newBoard);
+    }
+
+    function addLetters(letters, score) {
+      myWord.push(letters);
+      const newWord = myWord.join('');
+      myScore = myScore + score;
+      console.log('addLetters',newWord,myScore);
+      if (newWord.length < activeTiles.length) return console.log('error: loose tiles');
     }
 
     function startLook(direction,startTile) {
@@ -164,6 +171,6 @@ export default class App extends React.Component {
         tempScore=0;
         return result;
       } else return null;
-    }// tabScore.startLook() END
+    }
   } // tabScore() END
 } // App COMPONENT END

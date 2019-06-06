@@ -3,7 +3,7 @@ import React from 'react';
 
 const GameBoard = props => {
     return ( 
-        <section className="board">
+        <section className="GameBoard">
         {props.gameBoard.map((tile, index) => {
             return (
               <div 

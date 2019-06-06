@@ -1,13 +1,12 @@
-section.board {
+.GameBoard {
     align-items: center;
-    // background: papayawhip;
     // border:1px solid magenta;
     display:flex;
     flex-wrap: wrap;
     justify-content: center;
     margin:4px;
-    min-width: 500px;
     max-width:28rem;
+    min-width: 500px;
   
     .tile {
       align-items: center;
@@ -15,11 +14,11 @@ section.board {
       border:1px solid white;
       display:flex;
       font-size:2rem;
+      height:3rem;
       justify-content: center;
       margin:4px;
       padding:8px;
       width:3rem;
-      height:3rem;
   
       small {
         font-size:.75rem;

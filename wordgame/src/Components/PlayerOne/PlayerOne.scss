@@ -2,28 +2,30 @@
 .PlayerOne {
     align-items: center;
     align-self: flex-start;
-    // background:orangered;
+    // border:1px solid red;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin:8px;
+    margin:4px;
   
     .controls {
       align-items: center;
       display: flex;
       flex-direction: column;
       margin:8px;
+
       h4 {
         font-size:1rem;
       }
+      
       button {
         font-size:1rem;
         margin:8px;
         padding:10px;
         width:80px;
         &:hover {
-          cursor:pointer;
           background:palevioletred;
+          cursor:pointer;
           outline:none;
         }
       }
@@ -50,9 +52,9 @@
         width:3rem;
         height:3rem;
         &:hover {
-          cursor: pointer;
           background:white;
           color:black;
+          cursor: pointer;
         }
       }
     }
