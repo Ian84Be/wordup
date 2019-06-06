@@ -1,5 +1,7 @@
 
 @import './reset.scss';
+@import './Components/PlayerOne/PlayerOne.scss';
+@import './Components/GameBoard/GameBoard.scss';
 
 * {
   box-sizing: border-box;
@@ -22,67 +24,4 @@ h2 {
   display:flex;
   // flex-direction: column;
   width:100%;
-}
-
-.left-side {
-  align-items: center;
-  align-self: flex-start;
-  // background:orangered;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin:8px;
-}
-
-.myLetters {
-  align-items: center;
-  border: 1px solid black;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  width:140px;
-
-  .letter {
-    align-items: center;
-    background: rgba(255, 218, 185, 0.527);
-    border:1px solid white;
-    color:rgba(216, 112, 147, 0.74);
-    display:flex;
-    font-size:2rem;
-    justify-content: center;
-    margin:4px;
-    padding:8px;
-    width:3rem;
-    height:3rem;
-    &:hover {
-      cursor: pointer;
-      background:white;
-      color:black;
-    }
-  }
-}
-
-section.board {
-  align-items: center;
-  // background: papayawhip;
-  // border:1px solid magenta;
-  display:flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin:4px;
-  min-width: 500px;
-  max-width:28rem;
-
-  .tile {
-    align-items: center;
-    background:rgba(216, 112, 147, 0.425);
-    border:1px solid white;
-    display:flex;
-    font-size:2rem;
-    justify-content: center;
-    margin:4px;
-    padding:8px;
-    width:3rem;
-    height:3rem;
-  }
 }

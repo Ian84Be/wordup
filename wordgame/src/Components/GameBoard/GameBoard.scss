@@ -1,0 +1,28 @@
+section.board {
+    align-items: center;
+    // background: papayawhip;
+    // border:1px solid magenta;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin:4px;
+    min-width: 500px;
+    max-width:28rem;
+  
+    .tile {
+      align-items: center;
+      background:rgba(216, 112, 147, 0.425);
+      border:1px solid white;
+      display:flex;
+      font-size:2rem;
+      justify-content: center;
+      margin:4px;
+      padding:8px;
+      width:3rem;
+      height:3rem;
+  
+      small {
+        font-size:.75rem;
+      }
+    }
+  }

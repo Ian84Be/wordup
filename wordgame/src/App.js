@@ -1,4 +1,7 @@
+
 import React from 'react';
+import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
+import PlayerOne, {drawLetters} from './Components/PlayerOne/PlayerOne.js';
 import './App.scss';
 
 export default class App extends React.Component {
@@ -8,10 +11,28 @@ export default class App extends React.Component {
     myLetters:[],
     myScore:0,
   };
+  render() { 
+    const {activeTiles, myLetters,myScore, gameBoard} = this.state;
+    return ( 
+      <div className="container">
+        <PlayerOne 
+          myLetters={myLetters}
+          myScore={myScore}
+          onDragStart={this.onDragStart}
+          submitWord={() => this.submitWord(activeTiles)}
+        />
 
-  componentDidMount() {
+        <GameBoard 
+          boardClick={this.boardClick}
+          gameBoard={gameBoard}
+          onDrop={this.onDrop}
+        />
+    </div> 
+    );
+  } // render() END
+    componentDidMount() {
     const myGrid = boardMaker(8);
-    const myNewLetters = drawLetters(8).split('');
+    const myNewLetters = drawLetters(8);
     this.setState(prevState => ({
       ...prevState,
       gameBoard: myGrid,
@@ -19,56 +40,13 @@ export default class App extends React.Component {
     }))
   }
 
-  render() { 
-    const {activeTiles, myLetters, gameBoard} = this.state;
-    // console.log('reRender ACTIVE TILES',activeTiles);
-    return ( 
-      <div className="container">
-      <section className="left-side">
-        <h2>myLetters</h2>
-        <div className="myLetters">
-          {myLetters.map(letter => {
-              return (
-                <div 
-                  className="letter"
-                  draggable
-                  key={(Math.random() * 100)}
-                  onDragStart={e => this.onDragStart(e, letter)}
-                >
-                  {letter}
-                </div>
-              )
-            })}
-        </div>
-        <div className="controls">
-          <button onClick={() => this.submitWord(activeTiles)}>Submit</button>
-        </div>
-      </section>
-
-      <section className="board">
-        {gameBoard.map((tile, index) => {
-            return (
-              <div 
-                className="tile"
-                key={tile.id} 
-                onClick={e => this.boardClick(e, index)}
-                onDragOver={e => e.preventDefault()}
-                onDrop={e => this.onDrop(e, index)}
-              >
-                {tile.stack[0] || ''}
-              </div>
-            )
-          })}
-      </section>
-    </div> 
-    );
-  } // render() END
-
   boardClick = (e, index) => {
     e.preventDefault();
     const {activeTiles, myLetters, gameBoard} = this.state;
     const newBoard = [...gameBoard];
     const thisTile = newBoard[index];
+    if (!activeTiles.includes(thisTile)) return;
+
     const thisLetter = thisTile.stack.shift();
     if (!thisLetter) return;
 
@@ -92,7 +70,6 @@ export default class App extends React.Component {
     const {activeTiles, myLetters, gameBoard} = this.state;
     const newBoard = [...gameBoard];
     const thisTile = newBoard[index];
-    // this controls whether you can drop more than one letter per tile
     if (activeTiles.includes(thisTile)) return;
 
     const letter = e.dataTransfer.getData("letter");
@@ -113,70 +90,80 @@ export default class App extends React.Component {
     this.tabScore(sorted);
   }
 
+  nextPlayer = (newScore,newBoard) => {
+    let newLetters = drawLetters(8-this.state.myLetters.length);
+    this.setState(prevState => ({
+      ...prevState,
+      activeTiles:[],
+      gameBoard:newBoard,
+      myLetters: [...prevState.myLetters,...newLetters],
+      myScore: prevState.myScore + newScore
+    }))
+  }
+
   tabScore = (sortedTiles) => {
     // console.log('sortedTiles',sortedTiles);
     if (sortedTiles.length<1) return;
+    const activeTiles = [...this.state.activeTiles];
     const newBoard = [...this.state.gameBoard];
     const startTile = sortedTiles[0];
     const myWord = [startTile.stack[0]];
+    const id = startTile.id;
     let myScore = startTile.stack.length;
-    console.log('myWord:',myWord.join(''),'myScore',myScore);
-    // if (sortedTiles[0].id < 20) console.log('first row')
+    let tempScore = 0;
+    let tempWord = [];
+    // console.log('start tileId',id,'letter',myWord[0],'myScore',myScore);
 
-    // FIRST COLUMN look ABOVE, BELOW, RIGHT
-    if (startTile.id % 10 === 0) {
-      // look ABOVE
-      let above = newBoard.find(tile => tile.id === startTile.id - 10);
-      if (above && above.stack.length>0) console.log(above.stack[0], 'is above');
-      else console.log('nothing above');
+    //top row
+    let above = (id < 19) ? null : startLook('above', startTile);
+    console.log('above END',above);
 
-      startLook('right', startTile);
-
-      function startLook(direction,startTile) {
-        let next;
-        if (direction === 'right') next = newBoard.find(tile => tile.id === startTile.id + 1 );
-        if (next && next.stack.length>0) {
-          myWord.push(next.stack[0]);
-          myScore = myScore + (next.stack.length);
-          console.log('myWord:',myWord.join(''),'myScore',myScore,'RECURSE');
-          startLook('right', next);
-        }
-        else console.log('endLook');
-      }
-
+    //bottom row
+    let below = (id > 79) ? null : startLook('below', startTile);
+    console.log('below END',below);
+    if (below) {
+      myWord.push(below[0]);
+      const newWord = myWord.join('');
+      myScore = myScore + below[1];
+      console.log('if below',newWord,myScore);
+      if (newWord.length < activeTiles.length) return console.log('error: loose tiles');
+      return this.nextPlayer(myScore,newBoard);
     }
-  }
+
+    //first column
+    let left = (id % 10 === 0) ? null : startLook('left', startTile);
+    console.log('left END',left);
+
+    //last column
+    let right = (id-7 % 10 === 0) ? null : startLook('right', startTile);
+    console.log('right END',right);
+    if (right) {
+      myWord.push(right[0]);
+      const newWord = myWord.join('');
+      myScore = myScore + right[1];
+      console.log('if right',newWord,myScore);
+      if (newWord.length < activeTiles.length) return console.log('error: loose tiles');
+      return this.nextPlayer(myScore,newBoard);
+    }
+
+    function startLook(direction,startTile) {
+      let next,offset;
+      if (direction === 'above') offset = -10;
+      if (direction === 'below') offset = 10;
+      if (direction === 'left') offset = -1;
+      if (direction === 'right') offset = 1;
+      next = newBoard.find(tile => tile.id === startTile.id+offset);
+      if (next && next.stack.length>0) {
+        tempWord.push(next.stack[0]);
+        tempScore = tempScore + (next.stack.length);
+        // console.log(direction,tempWord,'myScore',myScore,'RECURSE');
+        return startLook(direction, next);
+      } else if (tempWord.length>0) {
+        const result = [tempWord.join(''),tempScore];
+        tempWord=[];
+        tempScore=0;
+        return result;
+      } else return null;
+    }// tabScore.startLook() END
+  } // tabScore() END
 } // App COMPONENT END
-
-// from https://codehandbook.org/generate-random-string-characters-in-javascript/
-function drawLetters(num) {
-  let random_string = '', random_ascii;
-  let ascii_low = 65, ascii_high = 90;
-  for(let i = 0; i < num; i++) {
-      random_ascii = Math.floor((Math.random() * (ascii_high - ascii_low)) + ascii_low);
-      random_string += String.fromCharCode(random_ascii)
-  }
-  // TODO
-  // add function to guarantee ONE VOWEL && ONE CONSONANT
-  // add function to combine Q+u
-  return random_string;
-}
-
-// TODO
-// custom boards
-// 3 square with non-playable center, outer-wall only
-// standard 8
-// scrabble 16
-function boardMaker(gridsize) {
-  const myGrid = [];
-  for (let i=1;i<=gridsize;i++) {
-    for (let j=0;j<gridsize;j++) {
-      myGrid.push({
-          id: Number(`${i}${j}`),
-          // face: '',
-          stack: [],
-      })
-    }
-  }
-  return myGrid;
-}
