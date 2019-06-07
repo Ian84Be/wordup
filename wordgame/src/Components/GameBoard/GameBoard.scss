@@ -23,5 +23,10 @@
       small {
         font-size:.75rem;
       }
+
+      &.active {
+        background:white;
+        color:black;
+      }
     }
   }

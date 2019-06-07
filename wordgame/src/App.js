@@ -19,10 +19,11 @@ export default class App extends React.Component {
           myLetters={myLetters}
           myScore={myScore}
           onDragStart={this.onDragStart}
-          submitWord={() => this.submitWord(activeTiles)}
+          submitLetters={() => this.submitLetters(activeTiles)}
         />
 
         <GameBoard 
+          activeTiles={this.state.activeTiles}
           boardClick={this.boardClick}
           gameBoard={gameBoard}
           onDrop={this.onDrop}
@@ -96,13 +97,13 @@ export default class App extends React.Component {
     }));
   } // onDrop() END
 
-  submitWord = (activeTiles) => {
+  submitLetters = (activeTiles) => {
     const sorted = [...activeTiles].sort((a,b) => a.id-b.id);
     if (sorted.length<1) return console.log('error: no active tiles');
-    else this.tabScore(sorted);
+    else this.findWords(sorted);
   }
 
-  tabScore = (sortedTiles) => {
+  findWords = (sortedTiles) => {
     // const activeTiles = [...this.state.activeTiles];
     const newBoard = [...this.state.gameBoard];
     const startTile = sortedTiles[0];

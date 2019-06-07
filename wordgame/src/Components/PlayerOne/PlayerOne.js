@@ -23,7 +23,7 @@ const PlayerOne = props => {
       
       <div className="controls">
         <h4>myScore: {props.myScore}</h4>
-        <button onClick={() => props.submitWord()}>Submit</button>
+        <button onClick={() => props.submitLetters()}>Submit</button>
       </div>
     </section>
   );

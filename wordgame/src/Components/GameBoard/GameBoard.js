@@ -7,7 +7,7 @@ const GameBoard = props => {
         {props.gameBoard.map((tile, index) => {
             return (
               <div 
-                className="tile"
+                className={(props.activeTiles.filter(activeTile => activeTile.id === tile.id).length>0) ? 'active tile' : 'tile'}
                 key={tile.id} 
                 onClick={e => props.boardClick(e, index)}
                 onDragOver={e => e.preventDefault()}
