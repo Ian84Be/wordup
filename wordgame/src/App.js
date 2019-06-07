@@ -103,55 +103,29 @@ export default class App extends React.Component {
   }
 
   tabScore = (sortedTiles) => {
-    const activeTiles = [...this.state.activeTiles];
+    // const activeTiles = [...this.state.activeTiles];
     const newBoard = [...this.state.gameBoard];
     const startTile = sortedTiles[0];
-    const myWord = [startTile.stack[0]];
-    const id = startTile.id;
-    let myScore = startTile.stack.length;
-
-    let tempScore = 0;
+    const {id} = startTile;
     let tempWord = [];
 
-    //top row
-    let above = (id < 19) ? null : startLook('above', startTile);
-    console.log('above END',above);
-    if (above) {
-      addLetters(above[0],above[1]);
-      return this.nextPlayer(myScore,newBoard);
-    }
-
-    //bottom row
+    // find VERTICAL word
+    let vertWord = [];
+    let above = (id < 20) ? null : startLook('above', startTile);
+    if (above) vertWord.push(...above);
     let below = (id > 79) ? null : startLook('below', startTile);
-    console.log('below END',below);
-    if (below) {
-      addLetters(below[0],below[1]);
-      return this.nextPlayer(myScore,newBoard);
-    }
+    if (below) vertWord.push(...below);
+    vertWord = [startTile,...vertWord].sort((a,b) => a.id-b.id);
+    console.log('wordValue vertWord',wordValue(vertWord));
 
-    //first column
+    // find HORIZONTAL word
+    let horWord = [];
     let left = (id % 10 === 0) ? null : startLook('left', startTile);
-    console.log('left END',left);
-    if (left) {
-      addLetters(left[0],left[1]);
-      return this.nextPlayer(myScore,newBoard);
-    }
-
-    //last column
+    if (left) horWord.push(...left);
     let right = (id-7 % 10 === 0) ? null : startLook('right', startTile);
-    console.log('right END',right);
-    if (right) {
-      addLetters(right[0],right[1]);
-      return this.nextPlayer(myScore,newBoard);
-    }
-
-    function addLetters(letters, score) {
-      myWord.push(letters);
-      const newWord = myWord.join('');
-      myScore = myScore + score;
-      console.log('addLetters',newWord,myScore);
-      if (newWord.length < activeTiles.length) return console.log('error: loose tiles');
-    }
+    if (right) horWord.push(...right);
+    horWord = [startTile,...horWord].sort((a,b) => a.id-b.id);
+    console.log('wordValue horWord',wordValue(horWord));
 
     function startLook(direction,startTile) {
       let next,offset;
@@ -161,16 +135,24 @@ export default class App extends React.Component {
       if (direction === 'right') offset = 1;
       next = newBoard.find(tile => tile.id === startTile.id+offset);
       if (next && next.stack.length>0) {
-        tempWord.push(next.stack[0]);
-        tempScore = tempScore + (next.stack.length);
-        // console.log(direction,tempWord,'myScore',myScore,'RECURSE');
+        tempWord.push(next);
         return startLook(direction, next);
       } else if (tempWord.length>0) {
-        const result = [tempWord.join(''),tempScore];
+        const result = tempWord.sort((a,b) => a.id-b.id);
         tempWord=[];
-        tempScore=0;
         return result;
       } else return null;
     }
+
+    function wordValue(tileSet) {
+      let word=[],score=0;
+      tileSet.forEach(tile => {
+        word.push(tile.stack[0]);
+        score = score + tile.stack.length;
+      });
+      return [word.join(''),score]
+    }
+
+
   } // tabScore() END
 } // App COMPONENT END
