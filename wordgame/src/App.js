@@ -2,6 +2,7 @@
 import React from 'react';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
 import PlayerOne, {drawLetters} from './Components/PlayerOne/PlayerOne.js';
+import scrabbleWordList from './scrabbleWordList';
 import './App.scss';
 
 export default class App extends React.Component {
@@ -19,6 +20,7 @@ export default class App extends React.Component {
           myLetters={myLetters}
           myScore={myScore}
           onDragStart={(e, letter) => e.dataTransfer.setData("letter", letter)}
+          passTurn={this.passTurn}
           submitLetters={() => this.submitLetters(activeTiles)}
         />
 
@@ -92,6 +94,16 @@ export default class App extends React.Component {
     }));
   }
 
+  passTurn = async () => {
+    console.log('pass')
+    if (this.state.activeTiles.length>0) return console.log('error: cannot pass with active tiles');
+    let newLetters = drawLetters(8);
+    await this.setState(prevState => ({
+      ...prevState,
+      myLetters: [...newLetters],
+    }))
+  }
+
   submitLetters = (activeTiles) => {
     const sorted = [...activeTiles].sort((a,b) => a.id-b.id);
     if (sorted.length<1) return console.log('error: no active tiles');
@@ -99,7 +111,7 @@ export default class App extends React.Component {
   }
 
   scoreWords = (foundWords) => {
-    let words=[],score=0;
+    let words=[],thisWord='',score=0;
     foundWords.forEach(tileSet => {
       let tempScore = 0;
       let tempWord = [];
@@ -107,13 +119,22 @@ export default class App extends React.Component {
         tempWord.push(tile.stack[0]);
         tempScore = tempScore + tile.stack.length;
       })
-      console.log('scoreWord',tempWord.join(''),tempScore);
-      words.push(`${tempWord.join('')} ${tempScore}`)
-      score = score + tempScore;
-      tempScore = 0;
+      thisWord = tempWord.join('').toLowerCase();
+      if (this.dictionaryCheck(thisWord)) {
+        score = score + tempScore;
+        words.push(`${tempWord.join('')} ${tempScore}`);
+        tempScore = 0;
+      } else {
+        return score = 'fail';
+      }
     });
+    if (score === 'fail') return console.log('dict FAIL',thisWord);
     console.log('score',score,words);
     return this.nextPlayer(score);
+  }
+
+  dictionaryCheck = (word) => {
+    return (scrabbleWordList.includes(word)) ? true : false;
   }
 
   findWords = (sortedTiles) => {
@@ -121,9 +142,8 @@ export default class App extends React.Component {
     const tempWords = [];
     sortedTiles.forEach(tile => tempWords.push(...lookBothWays(tile)));
     let foundWords = uniqWords(tempWords);
-    console.log(foundWords.length,'uniqWords',foundWords);
-    console.log('checkWords');
-    
+    // console.log(foundWords.length,'uniqWords',foundWords);
+
     if (foundWords.length>0) return this.scoreWords(foundWords);
 
     function uniqWords(tileIds) {
@@ -174,7 +194,5 @@ export default class App extends React.Component {
         } else return null;
       } // startLook() END
     } // lookBothWays() END
-
-
   } // findWords() END
 } // App COMPONENT END

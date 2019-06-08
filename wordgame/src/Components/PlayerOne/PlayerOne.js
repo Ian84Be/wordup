@@ -24,6 +24,7 @@ const PlayerOne = props => {
       <div className="controls">
         <h4>myScore: {props.myScore}</h4>
         <button onClick={() => props.submitLetters()}>Submit</button>
+        <button onClick={() => props.passTurn()}>Pass</button>
       </div>
     </section>
   );
