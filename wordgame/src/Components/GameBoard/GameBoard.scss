@@ -40,47 +40,97 @@
 
       &.xx {
         background:lightsteelblue;
-        box-shadow: 8px 8px lightsteelblue;
+        box-shadow:
+        4px 4px lightsteelblue,
+        8px 8px lightsteelblue;
         transform: translate(-8px,-8px);
       }
 
       &.xxx {
         background:lightskyblue;
-        box-shadow: 12px 12px lightskyblue;
+        box-shadow:
+        4px 4px lightskyblue,
+        8px 8px lightskyblue,
+        12px 12px lightskyblue;
         transform: translate(-12px,-12px);
       }
 
       &.xxxx {
         background:palegoldenrod;
-        box-shadow: 16px 16px palegoldenrod;
+        box-shadow:
+        4px 4px palegoldenrod,
+        8px 8px palegoldenrod,
+        12px 12px palegoldenrod,
+        16px 16px palegoldenrod;
         transform: translate(-16px,-16px);
       }
 
       &.xxxxx {
         background:lightcoral;
-        box-shadow: 20px 20px lightcoral;
+        box-shadow:
+        4px 4px lightcoral,
+        8px 8px lightcoral,
+        12px 12px lightcoral,
+        16px 16px lightcoral,
+        20px 20px lightcoral;
         transform: translate(-20px,-20px);
       }
 
       &.xxxxxx {
         background:lightgreen;
-        box-shadow: 24px 24px lightgreen;
+        box-shadow:
+        4px 4px lightgreen,
+        8px 8px lightgreen,
+        12px 12px lightgreen,
+        16px 16px lightgreen,
+        20px 20px lightgreen,
+        24px 24px lightgreen;
         transform: translate(-24px,-24px);
       }
 
       &.xxxxxxx {
         background:hotpink;
-        box-shadow: 28px 28px hotpink;
+        box-shadow:
+        4px 4px hotpink,
+        8px 8px hotpink,
+        12px 12px hotpink,
+        16px 16px hotpink,
+        20px 20px hotpink,
+        24px 24px hotpink,
+        28px 28px hotpink;
         transform: translate(-28px,-28px);
       }
 
       &.xxxxxxxx {
         background:greenyellow;
-        box-shadow: 32px 32px greenyellow;
+        box-shadow:
+        4px 4px greenyellow,
+        8px 8px greenyellow,
+        12px 12px greenyellow,
+        16px 16px greenyellow,
+        20px 20px greenyellow,
+        24px 24px greenyellow,
+        28px 28px greenyellow,
+        32px 32px 1px 0px greenyellow;
         transform: translate(-32px,-32px);
       }
 
       &.xxxxxxxxx {
+        background:rebeccapurple;
+        box-shadow:
+        4px 4px rebeccapurple,
+        8px 8px rebeccapurple,
+        12px 12px rebeccapurple,
+        16px 16px rebeccapurple,
+        20px 20px rebeccapurple,
+        24px 24px rebeccapurple,
+        28px 28px rebeccapurple,
+        32px 32px rebeccapurple,
+        36px 36px rebeccapurple;
+        transform: translate(-36px,-36px);
+      }
+
+      &.xxxxxxxxxx {
         background:rebeccapurple;
         box-shadow: 36px 36px rebeccapurple;
         transform: translate(-36px,-36px);
@@ -89,5 +139,5 @@
       &.active {
         background:white;
       }
-    }
-  }
+    } // .tile END
+  } // .GameBoard END

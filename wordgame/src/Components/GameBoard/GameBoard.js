@@ -2,6 +2,7 @@
 import React from 'react';
 
 const GameBoard = props => {
+  
   return ( 
     <section className="GameBoard">
 
@@ -20,8 +21,9 @@ const GameBoard = props => {
           stack += ' ';
         }
         myClassName += stack;
+        // console.log('myClassName',myClassName);
       }
-
+      
         return (
           <div 
             className={myClassName}
