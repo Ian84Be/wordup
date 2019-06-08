@@ -29,14 +29,7 @@ const PlayerOne = props => {
 export function drawLetters(num) {
   let random_string = [], random_ascii;
   let ascii_low = 65, ascii_high = 90;
-
-  // TODO
-  // toggle config obj >> guarantee ONE VOWEL
-  const vowels = 'AEIOU';
-  let randomV = Math.floor(Math.random()*5);
-  random_string.push(vowels.slice(randomV,randomV+1));
-
-  for(let i = 1; i < num; i++) {
+  for(let i = 0; i < num; i++) {
     random_ascii = Math.floor((Math.random() * (ascii_high - ascii_low)) + ascii_low);
     // TODO
     // toggle config obj >> combine Qu

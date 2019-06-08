@@ -5,6 +5,7 @@
     flex-wrap: wrap;
     justify-content: center;
     margin:4px;
+    margin-top:36px;
     max-width:28rem;
     min-width: 500px;
   
@@ -12,6 +13,7 @@
       align-items: center;
       background:rgba(216, 112, 147, 0.425);
       border:1px solid white;
+      color:black;
       display:flex;
       font-size:2rem;
       height:3rem;
@@ -24,9 +26,68 @@
         font-size:.75rem;
       }
 
+      // TODO
+      // automate this css setting with offset/color theme
+      // 4px too drastic with stacks>6
+
+      &.x {
+        background:lightblue;
+        border-top:0;
+        border-left:0;
+        box-shadow: 4px 4px lightblue;
+        transform: translate(-4px,-4px);
+      }
+
+      &.xx {
+        background:lightsteelblue;
+        box-shadow: 8px 8px lightsteelblue;
+        transform: translate(-8px,-8px);
+      }
+
+      &.xxx {
+        background:lightskyblue;
+        box-shadow: 12px 12px lightskyblue;
+        transform: translate(-12px,-12px);
+      }
+
+      &.xxxx {
+        background:palegoldenrod;
+        box-shadow: 16px 16px palegoldenrod;
+        transform: translate(-16px,-16px);
+      }
+
+      &.xxxxx {
+        background:lightcoral;
+        box-shadow: 20px 20px lightcoral;
+        transform: translate(-20px,-20px);
+      }
+
+      &.xxxxxx {
+        background:lightgreen;
+        box-shadow: 24px 24px lightgreen;
+        transform: translate(-24px,-24px);
+      }
+
+      &.xxxxxxx {
+        background:hotpink;
+        box-shadow: 28px 28px hotpink;
+        transform: translate(-28px,-28px);
+      }
+
+      &.xxxxxxxx {
+        background:greenyellow;
+        box-shadow: 32px 32px greenyellow;
+        transform: translate(-32px,-32px);
+      }
+
+      &.xxxxxxxxx {
+        background:rebeccapurple;
+        box-shadow: 36px 36px rebeccapurple;
+        transform: translate(-36px,-36px);
+      }
+
       &.active {
         background:white;
-        color:black;
       }
     }
   }

@@ -46,7 +46,10 @@ export default class App extends React.Component {
     componentDidMount() {
     // TODO
     // create config object
-    // default to 'fast mode' && 'standard board'
+    // DEFAULT config object >> 'wordUp rules' = setRules(build oneWay, waitTurn, 8board)
+    // toggle config obj >> 'fast rules' = setRules(build bothWays, loseTurn, 6board)
+    // toggle config obj >> guarantee ONE VOWEL
+    // toggle config obj >> combine Qu
     const myGrid = boardMaker(8);
     // const myNewLetters = drawLetters(8);
     const myNewLetters = ['T','Qu','E','B','S','I','N','K'];
@@ -79,12 +82,32 @@ export default class App extends React.Component {
   }
 
   nextPlayer = (addScore) => {
-    let newLetters = drawLetters(8-this.state.myLetters.length);
+    const oldLetters = [...this.state.myLetters];
+    let newLetters=[],randomLetters=[];
+    if (addScore === 0) newLetters = drawLetters(8);
+    if (this.state.myLetters.length<8) {
+      randomLetters = drawLetters(8-this.state.myLetters.length);
+      newLetters = [...oldLetters,...randomLetters];
+    }
+    // TODO
+    // toggle config obj >> guarantee ONE VOWEL
+    // fix so that hand INCLUDES one vowel >> put this on App method for nextPlayer
+    const vowels = ['A','E','I','O','U'];
+    let hasVowel = 0;
+    vowels.forEach(vowel => {
+      if (newLetters.includes(vowel)) ++hasVowel;
+    });
+    if (!hasVowel) {
+      let randomV = vowels[Math.floor(Math.random()*5)];
+      console.log('randomV',randomV);
+      newLetters.pop();
+      newLetters.push(randomV);
+    }
     this.setState(prevState => ({
       ...prevState,
       activeTiles:[],
       message: '',
-      myLetters: [...prevState.myLetters,...newLetters],
+      myLetters: newLetters,
       myScore: prevState.myScore + addScore
     }))
   }
@@ -137,14 +160,9 @@ export default class App extends React.Component {
     }));
   }
 
-  passTurn = async () => {
+  passTurn = () => {
     if (this.state.activeTiles.length>0) return this.setState(() => ({message: 'cannot pass with tiles in play'}));
-    let newLetters = drawLetters(8);
-    await this.setState(prevState => ({
-      ...prevState,
-      message: '',
-      myLetters: [...newLetters],
-    }))
+    this.nextPlayer(0);
   }
 
   submitLetters = (activeTiles) => {
@@ -198,6 +216,7 @@ export default class App extends React.Component {
   }
 
   dictionaryCheck = (word) => {
+    // return true;
     return (scrabbleWordList.includes(word)) ? true : false;
   }
 
