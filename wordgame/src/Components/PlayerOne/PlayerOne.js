@@ -27,16 +27,23 @@ const PlayerOne = props => {
 
 // from https://codehandbook.org/generate-random-string-characters-in-javascript/
 export function drawLetters(num) {
-  let random_string = '', random_ascii;
+  let random_string = [], random_ascii;
   let ascii_low = 65, ascii_high = 90;
-  for(let i = 0; i < num; i++) {
-    random_ascii = Math.floor((Math.random() * (ascii_high - ascii_low)) + ascii_low);
-    random_string += String.fromCharCode(random_ascii)
-  }
+
   // TODO
-  // add function to guarantee ONE VOWEL && ONE CONSONANT
-  // add function to combine Q+u
-  return random_string.split('');
+  // toggle config obj >> guarantee ONE VOWEL
+  const vowels = 'AEIOU';
+  let randomV = Math.floor(Math.random()*5);
+  random_string.push(vowels.slice(randomV,randomV+1));
+
+  for(let i = 1; i < num; i++) {
+    random_ascii = Math.floor((Math.random() * (ascii_high - ascii_low)) + ascii_low);
+    // TODO
+    // toggle config obj >> combine Qu
+    if (random_ascii === 81) random_string.push('Qu');
+    else random_string.push(String.fromCharCode(random_ascii));
+  }
+  return random_string;
 }
  
 export default PlayerOne;

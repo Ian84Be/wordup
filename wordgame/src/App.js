@@ -44,9 +44,12 @@ export default class App extends React.Component {
     );
   } // render() END
     componentDidMount() {
+    // TODO
+    // create config object
+    // default to 'fast mode' && 'standard board'
     const myGrid = boardMaker(8);
     // const myNewLetters = drawLetters(8);
-    const myNewLetters = ['N','U','M','B','S','I','N','K'];
+    const myNewLetters = ['T','Qu','E','B','S','I','N','K'];
     this.setState(prevState => ({
       ...prevState,
       gameBoard: myGrid,
@@ -166,9 +169,9 @@ export default class App extends React.Component {
       let tempScore = 0;
       let tempWord = [];
         tileSet.forEach(tile => {
-          console.log('tile',tile);
+          // console.log('tile',tile);
           let activeIndex = activeIds.indexOf(tile.id);
-          console.log(activeIndex);
+          // console.log(activeIndex);
           if (activeIndex >= 0) activeIds.splice(activeIndex,1);
           tempWord.push(tile.stack[0]);
           return tempScore = tempScore + tile.stack.length;
@@ -176,7 +179,7 @@ export default class App extends React.Component {
       thisWord = tempWord.join('').toLowerCase();
       if (this.dictionaryCheck(thisWord)) {
         score = score + tempScore;
-        words.push(` ${tempScore} ${tempWord.join('')}`);
+        words.push(` + ( ${tempScore} ${tempWord.join('')} )`);
         tempScore = 0;
       } else {
         return score = 'fail';
