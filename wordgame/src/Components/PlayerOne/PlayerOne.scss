@@ -6,28 +6,22 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin:4px;
-  
-    .controls {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      margin:8px;
+    margin:8px;
 
-      h4 {
-        font-size:1rem;
-      }
+    h2 {
+      font-size:2rem;
+      margin:8px;
+    }
       
-      button {
-        font-size:1rem;
-        margin:8px;
-        padding:10px;
-        width:80px;
-        &:hover {
-          background:palevioletred;
-          cursor:pointer;
-          outline:none;
-        }
+    button {
+      font-size:1rem;
+      margin:8px;
+      padding:10px;
+      width:80px;
+      &:hover {
+        background:palevioletred;
+        cursor:pointer;
+        outline:none;
       }
     }
 
@@ -38,12 +32,12 @@
       justify-content: center;
       flex-wrap: wrap;
       width:140px;
-    
+
       .letter {
         align-items: center;
         background: rgba(255, 218, 185, 0.527);
         border:1px solid white;
-        color:rgba(216, 112, 147, 0.74);
+        color:black;
         display:flex;
         font-size:2rem;
         justify-content: center;

@@ -2,13 +2,16 @@
 import React from 'react';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
 import PlayerOne, {drawLetters} from './Components/PlayerOne/PlayerOne.js';
-import scrabbleWordList from './scrabbleWordList';
+import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js'
+import scrabbleWordList from './scrabbleWordList.js';
 import './App.scss';
 
 export default class App extends React.Component {
   state = { 
     activeTiles:[],
     gameBoard:[],
+    message: '',
+    myHistory:[],
     myLetters:[],
     myScore:0,
   };
@@ -20,7 +23,6 @@ export default class App extends React.Component {
           myLetters={myLetters}
           myScore={myScore}
           onDragStart={(e, letter) => e.dataTransfer.setData("letter", letter)}
-          passTurn={this.passTurn}
           submitLetters={() => this.submitLetters(activeTiles)}
         />
 
@@ -29,6 +31,13 @@ export default class App extends React.Component {
           boardClick={this.boardClick}
           gameBoard={gameBoard}
           onDrop={this.onDrop}
+        />
+
+        <ScoreBoard
+          message={this.state.message}
+          myHistory={this.state.myHistory}
+          myScore={this.state.myScore}
+          passTurn={this.passTurn}
         />
     </div> 
     );
@@ -61,6 +70,7 @@ export default class App extends React.Component {
       ...prevState,
       activeTiles: newActive,
       gameBoard: newBoard,
+      message: '',
       myLetters: myNewLetters
     }));
   }
@@ -70,6 +80,7 @@ export default class App extends React.Component {
     this.setState(prevState => ({
       ...prevState,
       activeTiles:[],
+      message: '',
       myLetters: [...prevState.myLetters,...newLetters],
       myScore: prevState.myScore + addScore
     }))
@@ -90,46 +101,53 @@ export default class App extends React.Component {
       ...prevState,
       activeTiles: [...prevState.activeTiles, thisTile],
       gameBoard: newBoard,
+      message: '',
       myLetters: myNewLetters
     }));
   }
 
   passTurn = async () => {
-    console.log('pass')
-    if (this.state.activeTiles.length>0) return console.log('error: cannot pass with active tiles');
+    if (this.state.activeTiles.length>0) return this.setState(() => ({message: 'cannot pass with tiles in play'}));
     let newLetters = drawLetters(8);
     await this.setState(prevState => ({
       ...prevState,
+      message: '',
       myLetters: [...newLetters],
     }))
   }
 
   submitLetters = (activeTiles) => {
     const sorted = [...activeTiles].sort((a,b) => a.id-b.id);
-    if (sorted.length<1) return console.log('error: no active tiles');
+    if (sorted.length<1) return this.setState(() => ({message: 'you havent placed any tiles!'}));
     else this.findWords(sorted);
   }
 
   scoreWords = (foundWords) => {
     let words=[],thisWord='',score=0;
     foundWords.forEach(tileSet => {
+      if (score === 'fail') return this.setState(() => ({message: `dictionary fail ${thisWord.toUpperCase()}`}));
       let tempScore = 0;
       let tempWord = [];
-      tileSet.forEach(tile => {
-        tempWord.push(tile.stack[0]);
-        tempScore = tempScore + tile.stack.length;
-      })
+        tileSet.forEach(tile => {
+          tempWord.push(tile.stack[0]);
+          tempScore = tempScore + tile.stack.length;
+        })
       thisWord = tempWord.join('').toLowerCase();
       if (this.dictionaryCheck(thisWord)) {
         score = score + tempScore;
-        words.push(`${tempWord.join('')} ${tempScore}`);
+        words.push(` ${tempScore} ${tempWord.join('')}`);
         tempScore = 0;
       } else {
         return score = 'fail';
       }
     });
-    if (score === 'fail') return console.log('dict FAIL',thisWord);
-    console.log('score',score,words);
+    if (score === 'fail') return this.setState(() => ({message: `dictionary fail ${thisWord.toUpperCase()}`}));
+    // console.log('score',score,words);
+    this.setState(prevState => ({
+      ...prevState,
+      message: `you scored ${score} !`,
+      myHistory: [...prevState.myHistory, words]
+    }));
     return this.nextPlayer(score);
   }
 

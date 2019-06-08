@@ -2,6 +2,7 @@
 @import './reset.scss';
 @import './Components/PlayerOne/PlayerOne.scss';
 @import './Components/GameBoard/GameBoard.scss';
+@import './Components/ScoreBoard/ScoreBoard.scss';
 
 * {
   box-sizing: border-box;
@@ -13,10 +14,7 @@ body {
   color:white;
 }
 
-h2 {
-  font-size:2rem;
-  margin:12px;
-}
+
 
 .container {
   align-items: center;
