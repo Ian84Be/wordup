@@ -8,8 +8,10 @@ const GameBoard = props => {
             return (
               <div 
                 className={(props.activeTiles.filter(activeTile => activeTile.id === tile.id).length>0) ? 'active tile' : 'tile'}
+                draggable
                 key={tile.id} 
                 onClick={e => props.boardClick(e, index)}
+                onDragStart={e => props.onDragStart(e, index)}
                 onDragOver={e => e.preventDefault()}
                 onDrop={e => props.onDrop(e, index)}
               >

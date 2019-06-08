@@ -22,7 +22,7 @@ export default class App extends React.Component {
         <PlayerOne 
           myLetters={myLetters}
           myScore={myScore}
-          onDragStart={(e, letter) => e.dataTransfer.setData("letter", letter)}
+          onDragStart={this.onDragStart}
           submitLetters={() => this.submitLetters(activeTiles)}
         />
 
@@ -30,6 +30,7 @@ export default class App extends React.Component {
           activeTiles={this.state.activeTiles}
           boardClick={this.boardClick}
           gameBoard={gameBoard}
+          onDragStart={this.onDragStart}
           onDrop={this.onDrop}
         />
 
@@ -44,7 +45,8 @@ export default class App extends React.Component {
   } // render() END
     componentDidMount() {
     const myGrid = boardMaker(8);
-    const myNewLetters = drawLetters(8);
+    // const myNewLetters = drawLetters(8);
+    const myNewLetters = ['N','U','M','B','S','I','N','K'];
     this.setState(prevState => ({
       ...prevState,
       gameBoard: myGrid,
@@ -58,10 +60,8 @@ export default class App extends React.Component {
     const newBoard = [...gameBoard];
     const thisTile = newBoard[index];
     if (!activeTiles.includes(thisTile)) return;
-
     const thisLetter = thisTile.stack.shift();
     if (!thisLetter) return;
-
     const myNewLetters = [...myLetters, thisLetter];
     const newActive = [...activeTiles];
     newActive.splice(newActive.findIndex(tile => tile.id === thisTile.id),1);
@@ -86,20 +86,48 @@ export default class App extends React.Component {
     }))
   }
 
-  onDrop = (e, index) => {
-    const {activeTiles, myLetters, gameBoard} = this.state;
+  onDragStart = (e, index) => {
+    if (typeof(index) !== 'number') return e.dataTransfer.setData("letter", index);
+    const {activeTiles, gameBoard} = this.state;
     const newBoard = [...gameBoard];
     const thisTile = newBoard[index];
-    if (activeTiles.includes(thisTile)) return;
+    if (!activeTiles.includes(thisTile)) return e.dataTransfer.setData("letter", "blank");
+    if (e.target.classList.contains('active')) {
+      e.dataTransfer.setData("incomingIndex", index);
+      e.dataTransfer.setData("letter", thisTile.stack[0]);
+    } 
+  }
 
+  onDrop = (e, droppedOnIndex) => {
     const letter = e.dataTransfer.getData("letter");
-    const myNewLetters = [...myLetters];
-    myNewLetters.splice(myNewLetters.indexOf(letter),1)
-    thisTile.stack.unshift(letter);
+    if (letter === 'blank' || letter === 'undefined' ) return console.log('error: cannot move inactive tile');
+    
+    const {activeTiles, myLetters, gameBoard} = this.state;
+    const newBoard = [...gameBoard];
+    const droppedOnTile = newBoard[droppedOnIndex];
+    let myNewLetters = [...myLetters];
+    let newActiveTiles = [...activeTiles];
+    if (activeTiles.includes(droppedOnTile)) return console.log('error: cannot replace active tile');
+    if (droppedOnTile.stack[0] === letter) return console.log('error: cannot duplicate letter');
+
+    const incomingIndex = e.dataTransfer.getData("incomingIndex");
+    if (incomingIndex) {
+      const incomingTile = newBoard[incomingIndex];
+      incomingTile.stack.shift();
+      droppedOnTile.stack.unshift(letter);
+      newActiveTiles.splice(newActiveTiles.findIndex(tile => tile.id === incomingTile.id),1);
+      newActiveTiles = [...newActiveTiles, droppedOnTile];
+    }
+    
+    if (!incomingIndex) {
+      myNewLetters.splice(myNewLetters.indexOf(letter),1)
+      droppedOnTile.stack.unshift(letter);
+      newActiveTiles = [...activeTiles, droppedOnTile];
+    } 
 
     this.setState(prevState => ({
       ...prevState,
-      activeTiles: [...prevState.activeTiles, thisTile],
+      activeTiles: newActiveTiles,
       gameBoard: newBoard,
       message: '',
       myLetters: myNewLetters
@@ -123,14 +151,27 @@ export default class App extends React.Component {
   }
 
   scoreWords = (foundWords) => {
+    // console.log('scoreWords = (foundWords)',foundWords);
+    // console.log('this.state.activeTiles',this.state.activeTiles);
+    // TODO
+    // strict scoring mode >> force players to build in ONE DIRECTION ONLY
+    // double strict scoring >> lose turn if dictionary FAIL
+    const {activeTiles} = this.state;
+    const activeIds = [];
+    activeTiles.forEach(tile => activeIds.push(tile.id));
+
     let words=[],thisWord='',score=0;
     foundWords.forEach(tileSet => {
       if (score === 'fail') return this.setState(() => ({message: `dictionary fail ${thisWord.toUpperCase()}`}));
       let tempScore = 0;
       let tempWord = [];
         tileSet.forEach(tile => {
+          console.log('tile',tile);
+          let activeIndex = activeIds.indexOf(tile.id);
+          console.log(activeIndex);
+          if (activeIndex >= 0) activeIds.splice(activeIndex,1);
           tempWord.push(tile.stack[0]);
-          tempScore = tempScore + tile.stack.length;
+          return tempScore = tempScore + tile.stack.length;
         })
       thisWord = tempWord.join('').toLowerCase();
       if (this.dictionaryCheck(thisWord)) {
@@ -141,6 +182,8 @@ export default class App extends React.Component {
         return score = 'fail';
       }
     });
+
+    if (activeIds.length>0) return console.log('error: loose tiles');
     if (score === 'fail') return this.setState(() => ({message: `dictionary fail ${thisWord.toUpperCase()}`}));
     // console.log('score',score,words);
     this.setState(prevState => ({
