@@ -11,6 +11,7 @@ $th: $tile__height;
     background: $tile__9-color;
     // border:1px solid $tile__border-color;
     border-radius:8px;
+    box-shadow: 2px 2px $tile__2-color;
     color:black;
     display:flex;
     font-size:2rem;

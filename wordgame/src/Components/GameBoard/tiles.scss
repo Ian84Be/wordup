@@ -105,9 +105,10 @@
       transform: translate(-$th*9,-$th*9);
     }
 
-    // set a default BG for played tiles
+    // set a default style for played tiles
     &.x {
         background:$tile__0-color;
+        border: 1px solid $tile--played-border;
     }
 
     &.active {

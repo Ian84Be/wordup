@@ -114,8 +114,8 @@ export default class App extends React.Component {
   }
 
   onDragStart = (e, index) => {
-    console.log('dragSTART e.target',e.target);
-    console.log('dragSTART index',index);
+    // console.log('dragSTART e.target',e.target);
+    // console.log('dragSTART index',index);
     if (typeof(index) !== 'number') return e.dataTransfer.setData("letter", index);
     const {activeTiles, gameBoard} = this.state;
     const newBoard = [...gameBoard];
@@ -175,15 +175,82 @@ export default class App extends React.Component {
   }
 
   scoreWords = (foundWords) => {
-    // console.log('scoreWords = (foundWords)',foundWords);
-    // console.log('this.state.activeTiles',this.state.activeTiles);
+    console.log('scoreWords = (foundWords)',foundWords);
     // TODO
-    // strict scoring mode >> force players to build in ONE DIRECTION ONLY
     // double strict scoring >> lose turn if dictionary FAIL
     const {activeTiles} = this.state;
     const activeIds = [];
     activeTiles.forEach(tile => activeIds.push(tile.id));
 
+    if (!strictModeScoring(foundWords)) return console.log('error: strictModeScoring VIOLATION');
+
+    function strictModeScoring(foundWords) {
+      // pull ids for vertWord && horWord
+      let vertWay = [];
+      let horWay = [];
+      foundWords.forEach((tileSet, index) => {
+        console.log('tileSet',tileSet);
+        let vertWord = [];
+        let horWord = [];
+        let lastId = '';
+          tileSet.forEach((tile,i) => {
+            let nextTile = tileSet[i+1];
+            if (!nextTile) return lastId = tile.id;
+            if (tile.id + 10 === nextTile.id ) vertWord.push(tile.id);
+            if (tile.id + 1 === nextTile.id ) horWord.push(tile.id);
+          });
+        if (vertWord.length>0) {
+          vertWord.push(lastId);
+          vertWay.push(...vertWord);
+        }
+        if (horWord.length>0) {
+          horWord.push(lastId);
+          horWay.push(...horWord);
+        }
+        console.log('vertWord',vertWord,'horWord',horWord);
+      });
+      console.log('vertWay',vertWay,'horWay',horWay);
+      console.log('activeIds',activeIds);
+
+      // strictModeScoring() START
+      // strict scoring mode >> force players to build in ONE DIRECTION ONLY
+      if (vertWay.length>0 && horWay.length>0) {
+        let vertAct = 0;
+        let horAct = 0;
+        activeIds.forEach(id => {
+          if (vertWay.includes(id)) ++vertAct;
+          if (horWay.includes(id)) ++horAct;
+        });
+        console.log('vertAct',vertAct,'horAct',horAct);
+        console.log('vertAct+horAct',vertAct+horAct);
+        console.log('activeIds.length',activeIds.length);
+
+        let inequal = (vertAct+horAct > activeIds.length) ? true : false;
+        console.log('inequal',inequal);
+
+        if (vertAct>1 && horAct>1) {
+          if (inequal || vertAct === horAct) {
+            return console.log('error: cannot build in two directions!');
+          }
+        }
+        else if (vertAct === horAct) {
+          if (activeIds.length === 1) return true;
+          activeIds.forEach((id,i) => {
+            console.log('id',id,'activeIds[i+1]',activeIds[i+1]);
+            let nextId = activeIds[i+1];
+            if (!nextId) return console.log('vertMatch END');
+            else if (id % 10 === nextId % 10) console.log('activeIds vertMatch',id % 10 === nextId % 10);
+            else if (id + 1 === nextId) console.log('activeIds horMatch',id + 1 === nextId)
+            else return console.log('FFFFF: cannot build in two directions!');
+          });
+        }
+        else if (!inequal) return console.log('GGGGG: cannot build in two directions!');
+        else return true;
+      } 
+      else return true;
+    } // strictModeScoring() END 
+
+    // check the tileSet of each foundWord, push the letter to tempWord, score the letter based on stack length
     let words=[],thisWord='',score=0;
     foundWords.forEach(tileSet => {
       if (score === 'fail') return this.setState(() => ({message: `dictionary fail ${thisWord.toUpperCase()}`}));
@@ -229,7 +296,6 @@ export default class App extends React.Component {
     sortedTiles.forEach(tile => tempWords.push(...lookBothWays(tile)));
     let foundWords = uniqWords(tempWords);
     // console.log(foundWords.length,'uniqWords',foundWords);
-
     if (foundWords.length>0) return this.scoreWords(foundWords);
 
     function uniqWords(tileIds) {
@@ -261,6 +327,9 @@ export default class App extends React.Component {
       horWord = [startTile,...horWord].sort((a,b) => a.id-b.id);
       if (vertWord.length>1) result.push(vertWord);
       if (horWord.length>1) result.push(horWord);
+      // console.log('vertWord',vertWord);
+      // console.log('horWord',horWord);
+      // if (vertWord && horWord) console.log('error: must build in one direction only!')
       return result;
 
       function startLook(direction,startTile) {
