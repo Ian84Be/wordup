@@ -90,6 +90,7 @@ export default class App extends React.Component {
       newLetters = [...oldLetters,...randomLetters];
     }
     // TODO
+    // powerup E9 tile if theirScore - myScore > 40
     // toggle config obj >> guarantee ONE VOWEL
     // fix so that hand INCLUDES one vowel >> put this on App method for nextPlayer
     const vowels = ['A','E','I','O','U'];
@@ -113,6 +114,8 @@ export default class App extends React.Component {
   }
 
   onDragStart = (e, index) => {
+    console.log('dragSTART e.target',e.target);
+    console.log('dragSTART index',index);
     if (typeof(index) !== 'number') return e.dataTransfer.setData("letter", index);
     const {activeTiles, gameBoard} = this.state;
     const newBoard = [...gameBoard];

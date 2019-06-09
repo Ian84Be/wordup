@@ -1,132 +1,121 @@
+
+@import '../../palette.scss';
+@import '../../mixins.scss';
+
 .tile {
-    align-items: center;
-    background: $tile__0-color;
-    border:1px solid hsla(200,50,60,.75);
-    color:black;
-    display:flex;
-    font-size:2rem;
-    height:3rem;
-    justify-content: center;
-    margin:4px;
-    padding:8px;
-    width:3rem;
-
-    small {
-      font-size:.75rem;
-    }
-
-    // TODO
-    // automate this css setting with offset/color theme
-    // 4px too drastic with stacks>6
-
+    @include GameBoardTile;
     &.x {
       background:$tile__1-color;
       border-top:0;
       border-left:0;
-      box-shadow: 4px 4px $tile__1-color;
-      transform: translate(-4px,-4px);
+      box-shadow: $th $th $tile__1-color;
+      transform: translate(-$th,-$th);
     }
 
     &.xx {
       background:$tile__2-color;
       box-shadow:
-      4px 4px $tile__2-color,
-      8px 8px $tile__2-color;
-      transform: translate(-8px,-8px);
+      $th $th $tile__2-color,
+      $th*2 $th*2 $tile__2-color;
+      transform: translate(-$th*2,-$th*2);
     }
 
     &.xxx {
       background:$tile__3-color;
       box-shadow:
-      4px 4px $tile__3-color,
-      8px 8px $tile__3-color,
-      12px 12px $tile__3-color;
-      transform: translate(-12px,-12px);
+      $th $th $tile__3-color,
+      $th*2 $th*2 $tile__3-color,
+      $th*3 $th*3 $tile__3-color;
+      transform: translate(-$th*3,-$th*3);
     }
 
     &.xxxx {
       background:$tile__4-color;
       box-shadow:
-      4px 4px $tile__4-color,
-      8px 8px $tile__4-color,
-      12px 12px $tile__4-color,
-      16px 16px $tile__4-color;
-      transform: translate(-16px,-16px);
+      $th $th $tile__4-color,
+      $th*2 $th*2 $tile__4-color,
+      $th*3 $th*3 $tile__4-color,
+      $th*4 $th*4 $tile__4-color;
+      transform: translate(-$th*4,-$th*4);
     }
 
     &.xxxxx {
       background:$tile__5-color;
       border: 0;
       box-shadow:
-      4px 4px $tile__5-color,
-      8px 8px $tile__5-color,
-      12px 12px $tile__5-color,
-      16px 16px $tile__5-color,
-      20px 20px $tile__5-color;
-      transform: translate(-20px,-20px);
+      $th $th $tile__5-color,
+      $th*2 $th*2 $tile__5-color,
+      $th*3 $th*3 $tile__5-color,
+      $th*4 $th*4 $tile__5-color,
+      $th*5 $th*5 $tile__5-color;
+      transform: translate(-$th*5,-$th*5);
     }
 
     &.xxxxxx {
       background:$tile__6-color;
       box-shadow:
-      4px 4px $tile__6-color,
-      8px 8px $tile__6-color,
-      12px 12px $tile__6-color,
-      16px 16px $tile__6-color,
-      20px 20px $tile__6-color,
-      24px 24px $tile__6-color;
-      transform: translate(-24px,-24px);
+      $th $th $tile__6-color,
+      $th*2 $th*2 $tile__6-color,
+      $th*3 $th*3 $tile__6-color,
+      $th*4 $th*4 $tile__6-color,
+      $th*5 $th*5 $tile__6-color,
+      $th*6 $th*6 $tile__6-color;
+      transform: translate(-$th*6,-$th*6);
     }
 
     &.xxxxxxx {
       background:$tile__7-color;
       box-shadow:
-      4px 4px $tile__7-color,
-      8px 8px $tile__7-color,
-      12px 12px $tile__7-color,
-      16px 16px $tile__7-color,
-      20px 20px $tile__7-color,
-      24px 24px $tile__7-color,
-      28px 28px $tile__7-color;
-      transform: translate(-28px,-28px);
+      $th $th $tile__7-color,
+      $th*2 $th*2 $tile__7-color,
+      $th*3 $th*3 $tile__7-color,
+      $th*4 $th*4 $tile__7-color,
+      $th*5 $th*5 $tile__7-color,
+      $th*6 $th*6 $tile__7-color,
+      $th*7 $th*7 $tile__7-color;
+      transform: translate(-$th*7,-$th*7);
     }
 
     &.xxxxxxxx {
       background:$tile__8-color;
       box-shadow:
-      4px 4px $tile__8-color,
-      8px 8px $tile__8-color,
-      12px 12px $tile__8-color,
-      16px 16px $tile__8-color,
-      20px 20px $tile__8-color,
-      24px 24px $tile__8-color,
-      28px 28px $tile__8-color,
-      32px 32px 1px 0px $tile__8-color;
-      transform: translate(-32px,-32px);
+      $th $th $tile__8-color,
+      $th*2 $th*2 $tile__8-color,
+      $th*3 $th*3 $tile__8-color,
+      $th*4 $th*4 $tile__8-color,
+      $th*5 $th*5 $tile__8-color,
+      $th*6 $th*6 $tile__8-color,
+      $th*7 $th*7 $tile__8-color,
+      $th*8 $th*8 $tile__8-color;
+      transform: translate(-$th*8,-$th*8);
     }
 
     &.xxxxxxxxx {
       background:$tile__9-color;
       box-shadow:
-      4px 4px $tile__9-color,
-      8px 8px $tile__9-color,
-      12px 12px $tile__9-color,
-      16px 16px $tile__9-color,
-      20px 20px $tile__9-color,
-      24px 24px $tile__9-color,
-      28px 28px $tile__9-color,
-      32px 32px $tile__9-color,
-      36px 36px $tile__9-color;
-      transform: translate(-36px,-36px);
+      $th $th $tile__9-color,
+      $th*2 $th*2 $tile__9-color,
+      $th*3 $th*3 $tile__9-color,
+      $th*4 $th*4 $tile__9-color,
+      $th*5 $th*5 $tile__9-color,
+      $th*6 $th*6 $tile__9-color,
+      $th*7 $th*7 $tile__9-color,
+      $th*8 $th*8 $tile__9-color,
+      $th*9 $th*9 $tile__9-color;
+      transform: translate(-$th*9,-$th*9);
     }
 
-    &.xxxxxxxxxx {
-      background:$tile__9-color;
-      box-shadow: 36px 36px $tile__9-color;
-      transform: translate(-36px,-36px);
+    // set a default BG for played tiles
+    &.x {
+        background:$tile__0-color;
     }
 
     &.active {
       background:white;
+      &:hover {
+        cursor:pointer;
+        background:$active-color;
+      }
     }
+
   } // .tile END

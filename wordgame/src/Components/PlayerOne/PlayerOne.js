@@ -10,7 +10,7 @@ const PlayerOne = props => {
         {props.myLetters.map(letter => {
             return (
               <div 
-                className="letter"
+                className="tile letter"
                 draggable
                 key={(Math.random() * 100)}
                 onDragStart={e => props.onDragStart(e, letter)}
