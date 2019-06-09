@@ -1,0 +1,132 @@
+.tile {
+    align-items: center;
+    background: $tile__0-color;
+    border:1px solid hsla(200,50,60,.75);
+    color:black;
+    display:flex;
+    font-size:2rem;
+    height:3rem;
+    justify-content: center;
+    margin:4px;
+    padding:8px;
+    width:3rem;
+
+    small {
+      font-size:.75rem;
+    }
+
+    // TODO
+    // automate this css setting with offset/color theme
+    // 4px too drastic with stacks>6
+
+    &.x {
+      background:$tile__1-color;
+      border-top:0;
+      border-left:0;
+      box-shadow: 4px 4px $tile__1-color;
+      transform: translate(-4px,-4px);
+    }
+
+    &.xx {
+      background:$tile__2-color;
+      box-shadow:
+      4px 4px $tile__2-color,
+      8px 8px $tile__2-color;
+      transform: translate(-8px,-8px);
+    }
+
+    &.xxx {
+      background:$tile__3-color;
+      box-shadow:
+      4px 4px $tile__3-color,
+      8px 8px $tile__3-color,
+      12px 12px $tile__3-color;
+      transform: translate(-12px,-12px);
+    }
+
+    &.xxxx {
+      background:$tile__4-color;
+      box-shadow:
+      4px 4px $tile__4-color,
+      8px 8px $tile__4-color,
+      12px 12px $tile__4-color,
+      16px 16px $tile__4-color;
+      transform: translate(-16px,-16px);
+    }
+
+    &.xxxxx {
+      background:$tile__5-color;
+      border: 0;
+      box-shadow:
+      4px 4px $tile__5-color,
+      8px 8px $tile__5-color,
+      12px 12px $tile__5-color,
+      16px 16px $tile__5-color,
+      20px 20px $tile__5-color;
+      transform: translate(-20px,-20px);
+    }
+
+    &.xxxxxx {
+      background:$tile__6-color;
+      box-shadow:
+      4px 4px $tile__6-color,
+      8px 8px $tile__6-color,
+      12px 12px $tile__6-color,
+      16px 16px $tile__6-color,
+      20px 20px $tile__6-color,
+      24px 24px $tile__6-color;
+      transform: translate(-24px,-24px);
+    }
+
+    &.xxxxxxx {
+      background:$tile__7-color;
+      box-shadow:
+      4px 4px $tile__7-color,
+      8px 8px $tile__7-color,
+      12px 12px $tile__7-color,
+      16px 16px $tile__7-color,
+      20px 20px $tile__7-color,
+      24px 24px $tile__7-color,
+      28px 28px $tile__7-color;
+      transform: translate(-28px,-28px);
+    }
+
+    &.xxxxxxxx {
+      background:$tile__8-color;
+      box-shadow:
+      4px 4px $tile__8-color,
+      8px 8px $tile__8-color,
+      12px 12px $tile__8-color,
+      16px 16px $tile__8-color,
+      20px 20px $tile__8-color,
+      24px 24px $tile__8-color,
+      28px 28px $tile__8-color,
+      32px 32px 1px 0px $tile__8-color;
+      transform: translate(-32px,-32px);
+    }
+
+    &.xxxxxxxxx {
+      background:$tile__9-color;
+      box-shadow:
+      4px 4px $tile__9-color,
+      8px 8px $tile__9-color,
+      12px 12px $tile__9-color,
+      16px 16px $tile__9-color,
+      20px 20px $tile__9-color,
+      24px 24px $tile__9-color,
+      28px 28px $tile__9-color,
+      32px 32px $tile__9-color,
+      36px 36px $tile__9-color;
+      transform: translate(-36px,-36px);
+    }
+
+    &.xxxxxxxxxx {
+      background:$tile__9-color;
+      box-shadow: 36px 36px $tile__9-color;
+      transform: translate(-36px,-36px);
+    }
+
+    &.active {
+      background:white;
+    }
+  } // .tile END

@@ -216,8 +216,8 @@ export default class App extends React.Component {
   }
 
   dictionaryCheck = (word) => {
-    // return true;
-    return (scrabbleWordList.includes(word)) ? true : false;
+    return true;
+    // return (scrabbleWordList.includes(word)) ? true : false;
   }
 
   findWords = (sortedTiles) => {
