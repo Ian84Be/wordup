@@ -163,20 +163,19 @@ export default class App extends React.Component {
   scoreWords = (foundWords) => {
     // TODO
     // double strict scoring >> lose turn if dictionary FAIL
+    const newBoard = [...this.state.gameBoard];
     let okStrict = strictModeScoring(foundWords);
     if (!okStrict) return console.log('error: strictModeScoring VIOLATION');
-    const newBoard = [...this.state.gameBoard];
     const activeTiles = newBoard.filter(tile => tile.active);
-    // if (activeIds.length>0) return console.log('error: loose tiles');
 
     let scoreInfo = this.calculateScore(foundWords);
     // console.log('scoreWords scoreInfo',scoreInfo);
     const score = scoreInfo[0];
     const words = scoreInfo[1];
-    console.log('score',score,'words',words);
+    console.log('score',score,words);
     
     if (score !== 'fail') {
-      console.log('scoreWords PASS activeTiles',activeTiles);
+      // console.log('scoreWords PASS activeTiles',activeTiles);
       activeTiles.forEach((tile) => {
         let thisIndex = newBoard.findIndex(that => that.id === tile.id);
         newBoard[thisIndex].active = false;
@@ -193,63 +192,53 @@ export default class App extends React.Component {
       return this.setState(() => ({message: `dictionary FAIL ${words}`}));
     }
 
+    // strict scoring mode >> force players to build in ONE DIRECTION ONLY
     function strictModeScoring(foundWords) {
-      // console.log('strictModeScoring(foundWords) TRUE',foundWords);
+      console.log('strictModeScoring(foundWords)',foundWords);
+
+      let vertActive = [];
+      let horActive = [];
+      foundWords.forEach(tileSet => {
+        let direction = tileSet[0];
+        let activeTiles = tileSet[2];
+        (direction === 'vert') ? vertActive.push(...activeTiles) : horActive.push(...activeTiles);
+      });
+      console.log('vertActive',vertActive,'horActive',horActive);
+      const activeTiles = newBoard.filter(tile => tile.active);
+      console.log('activeTiles',activeTiles);
+      // if (activeIds.length>0) return console.log('error: loose tiles');
+
+      if (vertActive.length === 1 && horActive.length === 1) {
+        if (vertActive[0] !== horActive[0]) return console.log('strictMode FAIL >> cannot build in two directions!');
+      }
+
+      let oneColumn = true;
+      if (vertActive.length>0) oneColumn = vertActive.every(id => id % 10 === vertActive[0] % 10);
+
+      let oneRow = true;
+      let leftLimit = horActive[0] - (horActive[0] % 10);
+      let rightLimit = leftLimit + 7;
+      horActive.forEach((id, i) => {
+        if (id < leftLimit || id > rightLimit) oneRow = false;
+      });
+      console.log('oneRow',oneRow);
+      console.log('oneColumn',oneColumn);
+
+      if (!oneColumn || !oneRow) return console.log('strictMode FAIL >> cannot build in two directions!');
+      if (oneColumn && oneRow) return console.log('strictMode FAIL >> cannot build in two directions!');
+      // let oneRow = horActive.every(id => {})
       return true;
-      // strict scoring mode >> force players to build in ONE DIRECTION ONLY
-                // if (vertWay.length>0 && horWay.length>0) {
-                //   let vertAct = 0;
-                //   let horAct = 0;
-                //   activeIds.forEach(id => {
-                //     if (vertWay.includes(id)) ++vertAct;
-                //     if (horWay.includes(id)) ++horAct;
-                //   });
-                //   console.log('vertAct',vertAct,'horAct',horAct);
-                //   console.log('vertAct+horAct',vertAct+horAct);
-                //   console.log('activeIds.length',activeIds.length);
 
-                //   let inequal = (vertAct+horAct > activeIds.length) ? true : false;
-                //   console.log('inequal',inequal);
-
-                //   if (vertAct>1 && horAct>1) {
-                //     if (inequal && vertAct === horAct) {
-                //       let vertCheck = 0;
-                //       let horCheck = 0;
-                //       let errCheck = 0;
-                //       activeIds.forEach((id,i) => {
-                //         console.log('vertcheckhorcheck id',id);
-                //         let nextId = activeIds[i+1];
-                //         let lastId = activeIds[i-1];
-                //         console.log('nextId',nextId);
-                //         if (!nextId) {
-                //           if (id % 10 === lastId % 10) ++vertCheck;
-                //           if (id - 1 === lastId) ++horCheck;
-                //         }
-                //         else if (id % 10 === nextId % 10 || id % 10 === lastId % 10) ++vertCheck;
-                //         else if (id + 1 === nextId || id - 1 === nextId) ++horCheck;
-                //         else ++errCheck;
-                //       });
-                //       console.log('vertCheck',vertCheck,'horCheck',horCheck,'errCheck',errCheck);
-                //       if (errCheck) return console.log('error: cannot build in two directions!');
-                //       else if (vertCheck !== horCheck) {
-                //         if (vertCheck === 0 || horCheck === 0) return true;
-                //         else return console.log('error: cannot build in two directions!');
-                //       }
-                //     }
-                //   }
-                //   else if (vertAct === horAct) {
-                //     if (activeIds.length === 1) return true;
-                //     activeIds.forEach((id,i) => {
-                //       console.log('id',id,'activeIds[i+1]',activeIds[i+1]);
-                //       let nextId = activeIds[i+1];
-                //       if (!nextId) return console.log('vertMatch END');
-                //       else if (id % 10 === nextId % 10) console.log('activeIds vertMatch',id % 10 === nextId % 10);
-                //       else if (id + 1 === nextId) console.log('activeIds horMatch',id + 1 === nextId)
-                //       else return console.log('FFFFF: cannot build in two directions!');
-                //     });
-                //   }
-                //   else if (inequal) return console.log('GGGGG: cannot build in two directions!');
-                // } else return true;
+      // if (vertActive.length === 1 && horActive.length === 1) {
+      //   if (vertActive[0] !== horActive[0]) return console.log('strictMode FAIL >> cannot build in two directions!');
+      // } else if (vertActive.length>1 && horActive.length>1) {
+      //   let isEqual = true;
+      //   vertActive.forEach(tile => {
+      //     if (!horActive.includes(tile)) isEqual = false;
+      //   });
+      //   if (!isEqual) return console.log('strictMode FAIL >> cannot build in two directions!');
+      // }
+      
     } // strictModeScoring() END 
   } // this.scoreWords() END >> return this.nextPlayer(score);
   
@@ -289,67 +278,87 @@ export default class App extends React.Component {
     // return (scrabbleWordList.includes(word)) ? true : false;
   } // this.dictionaryCheck() END >> back to this.calculateScore();
 
-  // this.findWords() START >> lookBothWays(startTile) >> startLook(direction, startTile) >> uniqWords(tempWords) 
+  // this.findWords() START 
+  // >> this.lookBothWays(startTile) x startLook(direction, startTile) 
+  // >> this.uniqWords(tempWords) 
+  // END >> this.scoreWords(foundWords);
   findWords = (activeTiles) => {
-    // console.log('findWords(activeTiles)',activeTiles);
-    const newBoard = [...this.state.gameBoard];
     const tempWords = [];
-    activeTiles.forEach(tile => tempWords.push(...lookBothWays(tile)));
-    // console.log('findWords tempWords',tempWords);
-    let foundWords = uniqWords(tempWords);
+    activeTiles.forEach(tile => tempWords.push(...this.lookBothWays(tile)));
+    // console.log('!!! ### !!! findWords tempWords',tempWords);
+    let foundWords = this.uniqWords(tempWords);
     console.log(foundWords.length,'uniqWords',foundWords);
     if (foundWords.length>0) return this.scoreWords(foundWords);
-
-      function uniqWords(tempWords) {
-        const seen = {};
-        const result = tempWords.filter(tile => {
-          let word = JSON.stringify(tile);
-          return seen.hasOwnProperty(word) ? false : (seen[word] = true);
-        });
-        return result;
-      }
-
-      function lookBothWays(startTile) {
-        const result = []
-        const {id} = startTile;
-        let tempWord = [];
-        let vertWord = [];
-        let horWord = [];
-        // find VERTICAL word
-        let above = (id < 20) ? null : startLook('above', startTile);
-        if (above) vertWord.push(...above);
-        let below = (id > 79) ? null : startLook('below', startTile);
-        if (below) vertWord.push(...below);
-        vertWord = [startTile,...vertWord].sort((a,b) => a.id-b.id);
-        // find HORIZONTAL word
-        let left = (id % 10 === 0) ? null : startLook('left', startTile);
-        if (left) horWord.push(...left);
-        let right = (id-7 % 10 === 0) ? null : startLook('right', startTile);
-        if (right) horWord.push(...right);
-        horWord = [startTile,...horWord].sort((a,b) => a.id-b.id);
-        if (vertWord.length>1) result.push(['vert',vertWord]);
-        if (horWord.length>1) result.push(['hor',horWord]);
-        // console.log('vertWord',vertWord);
-        // console.log('horWord',horWord);
-        // if (vertWord.length>1 && horWord.length>1) console.log('error: must build in one direction only!')
-        return result;
-
-        function startLook(direction, startTile) {
-          let next,offset;
-          if (direction === 'above') offset = -10;
-          if (direction === 'below') offset = 10;
-          if (direction === 'left') offset = -1;
-          if (direction === 'right') offset = 1;
-          next = newBoard.find(tile => tile.id === startTile.id+offset);
-          if (next && next.stack.length>0) {
-            tempWord.push(next);
-            return startLook(direction, next);
-          } else if (tempWord.length>0) {
-            const result = tempWord.sort((a,b) => a.id-b.id);
-            tempWord=[];
-            return result;
-          } else return null;
-        } // startLook() END
-      } // lookBothWays() END >> back to findWords()
   } // this.findWords() END >> return this.scoreWords(foundWords);
+
+  lookBothWays = (startTile) => {
+    const newBoard = [...this.state.gameBoard];
+    const result = []
+    const {id} = startTile;
+    let tempAct=[],tempWord=[];
+    let vertAct=[],vertWord=[];
+    let horAct=[],horWord=[];
+      // find VERTICAL word
+      let above = (id < 20) ? null : startLook('above', startTile);
+      if (above) {
+        vertWord.push(...above[0]);
+        vertAct.push(...above[1]);
+      }
+      let below = (id > 79) ? null : startLook('below', startTile);
+      if (below) {
+        vertWord.push(...below[0]);
+        vertAct.push(...below[1]);
+      }
+      // find HORIZONTAL word
+      let left = (id % 10 === 0) ? null : startLook('left', startTile);
+      if (left) {
+        horWord.push(...left[0]);
+        horAct.push(...left[1]);
+      }
+      let right = (id-7 % 10 === 0) ? null : startLook('right', startTile);
+      if (right) {
+        horWord.push(...right[0]);
+        horAct.push(...right[1]);
+      }
+    vertAct = [startTile,...vertAct].sort((a,b) => a.id-b.id).map(tile => tile.id);
+    vertWord = [startTile,...vertWord].sort((a,b) => a.id-b.id);
+    horAct = [startTile,...horAct].sort((a,b) => a.id-b.id).map(tile => tile.id);
+    horWord = [startTile,...horWord].sort((a,b) => a.id-b.id);
+    if (vertWord.length>1) result.push(['vert',vertWord,vertAct]);
+    if (horWord.length>1) result.push(['hor',horWord,horAct]);
+    // console.log('vertWord',vertWord,'vertAct',vertAct);
+    // console.log('horWord',horWord,'horAct',horAct);
+    // console.log('result',result);
+    return result;
+
+    function startLook(direction, startTile) {
+      let next,offset;
+      if (direction === 'above') offset = -10;
+      if (direction === 'below') offset = 10;
+      if (direction === 'left') offset = -1;
+      if (direction === 'right') offset = 1;
+      next = newBoard.find(tile => tile.id === startTile.id+offset);
+      if (next && next.stack.length>0) {
+        tempWord.push(next);
+        if (next.active) tempAct.push(next);
+        return startLook(direction, next);
+      } else if (tempWord.length>0) {
+        const thisWord = tempWord.sort((a,b) => a.id-b.id);
+        const thisAct = tempAct.sort((a,b) => a.id-b.id);
+        const result = [thisWord,thisAct]
+        tempWord=[];
+        tempAct=[];
+        return result;
+      } else return null;
+    } // startLook() END
+  } // lookBothWays() END >> back to this.findWords()
+
+  uniqWords = (tempWords) => {
+    const seen = {};
+    const result = tempWords.filter(tile => {
+      let word = JSON.stringify(tile);
+      return seen.hasOwnProperty(word) ? false : (seen[word] = true);
+    });
+    return result;
+  }
 } // App COMPONENT END
