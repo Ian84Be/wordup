@@ -1,0 +1,24 @@
+
+@import './reset.scss';
+@import './palette.scss';
+@import './mixins.scss';
+@import './Components/PlayerOne/PlayerOne.scss';
+@import './Components/GameBoard/GameBoard.scss';
+@import './Components/ScoreBoard/ScoreBoard.scss';
+
+* {
+  box-sizing: border-box;
+  transition: .5s;
+}
+
+body {
+  background:slategray;
+  color:white;
+}
+
+.container {
+  align-items: center;
+  // border:1px solid white;
+  display:flex;
+  min-width:950px;
+}

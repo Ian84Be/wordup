@@ -1,0 +1,48 @@
+.ScoreBoard {
+    border:1px solid white;
+    background: gray;
+
+    align-items: center;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top:8px;
+    max-width:500px;
+    padding:8px;
+
+    h1 {
+        font-size:3rem;
+    }
+
+    button {
+        font-size:1rem;
+        margin:8px;
+        padding:10px;
+        width:80px;
+        &:hover {
+          background:palevioletred;
+          cursor:pointer;
+          outline:none;
+        }
+    }
+    .myHistory {
+        display: flex;
+        flex-direction: column;
+        align-items:center;
+        margin:8px;
+        .word {
+            padding:2px;
+        }
+    }
+    .myScore {
+        font-size:1.5rem;
+        margin:8px;
+    }
+    .message {
+        
+        font-size:1rem;
+        color:greenyellow;
+        margin:8px;
+    }
+}
