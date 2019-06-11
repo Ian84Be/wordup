@@ -92,7 +92,7 @@ export default class App extends React.Component {
           words.push(` + ( ${tempScore} ${tempWord.join('')} )`);
           tempScore = 0;
         } else {
-          console.log('calculateScore dictionary FAIL',thisWord);
+          // console.log('calculateScore dictionary FAIL',thisWord);
           score = 'fail';
           words.push(thisWord);
           return [score,words];
@@ -190,7 +190,7 @@ export default class App extends React.Component {
       newLetters = [...oldLetters,...randomLetters];
     }
     // TODO
-    // powerup E9 tile if theirScore - myScore > 40
+    // powerup S9 tile if theirScore - myScore > 40
     // toggle config obj >> guarantee ONE VOWEL
     // fix so that hand INCLUDES one vowel >> put this on App method for nextPlayer
     const vowels = ['A','E','I','O','U'];
@@ -275,7 +275,7 @@ export default class App extends React.Component {
     let scoreInfo = this.calculateScore(foundWords);
     const score = scoreInfo[0];
     const words = scoreInfo[1];
-    console.log('score',score,words);
+    // console.log('score',score,words);
     
     if (typeof(score) === 'number') {
       activeTiles.forEach((tile) => {
@@ -289,9 +289,14 @@ export default class App extends React.Component {
         myHistory: [...prevState.myHistory, words]
       }));
       return this.nextPlayer(score);
-    } else return this.setState(() => ({message: `dictionary FAIL ${words}`}));
+    } else {
+      let failWords = words.filter(word => word.match(/[a-z]/g));
+      // console.log('failWords',failWords);
+      return this.setState(() => ({message: `dictionary FAIL ${failWords}`}));
+    } 
     // TODO
     // double strict scoring >> lose turn if dictionary FAIL
+    // MAKE SURE > after 1st turn > active tiles are touching played tiles
 
     // strictModeScoring() START 
     // >> lineLook()

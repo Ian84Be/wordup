@@ -22,6 +22,16 @@ const GameBoard = props => {
         myClassName += stack;
         // console.log('myClassName',myClassName);
       }
+      function onDragOver(e, stack) {
+        e.preventDefault();
+        if (tile.active) return;
+        myClassName = myClassName + ' hover';
+      }
+      function onDragEnd(e) {
+        e.preventDefault();
+        if (!tile.active) return;
+        console.log('onDragEnd e',e.target);
+      }
       
         return (
           <div 
@@ -29,8 +39,9 @@ const GameBoard = props => {
             draggable
             key={tile.id} 
             onClick={e => props.boardClick(e, index, tile.active)}
+            onDragEnd={e => onDragEnd(e)}
             onDragStart={e => props.onDragStart(e, index, tile.active)}
-            onDragOver={e => e.preventDefault()}
+            onDragOver={e => onDragOver(e, tile.stack.length)}
             onDrop={e => props.onDrop(e, index, tile.active)}
           >
             {tile.stack[0] || ''}
