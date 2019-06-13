@@ -3,6 +3,7 @@ import React from 'react';
 import './PlayerOne.scss';
 
 const PlayerOne = props => {
+  if (!props.myLetters) return (<div className="loading">Loading...</div>);
   return ( 
     <section className="PlayerOne">
       <h2>myLetters</h2>

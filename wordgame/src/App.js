@@ -6,11 +6,9 @@ import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js'
 
 import './App.scss';
 
-// dictionary DISABLE for testing
-import scrabbleWordList from './scrabbleWordList.js';
-
 export default class App extends React.Component {
   state = { 
+    dictionary:[],
     gameBoard:[],
     message: '',
     myHistory:[],
@@ -54,11 +52,17 @@ export default class App extends React.Component {
     const myGrid = boardMaker(8);
     // const myNewLetters = drawLetters(8);
     const myNewLetters = ['T','Qu','E','B','S','I','N','K'];
-    this.setState(prevState => ({
-      ...prevState,
-      gameBoard: myGrid,
-      myLetters: myNewLetters
-    }))
+    import("./scrabbleWordList.js").then(dictionary => {
+      console.log('dictionary',dictionary);
+      this.setState(prevState => ({
+        ...prevState,
+        dictionary: dictionary.default,
+        gameBoard: myGrid,
+        myLetters: myNewLetters
+      }));
+    });
+
+
   }
 
   boardClick = (e, index, isActive) => {
@@ -102,9 +106,11 @@ export default class App extends React.Component {
   } // this.calculateScore() END >> back to scoreWords();
 
   dictionaryCheck = (word) => {
+    if (!this.state.dictionary) return this.setState(() => ({message: `dictionary loading... please wait...`}));
     // return false;
     // return true;
-    return (scrabbleWordList.includes(word)) ? true : false;
+    // return (scrabbleWordList.includes(word)) ? true : false;
+    return (this.state.dictionary.includes(word)) ? true : false;
   } // this.dictionaryCheck() END >> back to this.calculateScore();
 
   // this.findWords() START 
@@ -223,23 +229,31 @@ export default class App extends React.Component {
     }
   }
 
-  onDrop = (e, droppedOnIndex, isActive) => {
-    if (isActive) return this.setState(() => ({message: `cannot replace active tile!`}));
-    const letter = e.dataTransfer.getData("letter");
-    if (letter === '') return;
+  onDrop = (e, droppedOnIndex, onActive) => {
+    const incomingIndex = e.dataTransfer.getData("incomingIndex");
+    const incomingLetter = e.dataTransfer.getData("letter");
+    if (incomingLetter === '') return;
+    // if (onActive && incomingIndex === '') return;
     const newBoard = [...this.state.gameBoard];
     const myNewLetters = [...this.state.myLetters];
     const droppedOnTile = newBoard[droppedOnIndex];
-    if (droppedOnTile.stack[0] === letter) return this.setState(() => ({message: `this letter is already ${letter}!`}));
-    const incomingIndex = e.dataTransfer.getData("incomingIndex");
-    if (incomingIndex) {
+    const droppedOnLetter = droppedOnTile.stack[0];
+    if (droppedOnLetter === incomingLetter) return this.setState(() => ({message: `this letter is already ${incomingLetter}!`}));
+    if (incomingIndex !== '') {
       const incomingTile = newBoard[incomingIndex];
       incomingTile.stack.shift();
-      droppedOnTile.stack.unshift(letter);
-      incomingTile.active = false;
+      if (onActive) {
+        droppedOnTile.stack.shift();
+        incomingTile.stack.unshift(droppedOnLetter);
+      } else incomingTile.active = false;
+      droppedOnTile.stack.unshift(incomingLetter);
     } else {
-      myNewLetters.splice(myNewLetters.indexOf(letter),1)
-      droppedOnTile.stack.unshift(letter);
+      myNewLetters.splice(myNewLetters.indexOf(incomingLetter),1);
+      if (onActive) {
+        droppedOnTile.stack.shift();
+        myNewLetters.push(droppedOnLetter);
+      }
+      droppedOnTile.stack.unshift(incomingLetter);
     }
     droppedOnTile.active = true;
     this.setState(prevState => ({
