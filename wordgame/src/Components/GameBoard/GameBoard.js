@@ -2,8 +2,8 @@
 import React from 'react';
 
 const GameBoard = props => {
-  
-  return ( 
+  if (!props.gameBoard) return (<div className="loading">Loading...</div>);
+  else return ( 
     <section className="GameBoard">
 
     {props.gameBoard.map((tile, index) => {
@@ -22,6 +22,12 @@ const GameBoard = props => {
         myClassName += stack;
         // console.log('myClassName',myClassName);
       }
+
+      function onDragEnd(e) {
+        e.preventDefault();
+        if (tile.active) return;
+        console.log('onDragEnd',e.target);
+      }
       
         return (
           <div 
@@ -29,6 +35,7 @@ const GameBoard = props => {
             draggable
             key={tile.id} 
             onClick={e => props.boardClick(e, index, tile.active)}
+            // onDragEnd={e => onDragEnd(e)}
             onDragStart={e => props.onDragStart(e, index, tile.active)}
             onDragOver={e => e.preventDefault()}
             onDrop={e => props.onDrop(e, index, tile.active)}
