@@ -38,6 +38,7 @@ $th: $tile__height;
     margin:8px;
     outline:none;
     padding:10px;
+    user-select: none;
     width:80px;
     &:hover {
       background:$active-color;

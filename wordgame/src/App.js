@@ -234,6 +234,8 @@ export default class App extends React.Component {
     const myNewLetters = [...this.state.myLetters];
     const droppedOnTile = newBoard[droppedOnIndex];
     const droppedOnLetter = droppedOnTile.stack[0];
+
+    // TODO fix mobile error which duplicates an active tile dropped on a non-blank tile (only happening on tile.id===10?)
     if (droppedOnLetter === incomingLetter) return this.setState(() => ({message: `this letter is already ${incomingLetter}!`}));
     if (incomingIndex !== '') {
       const incomingTile = newBoard[incomingIndex];
