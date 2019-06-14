@@ -53,7 +53,6 @@ export default class App extends React.Component {
     // const myNewLetters = drawLetters(8);
     const myNewLetters = ['T','Qu','E','B','S','I','N','K'];
     import("./scrabbleWordList.js").then(dictionary => {
-      console.log('dictionary',dictionary);
       this.setState(prevState => ({
         ...prevState,
         dictionary: dictionary.default,
@@ -61,9 +60,7 @@ export default class App extends React.Component {
         myLetters: myNewLetters
       }));
     });
-
-
-  }
+  } // componentDidMount() END
 
   boardClick = (e, index, isActive) => {
     e.preventDefault();
@@ -233,7 +230,6 @@ export default class App extends React.Component {
     const incomingIndex = e.dataTransfer.getData("incomingIndex");
     const incomingLetter = e.dataTransfer.getData("letter");
     if (incomingLetter === '') return;
-    // if (onActive && incomingIndex === '') return;
     const newBoard = [...this.state.gameBoard];
     const myNewLetters = [...this.state.myLetters];
     const droppedOnTile = newBoard[droppedOnIndex];
@@ -262,7 +258,7 @@ export default class App extends React.Component {
       message: '',
       myLetters: myNewLetters
     }));
-  }
+  } // this.onDrop() END
 
   passTurn = () => {
     const activeTiles = this.state.gameBoard.filter(tile => tile.active);
