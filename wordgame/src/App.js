@@ -217,11 +217,13 @@ export default class App extends React.Component {
   }
 
   onDragStart = (e, index, isActive = false) => {
+    console.log('onDragStart index',index,'isActive',isActive);
     if (typeof(index) !== 'number') return e.dataTransfer.setData("letter", index);
     else if (!isActive) return;
     else {
       const thisTile = this.state.gameBoard[index];
-      e.dataTransfer.setData("incomingIndex", index);
+      console.log('onDragStart index',index,'thisTile',thisTile);
+      e.dataTransfer.setData("incomingIndex", index || '0');
       e.dataTransfer.setData("letter", thisTile.stack[0]);
     }
   }
@@ -237,6 +239,7 @@ export default class App extends React.Component {
 
     // TODO fix mobile error which duplicates an active tile dropped on a non-blank tile (only happening on tile.id===10?)
     if (droppedOnLetter === incomingLetter) return this.setState(() => ({message: `this letter is already ${incomingLetter}!`}));
+    console.log('incomingIndex',incomingIndex);
     if (incomingIndex !== '') {
       const incomingTile = newBoard[incomingIndex];
       incomingTile.stack.shift();
