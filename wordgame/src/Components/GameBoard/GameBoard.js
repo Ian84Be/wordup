@@ -23,11 +23,11 @@ const GameBoard = props => {
         // console.log('myClassName',myClassName);
       }
 
-      function onDragEnd(e) {
-        e.preventDefault();
-        if (tile.active) return;
-        console.log('onDragEnd',e.target);
-      }
+      // function onDragEnd(e) {
+      //   e.preventDefault();
+      //   if (tile.active) return;
+      //   console.log('onDragEnd',e.target);
+      // }
       
         return (
           <div 
