@@ -119,4 +119,13 @@
       }
     }
 
+    &.clicked {
+      background:slateblue;
+      color:greenyellow;
+      &:hover {
+        background:black;
+        color:white;
+      }
+    }
+
   } // .tile END
