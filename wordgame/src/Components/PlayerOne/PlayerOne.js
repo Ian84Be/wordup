@@ -8,13 +8,15 @@ const PlayerOne = props => {
     <section className="PlayerOne">
       <h2>myLetters</h2>
       <div className="myLetters">
-        {props.myLetters.map(letter => {
+        {props.myLetters.map((letter, myLettersIndex) => {
+          let clicked = (props.clickedLetter[1] === myLettersIndex) ? ' clicked' : '';
             return (
               <div 
-                className="tile letter"
+                className={"tile letter"+clicked}
                 draggable
                 key={(Math.random() * 100)}
                 onDragStart={e => props.onDragStart(e, letter)}
+                onClick={e => props.letterClick(e, letter, myLettersIndex)}
               >
                 {letter}
               </div>

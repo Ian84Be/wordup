@@ -8,4 +8,10 @@
     margin: 50px 20px 0 20px;
     min-width: 50*10px;
     width: 50*10px;
+    &.clickedHover {
+      .tile:hover {
+        background:yellow;
+        color:black;
+      }
+    }
   }

@@ -40,11 +40,25 @@
         padding:8px;
           width:50px;
           height:50px;
+        
+        &.clicked {
+          background:slateblue;
+          color:greenyellow;
+          &:hover {
+            background:black;
+            color:white;
+          }
+        }
 
         &:hover {
           background:white;
           color:black;
           cursor: pointer;
+        }
+
+        &:active {
+          background:palevioletred;
+          color:papayawhip;
         }
       }
     }

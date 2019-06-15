@@ -8,6 +8,7 @@ import './App.scss';
 
 export default class App extends React.Component {
   state = { 
+    clickedLetter:[],
     dictionary:[],
     gameBoard:[],
     message: '',
@@ -16,24 +17,28 @@ export default class App extends React.Component {
     myScore:0,
   };
   render() { 
-    const {myLetters,myScore, gameBoard} = this.state;
+    const {myLetters,myScore,clickedLetter,gameBoard} = this.state;
     return ( 
       <div className="container">
         <PlayerOne 
+          clickedLetter={clickedLetter}
           myLetters={myLetters}
           myScore={myScore}
           onDragStart={this.onDragStart}
           submitLetters={this.submitLetters}
+          letterClick={this.letterClick}
         />
 
         <GameBoard 
           boardClick={this.boardClick}
+          clickedLetter={clickedLetter}
           gameBoard={gameBoard}
           onDragStart={this.onDragStart}
           onDrop={this.onDrop}
         />
 
         <ScoreBoard
+          clearBoard={this.clearBoard}
           message={this.state.message}
           myHistory={this.state.myHistory}
           myScore={this.state.myScore}
@@ -64,18 +69,90 @@ export default class App extends React.Component {
 
   boardClick = (e, index, isActive) => {
     e.preventDefault();
-    if (!isActive) return;
-    const newBoard = [...this.state.gameBoard];
+    const {gameBoard, clickedLetter, myLetters} = this.state;
+    const myNewLetters = [...myLetters];
+    const newBoard = [...gameBoard];
     const thisTile = newBoard[index];
-    const thisLetter = thisTile.stack.shift();
-    thisTile.active = false;
+    let activeIndex = clickedLetter[2];
+    let newClicked = [];
+    if (clickedLetter.length===0 && !isActive) return;
+    if (clickedLetter.length===0 && isActive) newClicked = [thisTile.stack[0], null, index];
+    if (clickedLetter.length>0 && !isActive) {
+      thisTile.stack.unshift(clickedLetter[0]);
+      thisTile.active = true;
+      if (activeIndex || activeIndex === 0) {
+        newBoard[activeIndex].stack.shift();
+        newBoard[activeIndex].active = false;
+      } else myNewLetters.splice(clickedLetter[1],1);
+    }
+    if (clickedLetter.length>2 && isActive) {
+      newBoard[activeIndex].stack.shift();
+      newBoard[activeIndex].stack.unshift(thisTile.stack[0]);
+      thisTile.stack.shift();
+      thisTile.stack.unshift(clickedLetter[0]);
+    }
+    if (clickedLetter.length===2 && isActive) {
+      myNewLetters.splice(clickedLetter[1],1,thisTile.stack[0]);
+      thisTile.stack.shift();
+      thisTile.stack.unshift(clickedLetter[0]);
+    }
     this.setState(prevState => ({
       ...prevState,
+      clickedLetter: newClicked,
       gameBoard: newBoard,
       message: '',
-      myLetters: [...this.state.myLetters, thisLetter]
+      myLetters: myNewLetters
     }));
   }
+
+  clearBoard = () => {
+    const activeTiles = this.state.gameBoard.filter(tile => tile.active);
+    if (activeTiles.length<1) return;
+    else {
+      const newBoard = [...this.state.gameBoard];
+      let myNewLetters = [...this.state.myLetters];
+      newBoard.forEach(tile => {
+        if (tile.active) {
+          tile.active = false;
+          myNewLetters.push(tile.stack[0]);
+          tile.stack.shift();
+        }
+      });
+      this.setState(prevState => ({
+        ...prevState,
+        clickedLetter: [],
+        gameBoard: newBoard,
+        message: '',
+        myLetters: myNewLetters
+      }));
+    }
+  }
+
+  letterClick = (e, letter, myLettersIndex) => {
+    e.preventDefault();
+    const {clickedLetter, gameBoard, myLetters} = this.state;
+    if (clickedLetter.length>0) {
+      let activeIndex = clickedLetter[2];
+      if (activeIndex || activeIndex === 0) {
+        const newBoard = [...gameBoard];
+        const thisTile = newBoard[activeIndex];
+        thisTile.stack.shift();
+        thisTile.active = false;
+        this.setState(prevState => ({
+          ...prevState,
+          clickedLetter: [],
+          gameBoard: newBoard,
+          message: '',
+          myLetters: [...myLetters, clickedLetter[0]]
+        }));
+      }
+    }
+    this.setState(prevState => ({
+      ...prevState,
+      clickedLetter: [letter, myLettersIndex],
+      message: '',
+    }));
+  } // this.letterClick() END
 
   calculateScore = (foundWords) => {
     // check the tileSet of each foundWord, push the letter to tempWord, score the letter based on stack length
@@ -110,10 +187,6 @@ export default class App extends React.Component {
     return (this.state.dictionary.includes(word)) ? true : false;
   } // this.dictionaryCheck() END >> back to this.calculateScore();
 
-  // this.findWords() START 
-  // >> this.lookBothWays(startTile) x startLook(direction, startTile) 
-  // >> this.uniqWords(tempWords) 
-  // END >> this.scoreWords(foundWords);
   findWords = (activeTiles) => {
     const tempWords = [];
     activeTiles.forEach(tile => tempWords.push(...this.lookBothWays(tile)));
@@ -209,7 +282,7 @@ export default class App extends React.Component {
     }
     this.setState(prevState => ({
       ...prevState,
-      activeTiles:[],
+      clickedLetter: [],
       message: '',
       myLetters: newLetters,
       myScore: prevState.myScore + addScore
@@ -221,7 +294,8 @@ export default class App extends React.Component {
     else if (!isActive) return;
     else {
       const thisTile = this.state.gameBoard[index];
-      e.dataTransfer.setData("incomingIndex", index);
+      console.log('onDragStart index',index,'thisTile',thisTile);
+      e.dataTransfer.setData("incomingIndex", index || '0');
       e.dataTransfer.setData("letter", thisTile.stack[0]);
     }
   }
@@ -234,7 +308,9 @@ export default class App extends React.Component {
     const myNewLetters = [...this.state.myLetters];
     const droppedOnTile = newBoard[droppedOnIndex];
     const droppedOnLetter = droppedOnTile.stack[0];
+
     if (droppedOnLetter === incomingLetter) return this.setState(() => ({message: `this letter is already ${incomingLetter}!`}));
+    console.log('incomingIndex',incomingIndex);
     if (incomingIndex !== '') {
       const incomingTile = newBoard[incomingIndex];
       incomingTile.stack.shift();
