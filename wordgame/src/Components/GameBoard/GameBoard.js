@@ -2,11 +2,12 @@
 import React from 'react';
 
 const GameBoard = props => {
+  let warning = String.fromCharCode(9888);
   let clickedHover = (props.clickedLetter.length>0) ? 'clickedHover' : '';
   if (!props.gameBoard) return (<div className="loading">Loading...</div>);
   else return ( 
     <section className={'GameBoard '+clickedHover}>
-      <div className="message">{props.message}</div>
+      <div className="message">{props.message.length>1 ? `${warning} ${props.message} ${warning}` : ''}</div>
 
     {props.gameBoard.map((tile, index) => {
       let myClassName = 'tile ';

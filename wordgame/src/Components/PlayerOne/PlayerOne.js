@@ -1,12 +1,12 @@
 
 import React from 'react';
-import ScoreBoard from '../ScoreBoard/ScoreBoard'
 
 const PlayerOne = props => {
   if (!props.myLetters) return (<div className="loading">Loading...</div>);
   return ( 
     <section className="PlayerOne">
       <h1>WordUp</h1>
+
       <div className="myLetters">
         {props.myLetters.map((letter, myLettersIndex) => {
           let clicked = (props.clickedLetter[1] === myLettersIndex) ? ' clicked' : '';
@@ -23,18 +23,13 @@ const PlayerOne = props => {
             )
           })}
       </div>
+
       <div className="controls">
         <button onClick={() => props.submitLetters()}>Submit</button>
         <button onClick={() => props.passTurn()}>Pass</button>
           <div className="message">{props.message}</div>
         <button onClick={() => props.clearBoard()}>Clear Board</button>
       </div>
-
-
-      <ScoreBoard
-          myHistory={props.myHistory}
-          myScore={props.myScore}
-      />
     </section>
   );
 }
