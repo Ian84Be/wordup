@@ -6,6 +6,8 @@ import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js'
 
 import './App.scss';
 
+// TODO fix blank rendering on old iPad chrome (47.0.2526.107) && safari
+
 export default class App extends React.Component {
   state = { 
     clickedLetter:[],
@@ -128,32 +130,6 @@ export default class App extends React.Component {
     }
   }
 
-  letterClick = (e, letter, myLettersIndex) => {
-    e.preventDefault();
-    const {clickedLetter, gameBoard, myLetters} = this.state;
-    if (clickedLetter.length>0) {
-      let activeIndex = clickedLetter[2];
-      if (activeIndex || activeIndex === 0) {
-        const newBoard = [...gameBoard];
-        const thisTile = newBoard[activeIndex];
-        thisTile.stack.shift();
-        thisTile.active = false;
-        this.setState(prevState => ({
-          ...prevState,
-          clickedLetter: [],
-          gameBoard: newBoard,
-          message: '',
-          myLetters: [...myLetters, clickedLetter[0]]
-        }));
-      }
-    }
-    this.setState(prevState => ({
-      ...prevState,
-      clickedLetter: [letter, myLettersIndex],
-      message: '',
-    }));
-  } // this.letterClick() END
-
   calculateScore = (foundWords) => {
     // check the tileSet of each foundWord, push the letter to tempWord, score the letter based on stack length
     let words=[],thisWord='',score=0;
@@ -194,6 +170,32 @@ export default class App extends React.Component {
     // console.log(foundWords.length,'uniqWords',foundWords);
     if (foundWords.length>0) return this.scoreWords(foundWords);
   } // this.findWords() END >> return this.scoreWords(foundWords);
+
+  letterClick = (e, letter, myLettersIndex) => {
+    e.preventDefault();
+    const {clickedLetter, gameBoard, myLetters} = this.state;
+    if (clickedLetter.length>0) {
+      let activeIndex = clickedLetter[2];
+      if (activeIndex || activeIndex === 0) {
+        const newBoard = [...gameBoard];
+        const thisTile = newBoard[activeIndex];
+        thisTile.stack.shift();
+        thisTile.active = false;
+        this.setState(prevState => ({
+          ...prevState,
+          clickedLetter: [],
+          gameBoard: newBoard,
+          message: '',
+          myLetters: [...myLetters, clickedLetter[0]]
+        }));
+      }
+    }
+    this.setState(prevState => ({
+      ...prevState,
+      clickedLetter: [letter, myLettersIndex],
+      message: '',
+    }));
+  } // this.letterClick() END
 
   lookBothWays = (startTile) => {
     const newBoard = [...this.state.gameBoard];
@@ -276,7 +278,6 @@ export default class App extends React.Component {
     });
     if (!hasVowel) {
       let randomV = vowels[Math.floor(Math.random()*5)];
-      console.log('randomV',randomV);
       newLetters.pop();
       newLetters.push(randomV);
     }
@@ -294,7 +295,6 @@ export default class App extends React.Component {
     else if (!isActive) return;
     else {
       const thisTile = this.state.gameBoard[index];
-      console.log('onDragStart index',index,'thisTile',thisTile);
       e.dataTransfer.setData("incomingIndex", index || '0');
       e.dataTransfer.setData("letter", thisTile.stack[0]);
     }
@@ -310,7 +310,6 @@ export default class App extends React.Component {
     const droppedOnLetter = droppedOnTile.stack[0];
 
     if (droppedOnLetter === incomingLetter) return this.setState(() => ({message: `this letter is already ${incomingLetter}!`}));
-    console.log('incomingIndex',incomingIndex);
     if (incomingIndex !== '') {
       const incomingTile = newBoard[incomingIndex];
       incomingTile.stack.shift();
@@ -330,6 +329,7 @@ export default class App extends React.Component {
     droppedOnTile.active = true;
     this.setState(prevState => ({
       ...prevState,
+      clickedLetter: [],
       gameBoard: newBoard,
       message: '',
       myLetters: myNewLetters
