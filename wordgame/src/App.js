@@ -2,7 +2,6 @@
 import React from 'react';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
 import PlayerOne, {drawLetters} from './Components/PlayerOne/PlayerOne.js';
-import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js'
 
 import './App.scss';
 
@@ -20,13 +19,14 @@ export default class App extends React.Component {
     myScore:0,
   };
   render() { 
-    const {message,myLetters,myScore,clickedLetter,gameBoard} = this.state;
+    const {message,myHistory,myLetters,myScore,clickedLetter,gameBoard} = this.state;
     return ( 
       <div className="container">
         <PlayerOne 
           clickedLetter={clickedLetter}
           clearBoard={this.clearBoard}
           letterClick={this.letterClick}
+          myHistory={myHistory}
           myLetters={myLetters}
           myScore={myScore}
           onDragStart={this.onDragStart}
@@ -38,15 +38,10 @@ export default class App extends React.Component {
             boardClick={this.boardClick}
             clickedLetter={clickedLetter}
             gameBoard={gameBoard}
-            message={this.state.message}
+            message={message}
             onDragStart={this.onDragStart}
             onDrop={this.onDrop}
           />
-
-        <ScoreBoard
-          myHistory={this.state.myHistory}
-          myScore={this.state.myScore}
-        />
     </div> 
     );
   } // render() END
@@ -71,6 +66,9 @@ export default class App extends React.Component {
   } // componentDidMount() END
 
   boardClick = (e, index, isActive) => {
+
+    //TODO
+    // build >> this.changeTiles(incomingTile, target)
     e.preventDefault();
     const {gameBoard, clickedLetter, myLetters} = this.state;
     const myNewLetters = [...myLetters];
@@ -90,14 +88,28 @@ export default class App extends React.Component {
       } else myNewLetters.splice(clickedLetter[1],1);
     }
     if (clickedLetter.length>2 && isActive) {
-      if (newBoard[activeIndex].stack[0] === thisTile.stack[0]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[0]}!`}));
+      if (newBoard[activeIndex].stack[0] === thisTile.stack[1]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[1]}!`}));
+      if (newBoard[activeIndex].stack[1] === thisTile.stack[0]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[0]}!`}));
+      if (activeIndex === index) {
+        thisTile.stack.shift();
+        thisTile.active = false;
+        console.log('PUT IT BACK TO MYLETERS')
+        myNewLetters.push(clickedLetter[0]);
+        return this.setState(prevState => ({
+          ...prevState,
+          clickedLetter: [],
+          gameBoard: newBoard,
+          message: '',
+          myLetters: myNewLetters
+        }));
+      }
       newBoard[activeIndex].stack.shift();
       newBoard[activeIndex].stack.unshift(thisTile.stack[0]);
       thisTile.stack.shift();
       thisTile.stack.unshift(clickedLetter[0]);
     }
     if (clickedLetter.length===2 && isActive) {
-      if (clickedLetter[0] === thisTile[0]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[0]}!`}));
+      if (clickedLetter[0] === thisTile.stack[1]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[1]}!`}));
       myNewLetters.splice(clickedLetter[1],1,thisTile.stack[0]);
       thisTile.stack.shift();
       thisTile.stack.unshift(clickedLetter[0]);
@@ -183,14 +195,25 @@ export default class App extends React.Component {
       if (activeIndex || activeIndex === 0) {
         const newBoard = [...gameBoard];
         const thisTile = newBoard[activeIndex];
+        if (thisTile.stack[1] === letter) return this.setState(() => ({message: `this letter is already ${letter}!`}));
+        if (thisTile.stack[0] === letter) return this.setState(() => ({message: `this letter is already ${letter}!`}));
         thisTile.stack.shift();
-        thisTile.active = false;
+        let myNewLetters = [...myLetters];
+        myNewLetters.splice(myLettersIndex,1,clickedLetter[0]);
+        thisTile.stack.unshift(letter);
         this.setState(prevState => ({
           ...prevState,
           clickedLetter: [],
           gameBoard: newBoard,
           message: '',
-          myLetters: [...myLetters, clickedLetter[0]]
+          myLetters: myNewLetters
+        }));
+      }
+      if (clickedLetter[1] === myLettersIndex) {
+        return this.setState(prevState => ({
+          ...prevState,
+          clickedLetter: [],
+          message: '',
         }));
       }
     }
@@ -312,8 +335,9 @@ export default class App extends React.Component {
     const myNewLetters = [...this.state.myLetters];
     const droppedOnTile = newBoard[droppedOnIndex];
     const droppedOnLetter = droppedOnTile.stack[0];
-
     if (droppedOnLetter === incomingLetter) return this.setState(() => ({message: `this letter is already ${incomingLetter}!`}));
+    if (onActive && droppedOnTile.stack[1] === incomingLetter) return this.setState(() => ({message: `this letter is already ${incomingLetter}!`}));
+    if (onActive && droppedOnTile.stack[0] === newBoard[incomingIndex].stack[1]) return this.setState(() => ({message: `this letter is already ${droppedOnTile.stack[0]}!`}));
     if (incomingIndex !== '') {
       const incomingTile = newBoard[incomingIndex];
       incomingTile.stack.shift();
@@ -376,7 +400,7 @@ export default class App extends React.Component {
         ...prevState,
         gameBoard: newBoard,
         message: `you scored ${score} !`,
-        myHistory: [...prevState.myHistory, words]
+        myHistory: [words, ...prevState.myHistory]
       }));
       return this.nextPlayer(score);
     } else {

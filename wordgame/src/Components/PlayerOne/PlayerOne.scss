@@ -1,5 +1,6 @@
 @import '../../scss/palette';
 @import '../../scss/mixins';
+@import '../ScoreBoard/ScoreBoard.scss';
 
 .PlayerOne {
     // border:1px solid white;
@@ -32,12 +33,14 @@
       display: flex;
       flex-direction: column;
       grid-row-start: 6;
-      grid-row-end: span 4;
-      margin-top:$th*4;
+      grid-row-end: span 2;
+      margin:$th*4 0;
 
       button {
         @include grid__center();
         @include submit-button;
       }
     }
+
+
   }
