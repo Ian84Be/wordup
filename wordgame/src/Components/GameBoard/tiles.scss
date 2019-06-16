@@ -1,9 +1,10 @@
 
-@import '../../palette.scss';
-@import '../../mixins.scss';
+
+@import '../../scss/palette';
+@import '../../scss/mixins.scss';
 
 .tile {
-    @include GameBoardTile;
+    @include GameBoard--tile;
     &.x {
       background:$tile__1-color;
       border-top:0;
@@ -123,8 +124,15 @@
       background:slateblue;
       color:greenyellow;
       &:hover {
-        background:black;
-        color:white;
+        // background:black;
+        // color:white;
+      }
+    }
+
+    &.clickedHover {
+      .tile:hover {
+        background:yellow;
+        color:black;
       }
     }
 

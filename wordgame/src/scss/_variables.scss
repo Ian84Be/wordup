@@ -1,0 +1,12 @@
+
+// TODO
+// toggle config obj >> tile height (default = 4px)
+// toggle config obj >> tile angle
+// toggle config obj >> mobile friendly tiles (width >= 150px, height >= 150px) $transform property?
+
+// $tile__width:60px;
+$tile__width:10vh;
+$tw: $tile__width;
+
+$tile__height: $tw/10;
+$th: $tile__height;

@@ -1,7 +1,8 @@
 
-@import './reset.scss';
-@import './palette.scss';
-@import './mixins.scss';
+@import './scss/reset';
+@import './scss/variables';
+@import './scss/palette';
+@import './scss/mixins';
 @import './Components/PlayerOne/PlayerOne.scss';
 @import './Components/GameBoard/GameBoard.scss';
 @import './Components/ScoreBoard/ScoreBoard.scss';
@@ -18,7 +19,7 @@ body {
 
 .container {
   align-items: center;
-  // border:1px solid white;
+  // border:5px solid white;
   display:flex;
-  min-width:950px;
+  // min-width:950px;
 }

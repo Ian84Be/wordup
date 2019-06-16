@@ -1,5 +1,5 @@
-@import '../../palette.scss';
-@import '../../mixins.scss';
+@import '../../scss/palette';
+@import '../../scss/mixins';
 
 .PlayerOne {
     align-items: center;
@@ -8,11 +8,19 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin:8px;
+    padding:8px;
 
-    h2 {
-      font-size:2rem;
-      margin:8px;
+    h1 {
+      font-weight:700;
+      text-shadow:
+      0 2px  1px $tile__2-color,
+      0 4px  1px $tile__2-color,
+      0 6px  1px $tile__3-color,
+      0 8px  1px $tile__3-color,
+      0 10px 1px  $tile__4-color,
+      0 12px 1px  $tile__4-color;
+      font-size:$tw * .80;
+      margin-bottom:$th*2;
     }
       
     button {
@@ -21,45 +29,14 @@
 
     .myLetters {
       align-items: center;
-      // border: 1px solid black;
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      padding:8px;
-      width:140px;
+      margin:$th*2;
+      width:$tw*2;
 
       .letter {
-        align-items: center;
-        background: $tile__ltr-color;
-        box-shadow: 4px 4px $tile__1-color;
-        color:black;
-        display:flex;
-        font-size:2rem;
-        justify-content: center;
-        margin:4px;
-        padding:8px;
-          width:50px;
-          height:50px;
-        
-        &.clicked {
-          background:slateblue;
-          color:greenyellow;
-          &:hover {
-            background:black;
-            color:white;
-          }
-        }
-
-        &:hover {
-          background:white;
-          color:black;
-          cursor: pointer;
-        }
-
-        &:active {
-          background:palevioletred;
-          color:papayawhip;
-        }
+        @include PlayerOne--letter;
       }
     }
   }
