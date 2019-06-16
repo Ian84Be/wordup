@@ -23,10 +23,12 @@ const PlayerOne = props => {
             )
           })}
       </div>
-      <button onClick={() => props.submitLetters()}>Submit</button>
-      <button onClick={() => props.passTurn()}>Pass</button>
-        <div className="message">{props.message}</div>
-      <button onClick={() => props.clearBoard()}>Clear Board</button>
+      <div className="controls">
+        <button onClick={() => props.submitLetters()}>Submit</button>
+        <button onClick={() => props.passTurn()}>Pass</button>
+          <div className="message">{props.message}</div>
+        <button onClick={() => props.clearBoard()}>Clear Board</button>
+      </div>
     </section>
   );
 }

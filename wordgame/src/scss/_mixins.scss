@@ -2,6 +2,11 @@
 @import './variables';
 @import url('https://fonts.googleapis.com/css?family=Ultra&display=swap');
 
+@mixin grid__center {
+  align-self: center;
+  justify-self: center;
+}
+
 @mixin WordUp--logo {
   color:white;
   font-family: 'Ultra', serif;
@@ -19,7 +24,9 @@
 @mixin GameBoard--tile {
     align-items: center;
     background: $tile__9-color;
-    // border:1px solid $tile__border-color;
+    border: 2px solid $tile__border-color;
+    border-right:0;
+    border-bottom:0;
     // border-radius:8px;
     border-radius:$th*3;
     box-shadow: $th/2.2 $th/2.2 0 0 $tile__2-color;

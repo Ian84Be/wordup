@@ -34,8 +34,6 @@ export default class App extends React.Component {
           submitLetters={this.submitLetters}
         />
 
-        <div className="GameBoard--container">
-          <div className="message">{message}</div>
           <GameBoard 
             boardClick={this.boardClick}
             clickedLetter={clickedLetter}
@@ -44,7 +42,6 @@ export default class App extends React.Component {
             onDragStart={this.onDragStart}
             onDrop={this.onDrop}
           />
-        </div>
 
         <ScoreBoard
           myHistory={this.state.myHistory}

@@ -112,12 +112,11 @@
         border: 1px solid $tile--played-border;
     }
 
-// experiments START
+    // translucent bg for stacks > 5
     &.xxxxxx {
       background: hsla(40,50,50,.65);
       // border:0;
     }
-// experiments END
 
     &.active {
       background:white;
