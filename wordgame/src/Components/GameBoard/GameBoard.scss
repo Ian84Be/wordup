@@ -2,28 +2,27 @@
 @import './tiles.scss';
 @import '../../scss/mixins';
 
-.GameBoard--container {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
+.GameBoard {
+  // border:1px solid magenta;
+  display:grid;
+  grid-template-columns: repeat(8, $tw [GameBoard--tile]);
+  grid-template-rows: repeat(9, $tw [GameBoard--tile]);
+  grid-gap: $th $th;
+
   .message {
+    align-self: center;
     // background: $message--bg;
+    // border:1px solid red;
     border-radius:4px;
     // box-shadow: $th/2.2 $th/2.2 0 0 $tile__2-color;
     // color:$message--bg;
     font-size:$tw * .50;
-    // height: $tw;
-    padding:$th $th*4;
-    position:fixed;
-    width: $tw*9;
-    z-index:333;
-  }
-  .GameBoard {
-    // border:1px solid magenta;
-    display:grid;
-    grid-template-columns: repeat(8, $tw [GameBoard--tile]);
-    grid-template-rows: repeat(8, $tw [GameBoard--tile]);
-    grid-gap: $th $th;
-    margin: $tw 0 0;
+    grid-column-start: 1;
+    grid-column-end: 9;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    text-align: center;
+    // padding:$th $th*4;
+    // z-index:333;
   }
 }

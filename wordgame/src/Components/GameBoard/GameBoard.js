@@ -6,6 +6,7 @@ const GameBoard = props => {
   if (!props.gameBoard) return (<div className="loading">Loading...</div>);
   else return ( 
     <section className={'GameBoard '+clickedHover}>
+      <div className="message">{props.message}</div>
 
     {props.gameBoard.map((tile, index) => {
       let myClassName = 'tile ';

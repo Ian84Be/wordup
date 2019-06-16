@@ -1,6 +1,6 @@
 
 import React from 'react';
-import './PlayerOne.scss';
+import ScoreBoard from '../ScoreBoard/ScoreBoard'
 
 const PlayerOne = props => {
   if (!props.myLetters) return (<div className="loading">Loading...</div>);
@@ -23,10 +23,18 @@ const PlayerOne = props => {
             )
           })}
       </div>
-      <button onClick={() => props.submitLetters()}>Submit</button>
-      <button onClick={() => props.passTurn()}>Pass</button>
-        <div className="message">{props.message}</div>
-      <button onClick={() => props.clearBoard()}>Clear Board</button>
+      <div className="controls">
+        <button onClick={() => props.submitLetters()}>Submit</button>
+        <button onClick={() => props.passTurn()}>Pass</button>
+          <div className="message">{props.message}</div>
+        <button onClick={() => props.clearBoard()}>Clear Board</button>
+      </div>
+
+
+      <ScoreBoard
+          myHistory={props.myHistory}
+          myScore={props.myScore}
+      />
     </section>
   );
 }

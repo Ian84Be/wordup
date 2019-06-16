@@ -4,25 +4,35 @@
     align-self: flex-start;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding:8px;
-    // position: fixed;
-    // left:$tw*10;
+    grid-row-start: 9;
+    // grid-row-end: span 2;
+    margin-top:$th;
+
+    .myScore {
+        font-size:$th*5;
+        padding-bottom:$th;
+    }
 
     .myHistory {
-        border-bottom:1px solid white;
+        align-items:center;
+        border-top:1px solid white;
         display: flex;
         flex-direction: column;
-        align-items:center;
-        margin:8px;
-        min-width:$tw*1.5;
+        padding-top:$th;
         .word {
             font-size:$th*3;
-            padding:2px;
+            padding:$th/2;
         }
     }
-    .myScore {
-        font-size:1.5rem;
-        margin:8px;
+
+    @media (max-width: $screen-sm-max)  {
+        // border:1px solid red;
+        padding-top:$th*4;
     }
+
+    @media (max-width: $screen-xs-max) {
+        // border:1px solid green;
+        padding-top:$th*6;
+    }
+
 }
