@@ -7,6 +7,7 @@ import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js'
 import './App.scss';
 
 // TODO fix blank rendering on old iPad chrome (47.0.2526.107) && safari
+// is this related to my dynamic import in componentDidMount()?
 
 export default class App extends React.Component {
   state = { 
@@ -19,32 +20,35 @@ export default class App extends React.Component {
     myScore:0,
   };
   render() { 
-    const {myLetters,myScore,clickedLetter,gameBoard} = this.state;
+    const {message,myLetters,myScore,clickedLetter,gameBoard} = this.state;
     return ( 
       <div className="container">
         <PlayerOne 
           clickedLetter={clickedLetter}
+          clearBoard={this.clearBoard}
+          letterClick={this.letterClick}
           myLetters={myLetters}
           myScore={myScore}
           onDragStart={this.onDragStart}
+          passTurn={this.passTurn}
           submitLetters={this.submitLetters}
-          letterClick={this.letterClick}
         />
 
-        <GameBoard 
-          boardClick={this.boardClick}
-          clickedLetter={clickedLetter}
-          gameBoard={gameBoard}
-          onDragStart={this.onDragStart}
-          onDrop={this.onDrop}
-        />
+        <div className="GameBoard--container">
+          <div className="message">{message}</div>
+          <GameBoard 
+            boardClick={this.boardClick}
+            clickedLetter={clickedLetter}
+            gameBoard={gameBoard}
+            message={this.state.message}
+            onDragStart={this.onDragStart}
+            onDrop={this.onDrop}
+          />
+        </div>
 
         <ScoreBoard
-          clearBoard={this.clearBoard}
-          message={this.state.message}
           myHistory={this.state.myHistory}
           myScore={this.state.myScore}
-          passTurn={this.passTurn}
         />
     </div> 
     );
@@ -80,6 +84,7 @@ export default class App extends React.Component {
     if (clickedLetter.length===0 && !isActive) return;
     if (clickedLetter.length===0 && isActive) newClicked = [thisTile.stack[0], null, index];
     if (clickedLetter.length>0 && !isActive) {
+      if (clickedLetter[0] === thisTile.stack[0]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[0]}!`}));
       thisTile.stack.unshift(clickedLetter[0]);
       thisTile.active = true;
       if (activeIndex || activeIndex === 0) {
@@ -88,12 +93,14 @@ export default class App extends React.Component {
       } else myNewLetters.splice(clickedLetter[1],1);
     }
     if (clickedLetter.length>2 && isActive) {
+      if (newBoard[activeIndex].stack[0] === thisTile.stack[0]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[0]}!`}));
       newBoard[activeIndex].stack.shift();
       newBoard[activeIndex].stack.unshift(thisTile.stack[0]);
       thisTile.stack.shift();
       thisTile.stack.unshift(clickedLetter[0]);
     }
     if (clickedLetter.length===2 && isActive) {
+      if (clickedLetter[0] === thisTile[0]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[0]}!`}));
       myNewLetters.splice(clickedLetter[1],1,thisTile.stack[0]);
       thisTile.stack.shift();
       thisTile.stack.unshift(clickedLetter[0]);

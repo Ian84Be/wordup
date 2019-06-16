@@ -1,17 +1,29 @@
-@import './tiles.scss';
 
-.GameBoard {
-    // border:1px solid magenta;
-    display:flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 50px 20px 0 20px;
-    min-width: 50*10px;
-    width: 50*10px;
-    &.clickedHover {
-      .tile:hover {
-        background:yellow;
-        color:black;
-      }
-    }
+@import './tiles.scss';
+@import '../../scss/mixins';
+
+.GameBoard--container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  .message {
+    // background: $message--bg;
+    border-radius:4px;
+    // box-shadow: $th/2.2 $th/2.2 0 0 $tile__2-color;
+    // color:$message--bg;
+    font-size:$tw * .50;
+    // height: $tw;
+    padding:$th $th*4;
+    position:fixed;
+    width: $tw*9;
+    z-index:333;
   }
+  .GameBoard {
+    // border:1px solid magenta;
+    display:grid;
+    grid-template-columns: repeat(8, $tw [GameBoard--tile]);
+    grid-template-rows: repeat(8, $tw [GameBoard--tile]);
+    grid-gap: $th $th;
+    margin: $tw 0 0;
+  }
+}
