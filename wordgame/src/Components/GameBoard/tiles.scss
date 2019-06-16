@@ -112,6 +112,13 @@
         border: 1px solid $tile--played-border;
     }
 
+// experiments START
+    &.xxxxxx {
+      background: hsla(40,50,50,.65);
+      // border:0;
+    }
+// experiments END
+
     &.active {
       background:white;
       &:hover {
@@ -123,10 +130,6 @@
     &.clicked {
       background:slateblue;
       color:greenyellow;
-      &:hover {
-        // background:black;
-        // color:white;
-      }
     }
 
     &.clickedHover {
