@@ -38,7 +38,7 @@ const GameBoard = props => {
             onDrop={e => props.onDrop(e, index, tile.active)}
           >
             {tile.stack[0] || ''}
-            <small>{tile.stack.length || ''}</small>
+            <small>{tile.stack.length>1 ? tile.stack.length : ''}</small>
           </div>
         )
       })}
