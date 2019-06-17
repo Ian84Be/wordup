@@ -59,9 +59,10 @@
       $th*2 $th*2 $tile__6-color,
       $th*3 $th*3 $tile__6-color,
       $th*4 $th*4 $tile__6-color,
-      $th*5 $th*5 $tile__6-color,
-      $th*6 $th*6 $tile__6-color;
-      transform: translate(-$th*6,-$th*6);
+      $th*5 $th*5 $tile__6-color;
+      transform: translate(-$th*5,-$th*5);
+      // $th*6 $th*6 $tile__6-color;
+      // transform: translate(-$th*6,-$th*6);
     }
 
     &.xxxxxxx {
@@ -71,10 +72,11 @@
       $th*2 $th*2 $tile__7-color,
       $th*3 $th*3 $tile__7-color,
       $th*4 $th*4 $tile__7-color,
-      $th*5 $th*5 $tile__7-color,
-      $th*6 $th*6 $tile__7-color,
-      $th*7 $th*7 $tile__7-color;
-      transform: translate(-$th*7,-$th*7);
+      $th*5 $th*5 $tile__7-color;
+      transform: translate(-$th*5,-$th*5);
+      // $th*6 $th*6 $tile__7-color,
+      // $th*7 $th*7 $tile__7-color;
+      // transform: translate(-$th*7,-$th*7);
     }
 
     &.xxxxxxxx {
@@ -84,11 +86,13 @@
       $th*2 $th*2 $tile__8-color,
       $th*3 $th*3 $tile__8-color,
       $th*4 $th*4 $tile__8-color,
-      $th*5 $th*5 $tile__8-color,
-      $th*6 $th*6 $tile__8-color,
-      $th*7 $th*7 $tile__8-color,
-      $th*8 $th*8 $tile__8-color;
-      transform: translate(-$th*8,-$th*8);
+      $th*5 $th*5 $tile__8-color;
+      transform: translate(-$th*5,-$th*5);
+      // $th*6 $th*6 $tile__8-color,
+      // $th*7 $th*7 $tile__8-color;
+      // transform: translate(-$th*7,-$th*7);
+      // $th*8 $th*8 $tile__8-color;
+      // transform: translate(-$th*8,-$th*8);
     }
 
     &.xxxxxxxxx {
@@ -98,12 +102,14 @@
       $th*2 $th*2 $tile__9-color,
       $th*3 $th*3 $tile__9-color,
       $th*4 $th*4 $tile__9-color,
-      $th*5 $th*5 $tile__9-color,
-      $th*6 $th*6 $tile__9-color,
-      $th*7 $th*7 $tile__9-color,
-      $th*8 $th*8 $tile__9-color,
-      $th*9 $th*9 $tile__9-color;
-      transform: translate(-$th*9,-$th*9);
+      $th*5 $th*5 $tile__9-color;
+      transform: translate(-$th*5,-$th*5);
+      // $th*6 $th*6 $tile__9-color,
+      // $th*7 $th*7 $tile__9-color,
+      // $th*8 $th*8 $tile__9-color;
+      // transform: translate(-$th*8,-$th*8);
+      // $th*9 $th*9 $tile__9-color;
+      // transform: translate(-$th*9,-$th*9);
     }
 
     // set a default style for played tiles
@@ -114,7 +120,8 @@
 
     // translucent bg for stacks > 5
     &.xxxxxx {
-      background: hsla(40,50,50,.65);
+      // background: hsla(40,50,50,.65);
+      background: hsl(40,50,50);
       // border:0;
     }
 

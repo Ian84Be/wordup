@@ -1,6 +1,7 @@
 
 @import './variables';
 @import url('https://fonts.googleapis.com/css?family=Ultra&display=swap');
+@import url('https://fonts.googleapis.com/css?family=K2D&display=swap');
 
 @mixin grid__center {
   align-self: center;
@@ -32,6 +33,7 @@
     box-shadow: $th/2.2 $th/2.2 0 0 $tile__2-color;
     color:black;
     display:flex;
+    font-family: 'K2D', sans-serif;
     font-size:$tw * .60;
     height:$tw;
     justify-content: center;
@@ -39,9 +41,14 @@
     width:$tw;
 
     small {
-      // font-size:.75rem;
+      // border:1px solid red;
       font-size:$tw * .22;
-      // transform: translateY(-$th);
+
+      // ALTERNATE styling idea >> numbers on the vertical stack
+      // transform: skewX(45deg);
+      // position:absolute;
+      // left:37px;
+      // top:51px
     }
 }
 
@@ -70,9 +77,9 @@
     box-shadow:
       2px 2px $tile__2-color,
       4px 4px $tile__2-color;
-    font-size: 1rem;
+    font-size:$th*4;
     @media (max-width: $screen-xs-max) {
-      font-size:.75rem;
+      font-size:$th*5;
     }
     font-weight:700;
     margin:$th;

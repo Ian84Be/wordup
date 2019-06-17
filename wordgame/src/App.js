@@ -81,6 +81,7 @@ export default class App extends React.Component {
   boardClick = (e, index, isActive) => {
     //TODO
     // build >> this.changeTiles(incomingTile, target)
+    // add function to click gameBoard first then click incomingLetter
     e.preventDefault();
     const {gameBoard, clickedLetter, myLetters} = this.state;
     const myNewLetters = [...myLetters];
