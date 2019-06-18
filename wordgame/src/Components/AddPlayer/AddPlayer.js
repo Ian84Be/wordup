@@ -16,6 +16,7 @@ const AddPlayer = (props) => {
         props.addPlayer(thisPlayer);
         setnewPlayer({name:''});
     };
+    console.log('AddPlayer props',props.players)
     return ( 
         <div className="AddPlayer">
             <form onSubmit={(e) => handleSubmit(e)}>
@@ -27,11 +28,17 @@ const AddPlayer = (props) => {
                     value={newPlayer.name} 
                 />
             </form>
+            <div className="activePlayer">activePlayer:{props.activePlayer}</div>
             {props.players.map(player => {
+                console.log({player});
+                console.log(player.myLetters);
+                console.log(player.id);
+                console.log(player.myScore);
                 return (
                     <div className="player" key={player.id}>
-                        <li>id:{player.id}</li>
-                        <li>{player.name}</li>
+                        <li>{player.myName}: {player.myScore}</li>
+                        <li>{player.myLetters}</li>
+                        <li>{player.myHistory}</li>
                     </div>
                 )
             })}
@@ -39,8 +46,10 @@ const AddPlayer = (props) => {
     );
 }
 
-const mapStateToProps = state => ({
-    players: state.players
-});
+export default AddPlayer;
+
+// const mapStateToProps = state => ({
+//     players: state.players
+// });
  
-export default connect(mapStateToProps, {addPlayer})(AddPlayer);
+// export default connect(mapStateToProps, {addPlayer})(AddPlayer);
