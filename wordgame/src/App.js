@@ -1,5 +1,6 @@
 
 import React from 'react';
+import AddPlayer from './Components/AddPlayer/AddPlayer';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
 import PlayerOne, {drawLetters} from './Components/PlayerOne/PlayerOne.js';
 import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js';
@@ -22,7 +23,7 @@ export default class App extends React.Component {
         id: 0,
         history: [],
         letters: [],
-        name: PlayerOne,
+        name: 'playerOne',
         score: 0,
       },
     ]
@@ -55,6 +56,7 @@ export default class App extends React.Component {
               myHistory={myHistory}
               myScore={myScore}
           />
+          <AddPlayer />
       </div> 
     );
   } // render() END
