@@ -10,7 +10,7 @@ const AddPlayer = (props) => {
         e.preventDefault();
         console.log(newPlayer);
         const thisPlayer = {
-            id: props.players.length+1,
+            id: props.players.length,
             name:newPlayer.name
         };
         props.addPlayer(thisPlayer);

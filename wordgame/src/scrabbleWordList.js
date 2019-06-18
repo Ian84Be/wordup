@@ -1,5 +1,5 @@
 
-var ScrabbleWordList = [
+const scrabbleWordList = [
   'aa',
   'aah',
   'aahed',
@@ -79341,4 +79341,4 @@ var ScrabbleWordList = [
   'zyzzyvas'
 ];
 
-export default ScrabbleWordList;
+export default scrabbleWordList;
