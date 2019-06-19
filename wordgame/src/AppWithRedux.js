@@ -12,7 +12,7 @@ import {
     nextPlayer
 } from './redux/actions';
 
-import AddPlayer from './Components/AddPlayer/AddPlayer';
+// import AddPlayer from './Components/AddPlayer/AddPlayer';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
 import PlayerOne, {drawLetters} from './Components/PlayerOne/PlayerOne.js';
 import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js';
@@ -47,13 +47,10 @@ class App extends React.Component {
           />
 
           <ScoreBoard
-              myHistory={myHistory}
-              myName={myName}
-              myScore={myScore}
-          />
-
-          <AddPlayer
             activePlayer={activePlayer}
+            myHistory={myHistory}
+            myName={myName}
+            myScore={myScore}
             players={players}
           />
       </div> 
@@ -69,8 +66,8 @@ class App extends React.Component {
     const myGrid = boardMaker(8);
     this.props.makeBoard(myGrid);
     // const myNewLetters = drawLetters(8);
-    const myNewLetters = ['T','Qu','E','B','S','I','N','K'];
-    this.props.changeMyLetters(myNewLetters);
+    // const myNewLetters = ['T','Qu','E','B','S','I','N','K'];
+    // this.props.changeMyLetters(myNewLetters);
     import("./scrabbleWordList.js").then(dictionary => {
       this.props.loadDictionary(dictionary.default)
     });
@@ -154,7 +151,7 @@ class App extends React.Component {
         thisWord = tempWord.join('').toLowerCase();
         if (this.dictionaryCheck(thisWord)) {
           score = score + tempScore;
-          words.push(` + ( ${tempScore} ${tempWord.join('')} )`);
+          words.push(`${tempScore} ${tempWord.join('')}`);
           tempScore = 0;
         } else {
           // console.log('calculateScore dictionary FAIL',thisWord);
@@ -298,9 +295,10 @@ class App extends React.Component {
       newLetters.push(randomV);
     }
     this.props.holdLetter([]);
-    // this.props.newMessage('');
+    this.props.newMessage('');
     this.props.changeMyLetters(newLetters);
     this.props.addScore(addScore);
+    return this.props.nextPlayer();
   }
 
   onDragStart = (e, index, isActive = false) => {

@@ -26,12 +26,11 @@ const GameBoard = props => {
         myClassName += stack;
         // console.log('myClassName',myClassName);
       }
-      // let clicked = (props.clickedLetter[2] === index) ? ' clicked' : '';
+      let clicked = (props.clickedLetter[2] === index) ? ' clicked' : '';
       
         return (
           <div 
-            // className={myClassName+clicked}
-            className={myClassName}
+            className={myClassName+clicked}
             draggable
             key={tile.id} 
             onClick={e => props.boardClick(e, index, tile.active)}

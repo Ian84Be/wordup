@@ -11,6 +11,8 @@ import {
     NEXT_PLAYER 
 } from './actions';
 
+import {drawLetters} from '../Components/PlayerOne/PlayerOne';
+
 const initialState = {
     activePlayer: 0,
     clickedLetter:[],
@@ -21,15 +23,15 @@ const initialState = {
       {
         id: 0,
         myHistory: [],
-        myLetters: [],
-        myName: 'playerOne',
+        myLetters: drawLetters(8),
+        myName: 'Steve',
         myScore: 0,
       },
       {
         id: 1,
         myHistory: [],
-        myLetters: [],
-        myName: 'playerTwo',
+        myLetters: drawLetters(8),
+        myName: 'Dave',
         myScore: 0,
       },
     ]
@@ -37,32 +39,36 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     const {payload, type} = action;
+    const {activePlayer, players} = state;
     switch (type) {
         case ADD_HISTORY:
-            console.log('ADDHISTORY',payload)
-            let historyState = {...state}
-            historyState.players[historyState.activePlayer].myHistory.unshift(payload);
+            console.log('ADDHISTORY',payload);
+            let historyState = [...players];
+            historyState[activePlayer].myHistory.unshift(...payload);
             return {
-                ...historyState,
+                ...state,
+                players: historyState
         }
         case ADD_PLAYER:
             return {
                 ...state,
-                players: [...state.players, payload]
+                players: [...players, payload]
             }
         case ADD_SCORE:
-            console.log('ADDSCORE',payload)
-            let scoreState = {...state}
-            scoreState.players[scoreState.activePlayer].myScore += payload;
+            console.log('ADDSCORE',payload);
+            let scoreState = [...players];
+            scoreState[activePlayer].myScore += payload;
             return {
-                ...scoreState,
+                ...state,
+                players: scoreState
             }
         case CHANGE_MYLETTERS:
             console.log('CHANGE_MYLETTERS',payload);
-            let letterState = {...state};
-            letterState.players[letterState.activePlayer].myLetters = payload;
+            let letterState = [...players];
+            letterState[activePlayer].myLetters = payload;
             return {
-                ...letterState
+                ...state,
+                players: letterState
             }
         case HOLD_LETTER:
             console.log('HOLD_LETTER',payload);
@@ -77,7 +83,7 @@ const reducer = (state = initialState, action) => {
                 dictionary: payload
             }
         case MAKE_BOARD:
-            console.log('MAKEBOARD')
+            console.log('MAKEBOARD');
             return {
                 ...state,
                 gameBoard: payload
@@ -88,11 +94,10 @@ const reducer = (state = initialState, action) => {
                 message: payload
             }
         case NEXT_PLAYER:
-            let last = state.players.length-1;
-            let next = state.activePlayer;
-            if (state.activePlayer === last) {
-                next = 0;
-            } else ++next;
+            let last = players.length-1;
+            let next = activePlayer;
+            if (activePlayer === last) next = 0;
+            else ++next;
             return {
                 ...state,
                 activePlayer: next

@@ -1,32 +1,66 @@
 .ScoreBoard {
     // border:1px solid white;
     display:grid;
-    grid-template-rows: repeat(9, $tw [GameBoard--tile]);
-    grid-gap: $th $th;
+    grid-template-columns: repeat(2, $tw*3 [ScoreBoard--cols]);
+    // grid-template-rows: repeat(9, $tw [ScoreBoard--rows]);
+    grid-gap: $th $th*5;
     // max-width: $tw*3;
     padding:8px;
+    // padding-top:0;
 
-    .playerName {
-        align-self: center;
-        text-align: center;
-        // border: 1px solid green;
-        border-bottom:1px solid white;
-        display: flex;
-        font-size:$th*5;
-        padding-bottom:$th;
-    }
-
-    .history {
-        align-items:center;
-        // border:2px solid red;
+    .playerCard {
+        align-items: center;
+        // border: 1px solid red;
+        border-radius:8px;
+        color: black;
         display: flex;
         flex-direction: column;
-        padding-top:$th;
-        .word {
+        max-height:$tw*10;
+        padding:8px;
+
+        &.active {
+            background: slateblue;
+            color: white;
+        }
+
+        .name {
+            align-self: center;
+            text-align: center;
+            // border: 1px solid green;
+            border-bottom:1px solid black;
+            display: flex;
+            font-size:$th*5;
+            @media (max-width: $screen-xs-max) {
+                font-size:$th*8;
+            }
+            // padding-bottom:$th;
+        }
+
+        .score {
+            // border:1px solid red;
+            // margin:$th;
+            font-size:$th*6;
+            @media (max-width: $screen-xs-max) {
+                font-size:$th*8;
+            }
+            margin-bottom:$th/2;
+            padding:$th*2;
+        }
+    
+        .history {
+            // @include grid__center();
+            // align-items:center;
+            // border:1px solid blue;
+            display: flex;
+            flex-direction: column;
             font-size:$th*3;
-            // padding:$th/2;
+            @media (max-width: $screen-xs-max) {
+                font-size:$th*4;
+            }
         }
     }
+
+
 
     @media (max-width: $screen-sm-max)  {
         // border:1px solid red;

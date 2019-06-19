@@ -22,7 +22,9 @@
       grid-template-columns: $tw $tw;
       grid-template-rows: repeat(4, $tw);
       grid-gap: $th $th;
-      // margin:$th*2 0;
+      grid-row-start: 2;
+      grid-row-end: span 4;
+      margin-top:$th;
 
       .letter {
         @include PlayerOne--letter;
@@ -34,7 +36,8 @@
       display: flex;
       flex-direction: column;
       grid-row-start: 6;
-      // margin:$th*4 0;
+      grid-row-end: span 4;
+      margin-top:$th*4;
 
       button {
         @include grid__center();

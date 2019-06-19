@@ -47,9 +47,3 @@ const AddPlayer = (props) => {
 }
 
 export default AddPlayer;
-
-// const mapStateToProps = state => ({
-//     players: state.players
-// });
- 
-// export default connect(mapStateToProps, {addPlayer})(AddPlayer);

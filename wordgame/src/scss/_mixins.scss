@@ -77,16 +77,18 @@
     box-shadow:
       2px 2px $tile__2-color,
       4px 4px $tile__2-color;
-    font-size:$th*4;
+    font-family: 'K2D', sans-serif;
+    font-size:$th*3;
     @media (max-width: $screen-xs-max) {
-      font-size:$th*5;
+      font-size:$th*4;
     }
-    font-weight:700;
+    font-weight:bold;
     margin:$th;
     outline:none;
     padding:$th;
     user-select: none;
     width:$tw*2;
+    min-height:$th*10;
     &:hover {
       background:$active-color;
       cursor:pointer;
