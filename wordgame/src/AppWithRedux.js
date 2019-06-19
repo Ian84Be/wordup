@@ -1,5 +1,18 @@
 
 import React from 'react';
+import {connect} from 'react-redux';
+import {
+    addHistory,
+    addScore,
+    changeMyLetters, 
+    holdLetter,
+    loadDictionary, 
+    makeBoard,
+    newMessage,
+    nextPlayer
+} from './redux/actions';
+
+// import AddPlayer from './Components/AddPlayer/AddPlayer';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
 import PlayerOne, {drawLetters} from './Components/PlayerOne/PlayerOne.js';
 import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js';
@@ -8,28 +21,10 @@ import './App.scss';
 
 // TODO fix blank rendering on old iPad chrome (47.0.2526.107) && safari
 // is this related to my dynamic import in componentDidMount()?
-export default class App extends React.Component {
-  state = { 
-    clickedLetter:[],
-    dictionary:[],
-    gameBoard:[],
-    message: '',
-    myHistory:[],
-    myLetters:[],
-    myScore:0,
-    multiPlayer: [
-      {
-        id: 0,
-        history: [],
-        letters: [],
-        name: PlayerOne,
-        score: 0,
-      },
-    ]
-
-  };
+class App extends React.Component {
   render() { 
-    const {message,myHistory,myLetters,myScore,clickedLetter,gameBoard} = this.state;
+    const {activePlayer,clickedLetter,gameBoard,message,players} = this.props;
+    const {myHistory,myLetters,myName,myScore} = players[activePlayer];
     return ( 
       <div className="container">
         <PlayerOne 
@@ -52,8 +47,11 @@ export default class App extends React.Component {
           />
 
           <ScoreBoard
-              myHistory={myHistory}
-              myScore={myScore}
+            activePlayer={activePlayer}
+            myHistory={myHistory}
+            myName={myName}
+            myScore={myScore}
+            players={players}
           />
       </div> 
     );
@@ -66,15 +64,12 @@ export default class App extends React.Component {
     // toggle config obj >> guarantee ONE VOWEL
     // toggle config obj >> combine Qu
     const myGrid = boardMaker(8);
+    this.props.makeBoard(myGrid);
     // const myNewLetters = drawLetters(8);
-    const myNewLetters = ['T','Qu','E','B','S','I','N','K'];
+    // const myNewLetters = ['T','Qu','E','B','S','I','N','K'];
+    // this.props.changeMyLetters(myNewLetters);
     import("./scrabbleWordList.js").then(dictionary => {
-      this.setState(prevState => ({
-        ...prevState,
-        dictionary: dictionary.default,
-        gameBoard: myGrid,
-        myLetters: myNewLetters
-      }));
+      this.props.loadDictionary(dictionary.default)
     });
   } // componentDidMount() END
 
@@ -83,7 +78,8 @@ export default class App extends React.Component {
     // build >> this.changeTiles(incomingTile, target)
     // add function to click gameBoard first then click incomingLetter
     e.preventDefault();
-    const {gameBoard, clickedLetter, myLetters} = this.state;
+    const {activePlayer, clickedLetter, gameBoard, players} = this.props;
+    const {myLetters} = players[activePlayer];
     const myNewLetters = [...myLetters];
     const newBoard = [...gameBoard];
     const thisTile = newBoard[index];
@@ -92,7 +88,7 @@ export default class App extends React.Component {
     if (clickedLetter.length===0 && !isActive) return;
     if (clickedLetter.length===0 && isActive) newClicked = [thisTile.stack[0], null, index];
     if (clickedLetter.length>0 && !isActive) {
-      if (clickedLetter[0] === thisTile.stack[0]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[0]}`}));
+      if (clickedLetter[0] === thisTile.stack[0]) return this.props.newMessage(`this letter is already ${thisTile.stack[0]}`);
       thisTile.stack.unshift(clickedLetter[0]);
       thisTile.active = true;
       if (activeIndex || activeIndex === 0) {
@@ -101,20 +97,13 @@ export default class App extends React.Component {
       } else myNewLetters.splice(clickedLetter[1],1);
     }
     if (clickedLetter.length>2 && isActive) {
-      if (newBoard[activeIndex].stack[0] === thisTile.stack[1]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[1]}`}));
-      if (newBoard[activeIndex].stack[1] === thisTile.stack[0]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[0]}`}));
+      if (newBoard[activeIndex].stack[0] === thisTile.stack[1]) return this.props.newMessage(`this letter is already ${thisTile.stack[1]}`);
+      if (newBoard[activeIndex].stack[1] === thisTile.stack[0]) return this.props.newMessage(`this letter is already ${thisTile.stack[0]}`);
       if (activeIndex === index) {
         thisTile.stack.shift();
         thisTile.active = false;
-        console.log('PUT IT BACK TO MYLETERS')
         myNewLetters.push(clickedLetter[0]);
-        return this.setState(prevState => ({
-          ...prevState,
-          clickedLetter: [],
-          gameBoard: newBoard,
-          message: '',
-          myLetters: myNewLetters
-        }));
+        return this.updateStore([],myNewLetters, newBoard,'');
       }
       newBoard[activeIndex].stack.shift();
       newBoard[activeIndex].stack.unshift(thisTile.stack[0]);
@@ -122,26 +111,22 @@ export default class App extends React.Component {
       thisTile.stack.unshift(clickedLetter[0]);
     }
     if (clickedLetter.length===2 && isActive) {
-      if (clickedLetter[0] === thisTile.stack[1]) return this.setState(() => ({message: `this letter is already ${thisTile.stack[1]}`}));
+      if (clickedLetter[0] === thisTile.stack[1]) return this.props.newMessage(`this letter is already ${thisTile.stack[1]}`);
       myNewLetters.splice(clickedLetter[1],1,thisTile.stack[0]);
       thisTile.stack.shift();
       thisTile.stack.unshift(clickedLetter[0]);
     }
-    this.setState(prevState => ({
-      ...prevState,
-      clickedLetter: newClicked,
-      gameBoard: newBoard,
-      message: '',
-      myLetters: myNewLetters
-    }));
+    return this.updateStore(newClicked,myNewLetters, newBoard,'');
   }
 
   clearBoard = () => {
-    const activeTiles = this.state.gameBoard.filter(tile => tile.active);
+    const {activePlayer, gameBoard, players} = this.props;
+    const {myLetters} = players[activePlayer];
+    const activeTiles = gameBoard.filter(tile => tile.active);
     if (activeTiles.length<1) return;
     else {
-      const newBoard = [...this.state.gameBoard];
-      let myNewLetters = [...this.state.myLetters];
+      const newBoard = [...gameBoard];
+      const myNewLetters = [...myLetters];
       newBoard.forEach(tile => {
         if (tile.active) {
           tile.active = false;
@@ -149,13 +134,7 @@ export default class App extends React.Component {
           tile.stack.shift();
         }
       });
-      this.setState(prevState => ({
-        ...prevState,
-        clickedLetter: [],
-        gameBoard: newBoard,
-        message: '',
-        myLetters: myNewLetters
-      }));
+      return this.updateStore([],myNewLetters, newBoard,'');
     }
   }
 
@@ -172,7 +151,7 @@ export default class App extends React.Component {
         thisWord = tempWord.join('').toLowerCase();
         if (this.dictionaryCheck(thisWord)) {
           score = score + tempScore;
-          words.push(` + ( ${tempScore} ${tempWord.join('')} )`);
+          words.push(`${tempScore} ${tempWord.join('')}`);
           tempScore = 0;
         } else {
           // console.log('calculateScore dictionary FAIL',thisWord);
@@ -185,11 +164,9 @@ export default class App extends React.Component {
   } // this.calculateScore() END >> back to scoreWords();
 
   dictionaryCheck = (word) => {
-    if (!this.state.dictionary) return this.setState(() => ({message: `dictionary loading... please wait...`}));
-    // return false;
+    if (!this.props.dictionary) return this.props.newMessage(`dictionary loading... please wait...`);
     // return true;
-    // return (scrabbleWordList.includes(word)) ? true : false;
-    return (this.state.dictionary.includes(word)) ? true : false;
+    return (this.props.dictionary.includes(word)) ? true : false;
   } // this.dictionaryCheck() END >> back to this.calculateScore();
 
   findWords = (activeTiles) => {
@@ -202,43 +179,32 @@ export default class App extends React.Component {
 
   letterClick = (e, letter, myLettersIndex) => {
     e.preventDefault();
-    const {clickedLetter, gameBoard, myLetters} = this.state;
+    const {activePlayer, clickedLetter, gameBoard, players} = this.props;
+    const {myLetters} = players[activePlayer];
     if (clickedLetter.length>0) {
       let activeIndex = clickedLetter[2];
       if (activeIndex || activeIndex === 0) {
         const newBoard = [...gameBoard];
         const thisTile = newBoard[activeIndex];
-        if (thisTile.stack[1] === letter) return this.setState(() => ({message: `this letter is already ${letter}`}));
-        if (thisTile.stack[0] === letter) return this.setState(() => ({message: `this letter is already ${letter}`}));
+        if (thisTile.stack[1] === letter) return this.props.newMessage(`this letter is already ${letter}`);
+        if (thisTile.stack[0] === letter) return this.props.newMessage(`this letter is already ${letter}`);
         thisTile.stack.shift();
         let myNewLetters = [...myLetters];
         myNewLetters.splice(myLettersIndex,1,clickedLetter[0]);
         thisTile.stack.unshift(letter);
-        this.setState(prevState => ({
-          ...prevState,
-          clickedLetter: [],
-          gameBoard: newBoard,
-          message: '',
-          myLetters: myNewLetters
-        }));
+        return this.updateStore([],myNewLetters, newBoard,'');
       }
       if (clickedLetter[1] === myLettersIndex) {
-        return this.setState(prevState => ({
-          ...prevState,
-          clickedLetter: [],
-          message: '',
-        }));
+        this.props.holdLetter([]);
+        return this.props.newMessage('');
       }
     }
-    this.setState(prevState => ({
-      ...prevState,
-      clickedLetter: [letter, myLettersIndex],
-      message: '',
-    }));
+    this.props.holdLetter([letter, myLettersIndex]);
+    return this.props.newMessage('');
   } // this.letterClick() END
 
   lookBothWays = (startTile) => {
-    const newBoard = [...this.state.gameBoard];
+    const newBoard = [...this.props.gameBoard];
     const result = []
     const {id} = startTile;
     let tempAct=[],tempWord=[];
@@ -272,9 +238,6 @@ export default class App extends React.Component {
     horWord = [startTile,...horWord].sort((a,b) => a.id-b.id);
     if (vertWord.length>1) result.push(['vert',vertWord,vertAct]);
     if (horWord.length>1) result.push(['hor',horWord,horAct]);
-    // console.log('vertWord',vertWord,'vertAct',vertAct);
-    // console.log('horWord',horWord,'horAct',horAct);
-    // console.log('result',result);
     return result;
 
     function startLook(direction, startTile) {
@@ -300,11 +263,21 @@ export default class App extends React.Component {
   } // lookBothWays() END >> back to this.findWords()
 
   nextPlayer = (addScore) => {
-    const oldLetters = [...this.state.myLetters];
+    const {activePlayer, players} = this.props;
+    const {myLetters} = players[activePlayer];
+    const oldLetters = [...myLetters];
     let newLetters=[],randomLetters=[];
-    if (addScore === 0) newLetters = drawLetters(8);
-    if (this.state.myLetters.length<8) {
-      randomLetters = drawLetters(8-this.state.myLetters.length);
+    // pass turn to next player and draw all new letters
+    if (addScore === 0) {
+        newLetters = drawLetters(8);
+        this.props.holdLetter([])
+        this.props.changeMyLetters(newLetters);
+        this.props.newMessage('')
+        return this.props.nextPlayer();
+    }
+
+    if (myLetters.length<8) {
+      randomLetters = drawLetters(8-myLetters.length);
       newLetters = [...oldLetters,...randomLetters];
     }
     // TODO
@@ -321,20 +294,18 @@ export default class App extends React.Component {
       newLetters.pop();
       newLetters.push(randomV);
     }
-    this.setState(prevState => ({
-      ...prevState,
-      clickedLetter: [],
-      message: '',
-      myLetters: newLetters,
-      myScore: prevState.myScore + addScore
-    }))
+    this.props.holdLetter([]);
+    this.props.newMessage('');
+    this.props.changeMyLetters(newLetters);
+    this.props.addScore(addScore);
+    return this.props.nextPlayer();
   }
 
   onDragStart = (e, index, isActive = false) => {
     if (typeof(index) !== 'number') return e.dataTransfer.setData("letter", index);
     else if (!isActive) return;
     else {
-      const thisTile = this.state.gameBoard[index];
+      const thisTile = this.props.gameBoard[index];
       e.dataTransfer.setData("incomingIndex", index || '0');
       e.dataTransfer.setData("letter", thisTile.stack[0]);
     }
@@ -344,14 +315,16 @@ export default class App extends React.Component {
     const incomingIndex = e.dataTransfer.getData("incomingIndex");
     const incomingLetter = e.dataTransfer.getData("letter");
     if (incomingLetter === '') return;
-    const newBoard = [...this.state.gameBoard];
-    const myNewLetters = [...this.state.myLetters];
+    const {activePlayer, gameBoard, players} = this.props;
+    const {myLetters} = players[activePlayer];
+    const newBoard = [...gameBoard];
+    const myNewLetters = [...myLetters];
     const droppedOnTile = newBoard[droppedOnIndex];
     const droppedOnLetter = droppedOnTile.stack[0];
-    if (droppedOnLetter === incomingLetter) return this.setState(() => ({message: `this letter is already ${incomingLetter}`}));
-    if (onActive && droppedOnTile.stack[1] === incomingLetter) return this.setState(() => ({message: `this letter is already ${incomingLetter}`}));
+    if (droppedOnLetter === incomingLetter) return this.props.newMessage(`this letter is already ${incomingLetter}`);
+    if (onActive && droppedOnTile.stack[1] === incomingLetter) return this.props.newMessage(`this letter is already ${incomingLetter}`);
     if (incomingIndex !== '') {
-      if (onActive && droppedOnTile.stack[0] === newBoard[incomingIndex].stack[1]) return this.setState(() => ({message: `this letter is already ${droppedOnTile.stack[0]}`}));
+      if (onActive && droppedOnTile.stack[0] === newBoard[incomingIndex].stack[1]) return this.props.newMessage(`this letter is already ${droppedOnTile.stack[0]}`);
       const incomingTile = newBoard[incomingIndex];
       incomingTile.stack.shift();
       if (onActive) {
@@ -368,67 +341,50 @@ export default class App extends React.Component {
       droppedOnTile.stack.unshift(incomingLetter);
     }
     droppedOnTile.active = true;
-    this.setState(prevState => ({
-      ...prevState,
-      clickedLetter: [],
-      gameBoard: newBoard,
-      message: '',
-      myLetters: myNewLetters
-    }));
+    this.updateStore([],myNewLetters, newBoard,'');
   } // this.onDrop() END
 
   passTurn = () => {
-    const activeTiles = this.state.gameBoard.filter(tile => tile.active);
-    if (activeTiles.length>0) return this.setState(() => ({message: 'cannot pass with active tiles on board'}));
-    this.nextPlayer(0);
+    const activeTiles = this.props.gameBoard.filter(tile => tile.active);
+    if (activeTiles.length>0) return this.props.newMessage('cannot pass with active tiles on board');
+    else return this.nextPlayer(0);
   } // this.passTurn() END >> this.nextPlayer(0);
 
   submitLetters = () => {
-    const activeTiles = this.state.gameBoard.filter(tile => tile.active).sort((a,b) => a.id-b.id);
-    if (activeTiles.length<1) return this.setState(() => ({message: 'you haven\'t placed any tiles'}));
-    else this.findWords(activeTiles);
+    const activeTiles = this.props.gameBoard.filter(tile => tile.active).sort((a,b) => a.id-b.id);
+    if (activeTiles.length<1) return this.props.newMessage('you haven\'t placed any tiles');
+    else return this.findWords(activeTiles);
   } // this.submitLetters END >> this.findWords(activeTiles);
 
   // this.scoreWords() START >> strictModeScoring(foundWords) >> this.calculateScore(foundWords)
   scoreWords = (foundWords) => {
-    const newBoard = [...this.state.gameBoard];
+    const newBoard = [...this.props.gameBoard];
     let okStrict = strictModeScoring(foundWords);
-    if (!okStrict) {
-      console.log('error: strictModeScoring VIOLATION');
-      return this.setState(() => ({message: 'error: cannot build in both directions'}));
-    } 
+    if (!okStrict) return this.props.newMessage('error: cannot build in both directions');
     const activeTiles = newBoard.filter(tile => tile.active);
-
     let scoreInfo = this.calculateScore(foundWords);
     const score = scoreInfo[0];
     const words = scoreInfo[1];
-    // console.log('score',score,words);
-    
     if (typeof(score) === 'number') {
       activeTiles.forEach((tile) => {
         let thisIndex = newBoard.findIndex(that => that.id === tile.id);
         newBoard[thisIndex].active = false;
       });
-      this.setState(prevState => ({
-        ...prevState,
-        gameBoard: newBoard,
-        message: `you scored ${score} !`,
-        myHistory: [words, ...prevState.myHistory]
-      }));
+      this.props.makeBoard(newBoard);
+      this.props.newMessage(`you scored ${score} !`);
+      this.props.addHistory(words);
       return this.nextPlayer(score);
     } else {
       let failWords = words.filter(word => word.match(/[a-z]/g));
-      // console.log('failWords',failWords);
-      return this.setState(() => ({message: `dictionary FAIL ( ${failWords} )`}));
+      return this.props.newMessage(`dictionary FAIL ( ${failWords} )`);
     } 
     // TODO
-    // double strict scoring >> lose turn if dictionary FAIL
     // MAKE SURE > after 1st turn > active tiles are touching played tiles
+    // double strict scoring >> lose turn if dictionary FAIL
 
     // strictModeScoring() START 
     // >> lineLook()
     function strictModeScoring(foundWords) {
-      // console.log('strictModeScoring',foundWords);
       let vertActive = [];
       let horActive = [];
       foundWords.forEach(tileSet => {
@@ -437,7 +393,6 @@ export default class App extends React.Component {
         (direction === 'vert') ? vertActive.push(...activeTiles) : horActive.push(...activeTiles);
       });
         // console.log('vertActive',vertActive,'horActive',horActive);
-      
       const activeTiles = newBoard.filter(tile => tile.active);
       let vertDupe = activeTiles.every(tile => vertActive.includes(tile.id));
       let horDupe = activeTiles.every(tile => horActive.includes(tile.id));
@@ -446,23 +401,19 @@ export default class App extends React.Component {
       if (vertDupe && horActive.length<2) dupeCheck = true;
       if (horDupe && vertActive.length<2) dupeCheck = true;
         // console.log('dupeCheck',dupeCheck);
-
       let uniqActive = new Set();
       for (let ids of vertActive) uniqActive.add(ids);
       for (let ids of horActive) uniqActive.add(ids);
         // console.log('activeTiles',activeTiles);
         // console.log('uniqActive',uniqActive);
-      if (uniqActive.size < activeTiles.length) return console.log('error: loose tiles');
+      if (uniqActive.size < activeTiles.length) return this.newMessage('error: loose tiles');
       let okHor, okVert;
-
       if (vertActive.length > 0) okVert = lineLook('vert',vertActive);
       else okVert=0;
       // console.log('okVert',okVert);
-      
       if (horActive.length > 0) okHor = lineLook('hor',horActive);
       else okHor=0;
         // console.log('okHor',okHor);
-
         // console.log('okVert',okVert,'okHor',okHor);
         // console.log('dupeCheck',dupeCheck);
       if (okVert && okHor === 0) return (dupeCheck) ? true : false;
@@ -505,4 +456,30 @@ export default class App extends React.Component {
     });
     return result;
   }
+
+  updateStore = (holdLetter = [], myNewLetters, newBoard, newMessage = '') => {
+    this.props.holdLetter(holdLetter);
+    this.props.changeMyLetters(myNewLetters);
+    this.props.makeBoard(newBoard);
+    this.props.newMessage(newMessage);
+  }
 } // App COMPONENT END
+
+const mapStateToProps = state => ({
+    activePlayer: state.activePlayer,
+    clickedLetter: state.clickedLetter,
+    dictionary: state.dictionary,
+    gameBoard: state.gameBoard,
+    message: state.message,
+    players: state.players
+});
+export default connect(mapStateToProps, { 
+    addHistory,
+    addScore,
+    changeMyLetters, 
+    holdLetter, 
+    loadDictionary, 
+    makeBoard, 
+    newMessage,
+    nextPlayer
+})(App)
