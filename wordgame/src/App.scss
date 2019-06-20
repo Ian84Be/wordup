@@ -17,6 +17,7 @@
 body {
   background:slategray;
   color:white;
+  font-family: 'K2D', sans-serif;
 }
 
 h1 {
@@ -29,7 +30,6 @@ h1 {
   // border:3px solid red;
   display:flex;
   flex-direction: column;
-  font-family: 'K2D', sans-serif;
   height:99vh;
   width:99vw;
   margin: 0 auto;
