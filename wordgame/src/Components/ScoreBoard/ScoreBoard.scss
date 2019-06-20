@@ -1,22 +1,21 @@
 .ScoreBoard {
+    align-items: center;
     // border:1px solid white;
-    display:grid;
-    grid-template-columns: repeat(2, $tw*3 [ScoreBoard--cols]);
-    // grid-template-rows: repeat(9, $tw [ScoreBoard--rows]);
-    grid-gap: $th $th*5;
-    // max-width: $tw*3;
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
     padding:8px;
-    // padding-top:0;
+    width:$tw*4;
 
     .playerCard {
-        align-items: center;
         // border: 1px solid red;
         border-radius:8px;
         color: black;
         display: flex;
-        flex-direction: column;
-        max-height:$tw*10;
-        padding:8px;
+        flex-wrap: wrap;
+        margin:$th;
+        max-width: $tw*3;
+        padding:$th*4;
 
         &.active {
             background: slateblue;
@@ -24,52 +23,14 @@
         }
 
         .name {
-            align-self: center;
-            text-align: center;
             // border: 1px solid green;
-            border-bottom:1px solid black;
-            display: flex;
-            font-size:$th*5;
+            text-align: center;
+            font-size:$th*4;
+            overflow-wrap: break-word;
+            width:$tw*2;
             @media (max-width: $screen-xs-max) {
-                font-size:$th*8;
-            }
-            // padding-bottom:$th;
-        }
-
-        .score {
-            // border:1px solid red;
-            // margin:$th;
-            font-size:$th*6;
-            @media (max-width: $screen-xs-max) {
-                font-size:$th*8;
-            }
-            margin-bottom:$th/2;
-            padding:$th*2;
-        }
-    
-        .history {
-            // @include grid__center();
-            // align-items:center;
-            // border:1px solid blue;
-            display: flex;
-            flex-direction: column;
-            font-size:$th*3;
-            @media (max-width: $screen-xs-max) {
-                font-size:$th*4;
+                font-size:$th*5;
             }
         }
     }
-
-
-
-    @media (max-width: $screen-sm-max)  {
-        // border:1px solid red;
-        padding-top:$th*4;
-    }
-
-    @media (max-width: $screen-xs-max) {
-        // border:1px solid green;
-        padding-top:$th*6;
-    }
-
 }

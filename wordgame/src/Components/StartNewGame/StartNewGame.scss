@@ -1,0 +1,122 @@
+
+.StartNewGame {
+    align-items: center;
+    // border:1px solid white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin:0 auto;
+    // max-width: $tw*8;
+
+    h1.logo__big {
+        // border:1px solid red;
+        color:white;
+        font-family: 'Ultra', serif;
+        font-size:$tw * 3;
+        text-shadow:
+        0 $th     0px $tile__9-color,
+        0 $th*1.5 0px $tile__9-color,
+        0 $th*2   0px $tile__8-color,
+        0 $th*2.5 0px $tile__8-color,
+        0 $th*3   0px $tile__7-color,
+        0 $th*3.5 0px $tile__7-color,
+        0 $th*4   0px $tile__6-color,
+        0 $th*4.5 0px $tile__6-color,
+        0 $th*5   0px $tile__5-color,
+        0 $th*5.5 0px $tile__5-color,
+        0 $th*6   0px $tile__4-color,
+        0 $th*6.5 0px $tile__4-color,
+        0 $th*7   0px $tile__3-color,
+        0 $th*7.5 0px $tile__3-color,
+        0 $th*8   0px $tile__2-color,
+        0 $th*8.5 0px $tile__2-color,
+        0 $th*9   0px $tile__1-color,
+        0 $th*9.5 0px $tile__1-color,
+        0 $th*10   0px $tile__0-color,
+        0 $th*10.5 0px $tile__0-color,
+        // 0 $th*10   0px $tile__0-color,
+        // 0 $th*10.5 0px $tile__0-color,
+        0 $th*11 10px black;
+        transform: translateY(-$th*3);
+        z-index:1;
+    }
+
+    .headline {
+        // align-self: center;
+        text-align: center;
+        border-top:2px solid black;
+        border-bottom:2px solid black;
+        color: black;
+        font-size:$th*6;
+        margin-top:$th*4;
+        width:80vw;
+        padding:4px;
+        z-index:0;
+    }
+
+    button.start {
+        align-self: center;
+        @include submit-button;
+        border:1px solid yellow;
+        padding:8px;
+        width:$tw*4;
+    }
+
+    .middle {
+        align-items: center;
+        margin-top:8px;
+        // border:1px solid red;
+        display: flex;
+        // display:none;
+        flex-direction: column;
+
+        p {
+            // text-align: center;
+            margin:8px;
+        }
+
+        .numberButtons {
+            // border:1px solid blue;
+            display:flex;
+    
+            button.num {
+                @include submit-button;
+                width:$tw;
+                height:$tw;
+            }
+        }
+
+
+        form {
+            // border:1px solid yellow;
+            margin:8px;
+            display: flex;
+            flex-direction: column;
+
+            .playerName {
+                align-self: center;
+                // border:1px solid white;
+                padding:8px;
+
+                label {
+                    margin:8px;
+                }
+    
+                input[type=text] {
+                    background:$form__input-bg;
+                    border:1px solid $form__input-text;
+                    border-radius:4px;
+                    color:$form__input-text;
+                    outline:none;
+                    padding:8px;
+                    width:$tw*2;
+                    &:focus {
+                        background:slateblue;
+                    }
+                }
+            }
+        }
+    }
+
+
+}

@@ -1,6 +1,6 @@
 
 export const ADD_HISTORY = 'ADD_HISTORY';
-export const ADD_PLAYER = 'ADD_PLAYER';
+export const ADD_PLAYERS = 'ADD_PLAYERS';
 export const ADD_SCORE = 'ADD_SCORE';
 export const CHANGE_MYLETTERS = 'CHANGE_MYLETTERS';
 export const HOLD_LETTER = 'HOLD_LETTER';
@@ -13,8 +13,8 @@ export const addHistory = (words) => {
     return ({type: ADD_HISTORY, payload: words})
 }
 
-export const addPlayer = (player) => {
-    return ({type: ADD_PLAYER, payload: player})
+export const addPlayers = (players) => {
+    return ({type: ADD_PLAYERS, payload: players})
 }
 
 export const addScore = (score) => {

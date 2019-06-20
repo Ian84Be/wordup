@@ -3,44 +3,31 @@
 @import '../ScoreBoard/ScoreBoard.scss';
 
 .PlayerOne {
-    // border:1px solid white;
-    display:grid;
-    grid-template-rows: repeat(9, $tw [GameBoard--tile]);
-    grid-gap: $th $th;
-    padding:8px;
-    // padding-top:0;
-
-    h1 {
-      @include WordUp--logo();
-      @include grid__center();
-    }
+  // border:1px solid yellow; 
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px;
 
     .myLetters {
-      justify-self: center;
-      // border:1px solid red;
-      display: grid;
-      grid-template-columns: $tw $tw;
-      grid-template-rows: repeat(4, $tw);
-      grid-gap: $th $th;
-      grid-row-start: 2;
-      grid-row-end: span 4;
-      margin-top:$th;
+      justify-content: center;
+      // border:1px solid white;
+      display: flex;
 
       .letter {
+        // margin:$th;
         @include PlayerOne--letter;
       }
     }
 
     .controls {
-      // border:1px solid red;
+      align-items: center;
+      justify-content: center;
+      // border:1px solid blue;
       display: flex;
-      flex-direction: column;
-      grid-row-start: 6;
-      grid-row-end: span 4;
-      margin-top:$th*4;
+      padding: 8px;
 
       button {
-        @include grid__center();
         @include submit-button;
       }
     }

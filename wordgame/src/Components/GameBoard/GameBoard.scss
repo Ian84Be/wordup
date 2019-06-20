@@ -3,10 +3,11 @@
 @import '../../scss/mixins';
 
 .GameBoard {
+  align-self: center;
   // border:1px solid magenta;
   display:grid;
   grid-template-columns: repeat(8, $tw [GameBoard--tile]);
-  grid-template-rows: repeat(9, $tw [GameBoard--tile]);
+  grid-template-rows: repeat(8, $tw [GameBoard--tile]);
   grid-gap: $th $th;
 
   .message {
@@ -20,7 +21,7 @@
     grid-column-start: 1;
     grid-column-end: 9;
     grid-row-start: 1;
-    grid-row-end: 1;
+    // grid-row-end: 1;
     text-align: center;
     // padding:$th $th*4;
     // z-index:333;

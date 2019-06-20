@@ -5,7 +5,6 @@ const PlayerOne = props => {
   if (!props.myLetters) return (<div className="loading">Loading...</div>);
   return ( 
     <section className="PlayerOne">
-      <h1>WordUp</h1>
 
       <div className="myLetters">
         {props.myLetters.map((letter, myLettersIndex) => {
@@ -25,13 +24,45 @@ const PlayerOne = props => {
       </div>
 
       <div className="controls">
-        <button onClick={() => props.submitLetters()}>Submit</button>
         <button onClick={() => props.passTurn()}>Pass</button>
+        <button onClick={() => props.submitLetters()}>Submit</button>
           <div className="message">{props.message}</div>
         <button onClick={() => props.clearBoard()}>Clear Board</button>
       </div>
     </section>
   );
+}
+
+// TODO
+// limit pool
+// classic 65 tiles
+// International Standard 100 tiles
+const letterBag = {
+  A: 5,
+  B: 2,
+  C: 2,
+  D: 3,
+  E: 6,
+  G: 2,
+  H: 2,
+  I: 4,
+  J: 1,
+  K: 1,
+  L: 3,
+  M: 3,
+  N: 3,
+  O: 4,
+  P: 3,
+  Qu: 1,
+  R: 2,
+  S: 3,
+  T: 4,
+  U: 3,
+  V: 1,
+  W: 1,
+  X: 1,
+  Y: 2,
+  Z: 1
 }
 
 // from https://codehandbook.org/generate-random-string-characters-in-javascript/

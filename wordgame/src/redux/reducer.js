@@ -1,7 +1,7 @@
 
 import { 
     ADD_HISTORY,
-    ADD_PLAYER, 
+    ADD_PLAYERS, 
     ADD_SCORE,
     CHANGE_MYLETTERS, 
     HOLD_LETTER,
@@ -11,30 +11,15 @@ import {
     NEXT_PLAYER 
 } from './actions';
 
-import {drawLetters} from '../Components/PlayerOne/PlayerOne';
+// import {drawLetters} from '../Components/PlayerOne/PlayerOne';
 
 const initialState = {
     activePlayer: 0,
-    clickedLetter:[],
-    dictionary:[],
-    gameBoard:[],
+    clickedLetter: [],
+    dictionary: [],
+    gameBoard: [],
     message: '',
-    players: [
-      {
-        id: 0,
-        myHistory: [],
-        myLetters: drawLetters(8),
-        myName: 'Steve',
-        myScore: 0,
-      },
-      {
-        id: 1,
-        myHistory: [],
-        myLetters: drawLetters(8),
-        myName: 'Dave',
-        myScore: 0,
-      },
-    ]
+    players: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -49,10 +34,10 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 players: historyState
         }
-        case ADD_PLAYER:
+        case ADD_PLAYERS:
             return {
                 ...state,
-                players: [...players, payload]
+                players: payload
             }
         case ADD_SCORE:
             console.log('ADDSCORE',payload);
