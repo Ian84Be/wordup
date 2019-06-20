@@ -12,47 +12,59 @@ import {
     nextPlayer
 } from './redux/actions';
 
-// import AddPlayer from './Components/AddPlayer/AddPlayer';
+import AddPlayer from './Components/AddPlayer/AddPlayer';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
 import PlayerOne, {drawLetters} from './Components/PlayerOne/PlayerOne.js';
 import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js';
+import StartNewGame from './Components/StartNewGame/StartNewGame.js';
 
 import './App.scss';
 
 // TODO fix blank rendering on old iPad chrome (47.0.2526.107) && safari
 // is this related to my dynamic import in componentDidMount()?
+
 class App extends React.Component {
   render() { 
+    if (this.props.players.length<1) return (<StartNewGame message={this.props.message} players={this.props.players} />);
     const {activePlayer,clickedLetter,gameBoard,message,players} = this.props;
     const {myHistory,myLetters,myName,myScore} = players[activePlayer];
     return ( 
       <div className="container">
-        <PlayerOne 
-          clickedLetter={clickedLetter}
-          clearBoard={this.clearBoard}
-          letterClick={this.letterClick}
-          myLetters={myLetters}
-          onDragStart={this.onDragStart}
-          passTurn={this.passTurn}
-          submitLetters={this.submitLetters}
+        <AddPlayer 
+        activePlayer={activePlayer}
+        message={message}
+        players={players}
         />
 
-          <GameBoard 
-            boardClick={this.boardClick}
-            clickedLetter={clickedLetter}
-            gameBoard={gameBoard}
-            message={message}
-            onDragStart={this.onDragStart}
-            onDrop={this.onDrop}
-          />
-
-          <ScoreBoard
+        <div className="middleContainer">
+        <ScoreBoard
             activePlayer={activePlayer}
             myHistory={myHistory}
             myName={myName}
             myScore={myScore}
             players={players}
-          />
+        />
+
+            <div className="middleContainer--center">
+            <GameBoard 
+                boardClick={this.boardClick}
+                clickedLetter={clickedLetter}
+                gameBoard={gameBoard}
+                onDragStart={this.onDragStart}
+                onDrop={this.onDrop}
+            />
+
+            <PlayerOne 
+            clickedLetter={clickedLetter}
+            clearBoard={this.clearBoard}
+            letterClick={this.letterClick}
+            myLetters={myLetters}
+            onDragStart={this.onDragStart}
+            passTurn={this.passTurn}
+            submitLetters={this.submitLetters}
+            />
+            </div>
+        </div>
       </div> 
     );
   } // render() END
@@ -269,15 +281,15 @@ class App extends React.Component {
     let newLetters=[],randomLetters=[];
     // pass turn to next player and draw all new letters
     if (addScore === 0) {
-        newLetters = drawLetters(8);
+        newLetters = drawLetters(7);
         this.props.holdLetter([])
         this.props.changeMyLetters(newLetters);
         this.props.newMessage('')
         return this.props.nextPlayer();
     }
 
-    if (myLetters.length<8) {
-      randomLetters = drawLetters(8-myLetters.length);
+    if (myLetters.length<7) {
+      randomLetters = drawLetters(7-myLetters.length);
       newLetters = [...oldLetters,...randomLetters];
     }
     // TODO
@@ -406,7 +418,7 @@ class App extends React.Component {
       for (let ids of horActive) uniqActive.add(ids);
         // console.log('activeTiles',activeTiles);
         // console.log('uniqActive',uniqActive);
-      if (uniqActive.size < activeTiles.length) return this.newMessage('error: loose tiles');
+      if (uniqActive.size < activeTiles.length) return this.props.newMessage('error: loose tiles');
       let okHor, okVert;
       if (vertActive.length > 0) okVert = lineLook('vert',vertActive);
       else okVert=0;

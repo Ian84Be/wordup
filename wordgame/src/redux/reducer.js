@@ -20,20 +20,13 @@ const initialState = {
     gameBoard:[],
     message: '',
     players: [
-      {
-        id: 0,
-        myHistory: [],
-        myLetters: drawLetters(8),
-        myName: 'Steve',
-        myScore: 0,
-      },
-      {
-        id: 1,
-        myHistory: [],
-        myLetters: drawLetters(8),
-        myName: 'Dave',
-        myScore: 0,
-      },
+    //   {
+    //     id: 0,
+    //     myHistory: [],
+    //     myLetters: drawLetters(7),
+    //     myName: 'Steve',
+    //     myScore: 0,
+    //   },
     ]
 };
 

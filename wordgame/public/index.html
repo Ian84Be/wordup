@@ -20,7 +20,11 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>wordup // wordgame</title>
+    <!-- Drag/Drop shim for mobile devices, works well -->
     <script src="./DragDropTouch.js"></script>
+    <!-- Promise shim for older browsers (will this help my dynamic import?) -->
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script> 
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

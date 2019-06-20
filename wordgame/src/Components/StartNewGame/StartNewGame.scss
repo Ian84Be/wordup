@@ -1,0 +1,59 @@
+
+.StartNewGame {
+    // border:1px solid white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin:0 auto;
+    // max-width: $tw*8;
+
+    h1.logo__big {
+        color:white;
+        // color:transparent;
+        font-family: 'Ultra', serif;
+        font-size:$tw * 3;
+        text-shadow:
+        0 $th     0px $tile__9-color,
+        0 $th*1.5 0px $tile__9-color,
+        0 $th*2   0px $tile__8-color,
+        0 $th*2.5 0px $tile__8-color,
+        0 $th*3   0px $tile__7-color,
+        0 $th*3.5 0px $tile__7-color,
+        0 $th*4   0px $tile__6-color,
+        0 $th*4.5 0px $tile__6-color,
+        0 $th*5   0px $tile__5-color,
+        0 $th*5.5 0px $tile__5-color,
+        0 $th*6   0px $tile__4-color,
+        0 $th*6.5 0px $tile__4-color,
+        0 $th*7   0px $tile__3-color,
+        0 $th*7.5 0px $tile__3-color,
+        0 $th*8   0px $tile__2-color,
+        0 $th*8.5 0px $tile__2-color,
+        0 $th*9   0px $tile__1-color,
+        0 $th*9.5 0px $tile__1-color,
+        0 $th*10   0px $tile__0-color,
+        0 $th*10.5 0px $tile__0-color,
+        0 $th*11 10px black;
+      }
+    .middle {
+        margin-top:$th*6;
+        // border:1px solid red;
+        display: flex;
+        flex-direction: column;
+
+        p {
+            text-align: center;
+        }
+        form {
+            // border:1px solid yellow;
+            align-self: center;
+            width:100px;
+            // display: flex;
+            input[type=text] {
+                width:100px;
+            }
+        }
+    }
+
+
+}

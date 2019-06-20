@@ -3,9 +3,11 @@
 @import './scss/variables';
 @import './scss/palette';
 @import './scss/mixins';
+@import './Components/AddPlayer/AddPlayer.scss';
 @import './Components/PlayerOne/PlayerOne.scss';
 @import './Components/GameBoard/GameBoard.scss';
 @import './Components/ScoreBoard/ScoreBoard.scss';
+@import './Components/StartNewGame/StartNewGame.scss';
 
 * {
   box-sizing: border-box;
@@ -17,11 +19,31 @@ body {
   color:white;
 }
 
+h1 {
+  @include WordUp--logo();
+  @include grid__center();
+}
+
 .container {
   // align-items: center;
-  // border:1px solid white;
+  // border:3px solid red;
   display:flex;
+  flex-direction: column;
   font-family: 'K2D', sans-serif;
   height:99vh;
   width:99vw;
+  margin: 0 auto;
+
+  .middleContainer {
+    // border:1px solid green;
+    display:flex;
+    // justify-content: center;
+    width: 100%;
+  }
+
+  .middleContainer--center {
+    // border:1px solid orange;
+    display:flex;
+    flex-direction: column;
+  }
 }

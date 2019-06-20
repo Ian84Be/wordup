@@ -2,13 +2,11 @@
 import React from 'react';
 
 const GameBoard = props => {
-  let warning = String.fromCharCode(9888);
   // let clickedHover = (props.clickedLetter.length>0) ? 'clickedHover' : '';
   if (!props.gameBoard) return (<div className="loading">Loading...</div>);
   else return ( 
     // <section className={'GameBoard '+clickedHover}>
     <section className={'GameBoard'}>
-      <div className="message">{props.message.length>1 ? `${warning} ${props.message} ${warning}` : ''}</div>
 
     {props.gameBoard.map((tile, index) => {
       let myClassName = 'tile ';
@@ -51,8 +49,9 @@ const GameBoard = props => {
 // TODO
 // custom boards
 // 3 square with non-playable center, outer-wall only
-// standard 8
-// scrabble 16
+// classic 8x8
+// International Standard 10x10
+// Scrabble (15x15, premium tiles)
 export function boardMaker(gridsize) {
   const myGrid = [];
   for (let i=1;i<=gridsize;i++) {
