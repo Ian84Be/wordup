@@ -77,10 +77,10 @@ const StartNewGame = (props) => {
                                         type="text" 
                                         value={newPlayer[`name ${num}`]} 
                                     />
-                                    <button className="color" style={{backgroundColor:'slateblue'}} onClick={e => playerColor(e,'slateblue')}></button>
+                                    {/* <button className="color" style={{backgroundColor:'slateblue'}} onClick={e => playerColor(e,'slateblue')}></button>
                                     <button className="color" style={{backgroundColor:'orangered'}} onClick={e => playerColor(e,'orangered')}></button>
                                     <button className="color" style={{backgroundColor:'burlywood'}} onClick={e => playerColor(e,'burlywood')}></button>
-                                    <button className="color" style={{backgroundColor:'firebrick'}} onClick={e => playerColor(e,'firebrick')}></button>
+                                    <button className="color" style={{backgroundColor:'firebrick'}} onClick={e => playerColor(e,'firebrick')}></button> */}
                                 </div>
                             )
                         })

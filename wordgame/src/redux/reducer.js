@@ -1,6 +1,7 @@
 
 import { 
     ADD_HISTORY,
+    ADD_PASSCOUNT, 
     ADD_PLAYERS, 
     ADD_SCORE,
     CHANGE_MYLETTERS, 
@@ -18,9 +19,11 @@ const initialState = {
     activePlayer: 0,
     clickedLetter: [],
     dictionary: [],
+    emptyBag: false,
     gameBoard: [],
     letterBag: letterBag,
     message: '',
+    passCount: 0,
     players: []
 };
 
@@ -35,6 +38,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 players: historyState
         }
+        case ADD_PASSCOUNT:
+            return {
+                ...state,
+                passCount: payload
+            }
         case ADD_PLAYERS:
             return {
                 ...state,
@@ -75,7 +83,14 @@ const reducer = (state = initialState, action) => {
                 message: payload
             }
         case NEW_LETTERBAG:
-            return {
+            if (Object.values(payload).reduce((a,b)=>a+b) === 0) {
+                return {
+                    ...state,
+                    emptyBag: true,
+                    letterBag: payload
+                }
+            }
+            else return {
                 ...state,
                 letterBag: payload
             }

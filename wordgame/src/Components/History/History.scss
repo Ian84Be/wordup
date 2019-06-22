@@ -14,6 +14,7 @@
     h3 {
         @include WordUp--logo();
         font-size:$tw * .50;
+        padding-top:4px;
         // @include grid__center();
     }
 

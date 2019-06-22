@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {
     addHistory,
+    addPassCount,
     addScore,
     changeMyLetters, 
     holdLetter,
@@ -64,7 +65,6 @@ class App extends React.Component {
             letterClick={this.letterClick}
             myLetters={myLetters}
             onDragStart={this.onDragStart}
-            // passTurn={this.passTurn}
             submitLetters={this.submitLetters}
             />
           </div>
@@ -164,6 +164,13 @@ class App extends React.Component {
   }
 
   calculateScore = (foundWords) => {
+    // TODO
+    // Any word with no stacked letters scores two points per tile
+    // 2 bonus points are awarded for using the "Qu" tile in a one-level word
+    // 20 bonus points for using all seven tiles in one turn
+    // Players may not pluralize a word simply by adding an S at its end.
+    // only allowed if the S is part of another complete word that is played onto the board in the same turn. 
+   
     // check the tileSet of each foundWord, push the letter to tempWord, score the letter based on stack length
     let words=[],thisWord='',score=0;
       foundWords.forEach(tileSet => {
@@ -190,11 +197,14 @@ class App extends React.Component {
 
   dictionaryCheck = (word) => {
     if (!this.props.dictionary) return this.props.newMessage(`dictionary loading... please wait...`);
-    return (this.props.dictionary.includes(word)) ? true : false;
+    // return (this.props.dictionary.includes(word)) ? true : false;
+    return true;
   } // this.dictionaryCheck() END >> back to this.calculateScore();
 
   endGame = () => {
-
+    // Once the draw pile is exhausted, the game ends when one player has used all of his/her tiles
+    // or every player passes in a single round.
+    // Players lose five points for every unused tile they hold at the end of the game.
   }
   
   findWords = (activeTiles) => {
@@ -209,8 +219,8 @@ class App extends React.Component {
     let myLetters=[], random_letter;
     for (let i = 0; i < num; i++) {
       let grabBag = Object.entries(newBag).filter(letter => letter[1] > 0);
-      console.log('grabBag',i);
-      console.log({grabBag});
+      // console.log('grabBag',i);
+      // console.log({grabBag});
       if (grabBag.length<1) {
         console.log('grabBag.length<1')
         this.props.newLetterBag(newBag);
@@ -228,8 +238,10 @@ class App extends React.Component {
   }
 
   passLetters = (num) => {
-    const {activePlayer,letterBag,players} = this.props;
+    const {activePlayer,addPassCount,emptyBag,letterBag,newMessage,passCount,players} = this.props;
     const {myLetters} = players[activePlayer];
+    if (emptyBag) addPassCount(passCount+1);
+    if (emptyBag && players.length-1 === passCount) return newMessage('END GAME // PASSCOUNT MAX');
     let newBag = {...letterBag};
     let myOldLetters = [...myLetters];
     let myNewLetters=[], random_letter;
@@ -339,7 +351,7 @@ class App extends React.Component {
 
   nextPlayer = (addScore) => {
     const {activePlayer, players} = this.props;
-    const {myLetters} = players[activePlayer];
+    const {myLetters,myName} = players[activePlayer];
     const oldLetters = [...myLetters];
     let newLetters=[],randomLetters=[];
     // pass turn to next player and draw all new letters
@@ -350,6 +362,7 @@ class App extends React.Component {
         // this.props.newMessage('')
         return this.props.nextPlayer();
     }
+    else if (myLetters.length===0) return this.props.newMessage(`END GAME // ${myName} CLEAR`);
     // add new letters to hand 
     else if (myLetters.length<7) {
       randomLetters = this.getLetters(7-myLetters.length);
@@ -357,6 +370,7 @@ class App extends React.Component {
       this.props.holdLetter([]);
       this.props.changeMyLetters(newLetters);
       // this.props.newMessage('');
+      this.props.addPassCount(0);
       this.props.addScore(addScore);
       return this.props.nextPlayer();
     }
@@ -419,9 +433,16 @@ class App extends React.Component {
 
   // this.scoreWords() START >> strictModeScoring(foundWords) >> this.calculateScore(foundWords)
   scoreWords = (foundWords) => {
+    // TODO 
+    // The first player must cover one or more of the four central squares
+    // Subsequent players may put tiles on the board adjacent to and/or on top of the tiles already played
+    // No stack may be more than five tiles high
+    // At least one tile or stack must be left unchanged; a player may not cover every letter in a word on a single turn.
+
     const {activePlayer, players} = this.props;
     const {myName} = players[activePlayer];
     const newBoard = [...this.props.gameBoard];
+    // strictModeScoring >> all tiles played on a turn must form part of one continuous line of tiles vertical or horizontal
     let okStrict = strictModeScoring(foundWords);
     if (!okStrict) return this.props.newMessage('error: cannot build in both directions');
     const activeTiles = newBoard.filter(tile => tile.active);
@@ -523,13 +544,16 @@ const mapStateToProps = state => ({
     activePlayer: state.activePlayer,
     clickedLetter: state.clickedLetter,
     dictionary: state.dictionary,
+    emptyBag: state.emptyBag,
     gameBoard: state.gameBoard,
     letterBag: {...state.letterBag},
     message: state.message,
+    passCount: state.passCount,
     players: state.players
 });
 export default connect(mapStateToProps, { 
     addHistory,
+    addPassCount,
     addScore,
     changeMyLetters, 
     holdLetter, 

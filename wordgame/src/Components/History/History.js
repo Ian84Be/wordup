@@ -13,9 +13,10 @@ const History = (props) => {
 
             <div className="name">{player.myName}: {(player.myScore === 0) ? '0' : player.myScore}</div>
           
-            <ul className="history">{player.myHistory.map(word => {
+            <ul className="history">{player.myHistory.map((word,i) => {
+              let thisId = i * Math.random();
               return (
-                <li>{word}</li>
+                <li key={thisId}>{word}</li>
               )
             })}</ul>
 
