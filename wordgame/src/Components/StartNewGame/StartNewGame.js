@@ -2,8 +2,6 @@ import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {addPlayers} from '../../redux/actions'
 
-import {drawLetters} from '../PlayerOne/PlayerOne';
-
 const StartNewGame = (props) => {
     const [newPlayer, setnewPlayer] = useState({
         'name 1' : '',
@@ -13,22 +11,26 @@ const StartNewGame = (props) => {
     });
     const [numPlayers, setnumPlayers] = useState([]);
 
-    const startNewGame = e => {
+    const startNewGame = async (e) => {
         e.preventDefault();
-        console.log('START',newPlayer);
         let newPlayers = numPlayers.map((num, i) => ({
             id: i,
             myHistory: [],
-            myLetters: drawLetters(7),
+            myLetters: [],
             myName: newPlayer[`name ${num}`],
             myScore: 0,
         }));
-        console.log(newPlayers);
-        props.addPlayers(newPlayers);
-        // setnewPlayer({name:''});
+        await newPlayers.forEach((player) => {
+            player.myLetters = props.getLetters(7);
+        });
+        console.log({newPlayers});
+        return props.addPlayers(newPlayers);
     }
 
-    console.log('StartNewGame props',props.players)
+    function playerColor(e, color) {
+        e.preventDefault();
+        console.log(color);
+    }
     return ( 
         <div className="StartNewGame">
             <h1 className="logo__big">WordUp</h1>
@@ -59,6 +61,10 @@ const StartNewGame = (props) => {
                                         type="text" 
                                         value={newPlayer[`name ${num}`]} 
                                     />
+                                    <button className="color" style={{backgroundColor:'slateblue'}} onClick={e => playerColor(e,'slateblue')}></button>
+                                    <button className="color" style={{backgroundColor:'orangered'}} onClick={e => playerColor(e,'orangered')}></button>
+                                    <button className="color" style={{backgroundColor:'burlywood'}} onClick={e => playerColor(e,'burlywood')}></button>
+                                    <button className="color" style={{backgroundColor:'firebrick'}} onClick={e => playerColor(e,'firebrick')}></button>
                                 </div>
                             )
                         })

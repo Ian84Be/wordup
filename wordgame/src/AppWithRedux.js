@@ -8,13 +8,14 @@ import {
     holdLetter,
     loadDictionary, 
     makeBoard,
+    newLetterBag,
     newMessage,
     nextPlayer
 } from './redux/actions';
 
-import AddPlayer from './Components/AddPlayer/AddPlayer';
+import MessageModal from './Components/MessageModal/MessageModal';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
-import PlayerOne, {drawLetters} from './Components/PlayerOne/PlayerOne.js';
+import PlayerControls from './Components/PlayerControls/PlayerControls.js';
 import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js';
 import StartNewGame from './Components/StartNewGame/StartNewGame.js';
 
@@ -25,16 +26,18 @@ import './App.scss';
 
 class App extends React.Component {
   render() { 
-    if (this.props.players.length<1) return (<StartNewGame message={this.props.message} players={this.props.players} />);
+    if (this.props.players.length<1) return (
+      <StartNewGame 
+        getLetters={this.getLetters}
+        message={this.props.message} 
+        players={this.props.players} 
+      />
+    );
     const {activePlayer,clickedLetter,gameBoard,message,players} = this.props;
     const {myHistory,myLetters,myName,myScore} = players[activePlayer];
     return ( 
       <div className="container">
-        <AddPlayer 
-        activePlayer={activePlayer}
-        message={message}
-        players={players}
-        />
+        {message.length>1 && <MessageModal message={message} />}
 
         <div className="middleContainer">
         <ScoreBoard
@@ -54,7 +57,7 @@ class App extends React.Component {
                 onDrop={this.onDrop}
             />
 
-            <PlayerOne 
+            <PlayerControls 
             clickedLetter={clickedLetter}
             clearBoard={this.clearBoard}
             letterClick={this.letterClick}
@@ -177,7 +180,6 @@ class App extends React.Component {
 
   dictionaryCheck = (word) => {
     if (!this.props.dictionary) return this.props.newMessage(`dictionary loading... please wait...`);
-    // return true;
     return (this.props.dictionary.includes(word)) ? true : false;
   } // this.dictionaryCheck() END >> back to this.calculateScore();
 
@@ -185,9 +187,25 @@ class App extends React.Component {
     const tempWords = [];
     activeTiles.forEach(tile => tempWords.push(...this.lookBothWays(tile)));
     let foundWords = this.uniqWords(tempWords);
-    // console.log(foundWords.length,'uniqWords',foundWords);
     if (foundWords.length>0) return this.scoreWords(foundWords);
   } // this.findWords() END >> return this.scoreWords(foundWords);
+
+  getLetters = (num) => {
+    let newBag = {...this.props.letterBag};
+    console.log({newBag});
+    let myLetters=[], random_letter;
+    for (let i = 0; i < num; i++) {
+        let grabBag = Object.entries(newBag).filter(letter => letter[1]>0);
+        if (grabBag.length<1) return myLetters;
+        let random = Math.floor(Math.random() * grabBag.length);
+        random_letter = grabBag[random][0];
+        myLetters.push(random_letter);
+        grabBag[random][1]--;
+        newBag[random_letter] = grabBag[random][1];
+    }
+    this.props.newLetterBag(newBag);
+    return myLetters;
+  }
 
   letterClick = (e, letter, myLettersIndex) => {
     e.preventDefault();
@@ -281,36 +299,22 @@ class App extends React.Component {
     let newLetters=[],randomLetters=[];
     // pass turn to next player and draw all new letters
     if (addScore === 0) {
-        newLetters = drawLetters(7);
+        newLetters = this.getLetters(7);
         this.props.holdLetter([])
         this.props.changeMyLetters(newLetters);
         this.props.newMessage('')
         return this.props.nextPlayer();
     }
-
-    if (myLetters.length<7) {
-      randomLetters = drawLetters(7-myLetters.length);
+    // add new letters to hand 
+    else if (myLetters.length<7) {
+      randomLetters = this.getLetters(7-myLetters.length);
       newLetters = [...oldLetters,...randomLetters];
+      this.props.holdLetter([]);
+      this.props.changeMyLetters(newLetters);
+      this.props.newMessage('');
+      this.props.addScore(addScore);
+      return this.props.nextPlayer();
     }
-    // TODO
-    // powerup S9 tile if theirScore - myScore > 40
-    // toggle config obj >> guarantee ONE VOWEL
-    // fix so that hand INCLUDES one vowel >> put this on App method for nextPlayer
-    const vowels = ['A','E','I','O','U'];
-    let hasVowel = 0;
-    vowels.forEach(vowel => {
-      if (newLetters.includes(vowel)) ++hasVowel;
-    });
-    if (!hasVowel) {
-      let randomV = vowels[Math.floor(Math.random()*5)];
-      newLetters.pop();
-      newLetters.push(randomV);
-    }
-    this.props.holdLetter([]);
-    this.props.newMessage('');
-    this.props.changeMyLetters(newLetters);
-    this.props.addScore(addScore);
-    return this.props.nextPlayer();
   }
 
   onDragStart = (e, index, isActive = false) => {
@@ -404,30 +408,21 @@ class App extends React.Component {
         let activeTiles = tileSet[2];
         (direction === 'vert') ? vertActive.push(...activeTiles) : horActive.push(...activeTiles);
       });
-        // console.log('vertActive',vertActive,'horActive',horActive);
       const activeTiles = newBoard.filter(tile => tile.active);
       let vertDupe = activeTiles.every(tile => vertActive.includes(tile.id));
       let horDupe = activeTiles.every(tile => horActive.includes(tile.id));
       let dupeCheck = (vertDupe && horDupe) ? true : false;
-        // console.log('vertDupe',vertDupe,'horDupe',horDupe,'dupeCheck',dupeCheck);
       if (vertDupe && horActive.length<2) dupeCheck = true;
       if (horDupe && vertActive.length<2) dupeCheck = true;
-        // console.log('dupeCheck',dupeCheck);
       let uniqActive = new Set();
       for (let ids of vertActive) uniqActive.add(ids);
       for (let ids of horActive) uniqActive.add(ids);
-        // console.log('activeTiles',activeTiles);
-        // console.log('uniqActive',uniqActive);
       if (uniqActive.size < activeTiles.length) return this.props.newMessage('error: loose tiles');
       let okHor, okVert;
       if (vertActive.length > 0) okVert = lineLook('vert',vertActive);
       else okVert=0;
-      // console.log('okVert',okVert);
       if (horActive.length > 0) okHor = lineLook('hor',horActive);
       else okHor=0;
-        // console.log('okHor',okHor);
-        // console.log('okVert',okVert,'okHor',okHor);
-        // console.log('dupeCheck',dupeCheck);
       if (okVert && okHor === 0) return (dupeCheck) ? true : false;
       if (okHor && okVert === 0) return true;
       if (okVert && vertDupe) return true;
@@ -482,6 +477,7 @@ const mapStateToProps = state => ({
     clickedLetter: state.clickedLetter,
     dictionary: state.dictionary,
     gameBoard: state.gameBoard,
+    letterBag: state.letterBag,
     message: state.message,
     players: state.players
 });
@@ -492,6 +488,7 @@ export default connect(mapStateToProps, {
     holdLetter, 
     loadDictionary, 
     makeBoard, 
+    newLetterBag,
     newMessage,
     nextPlayer
 })(App)

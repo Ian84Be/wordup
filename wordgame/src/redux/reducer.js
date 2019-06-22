@@ -7,17 +7,19 @@ import {
     HOLD_LETTER,
     LOAD_DICTIONARY, 
     MAKE_BOARD, 
+    NEW_LETTERBAG,
     NEW_MESSAGE,
     NEXT_PLAYER 
 } from './actions';
 
-// import {drawLetters} from '../Components/PlayerOne/PlayerOne';
+import {letterBag} from '../letterBag.js';
 
 const initialState = {
     activePlayer: 0,
     clickedLetter: [],
     dictionary: [],
     gameBoard: [],
+    letterBag: letterBag,
     message: '',
     players: []
 };
@@ -27,7 +29,6 @@ const reducer = (state = initialState, action) => {
     const {activePlayer, players} = state;
     switch (type) {
         case ADD_HISTORY:
-            console.log('ADDHISTORY',payload);
             let historyState = [...players];
             historyState[activePlayer].myHistory.unshift(...payload);
             return {
@@ -40,7 +41,6 @@ const reducer = (state = initialState, action) => {
                 players: payload
             }
         case ADD_SCORE:
-            console.log('ADDSCORE',payload);
             let scoreState = [...players];
             scoreState[activePlayer].myScore += payload;
             return {
@@ -48,7 +48,6 @@ const reducer = (state = initialState, action) => {
                 players: scoreState
             }
         case CHANGE_MYLETTERS:
-            console.log('CHANGE_MYLETTERS',payload);
             let letterState = [...players];
             letterState[activePlayer].myLetters = payload;
             return {
@@ -56,19 +55,16 @@ const reducer = (state = initialState, action) => {
                 players: letterState
             }
         case HOLD_LETTER:
-            console.log('HOLD_LETTER',payload);
             return {
                 ...state,
                 clickedLetter: payload
             }
         case LOAD_DICTIONARY:
-            console.log('LOAD_DICTIONARY');
             return {
                 ...state,
                 dictionary: payload
             }
         case MAKE_BOARD:
-            console.log('MAKEBOARD');
             return {
                 ...state,
                 gameBoard: payload
@@ -77,6 +73,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 message: payload
+            }
+        case NEW_LETTERBAG:
+            return {
+                ...state,
+                letterBag: payload
             }
         case NEXT_PLAYER:
             let last = players.length-1;

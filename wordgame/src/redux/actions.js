@@ -6,6 +6,7 @@ export const CHANGE_MYLETTERS = 'CHANGE_MYLETTERS';
 export const HOLD_LETTER = 'HOLD_LETTER';
 export const LOAD_DICTIONARY = 'LOAD_DICTIONARY';
 export const MAKE_BOARD = 'MAKE_BOARD';
+export const NEW_LETTERBAG = 'NEW_LETTERBAG';
 export const NEW_MESSAGE = 'NEW_MESSAGE';
 export const NEXT_PLAYER = 'NEXT_PLAYER';
 
@@ -39,6 +40,9 @@ export const makeBoard = (gameBoard) => {
 
 export const newMessage = (message) => {
     return ({type: NEW_MESSAGE, payload: message})
+}
+export const newLetterBag = (letterBag) => {
+    return ({type: NEW_LETTERBAG, payload: letterBag})
 }
 
 export const nextPlayer = () => {
