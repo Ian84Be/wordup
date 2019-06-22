@@ -1,14 +1,4 @@
 
-// TODO
-// toggle config obj >> tile viewing angle (shift box-shadow && transform offset)
-
-// $tile__width:60px;
-$tile__width:6vw;
-$tw: $tile__width;
-
-$tile__height: $tw/10;
-$th: $tile__height;
-
 // Mobile Breakpoints
 $screen-sm-min: 650px;
 $screen-xs-max: ($screen-sm-min - 1);
@@ -16,7 +6,6 @@ $screen-md-min: 900px;
 $screen-sm-max: ($screen-md-min - 1);
 $screen-lg-min: 1200px;
 $screen-md-max: ($screen-lg-min - 1);
-
 // Usage
 // @media (max-width: $screen-xs-max) { ... }
 // @media (min-width: $screen-sm-min) { ... }
@@ -24,3 +13,11 @@ $screen-md-max: ($screen-lg-min - 1);
 // @media (min-width: $screen-md-min) { ... }
 // @media (max-width: $screen-md-max) { ... }
 // @media (min-width: $screen-lg-min) { ... }
+
+// TODO
+// toggle config obj >> tile viewing angle (shift box-shadow && transform offset)
+$tile__width:6vw;
+$tw: $tile__width;
+
+$tile__height: $tw/10;
+$th: $tile__height;

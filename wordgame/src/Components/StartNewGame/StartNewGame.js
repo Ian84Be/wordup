@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {addPlayers} from '../../redux/actions'
+import {addPlayers,newLetterBag} from '../../redux/actions'
+import {letterBag} from '../../letterBag.js';
+let startBag = {...letterBag};
 
-import {drawLetters} from '../PlayerOne/PlayerOne';
 
 const StartNewGame = (props) => {
     const [newPlayer, setnewPlayer] = useState({
@@ -13,22 +14,39 @@ const StartNewGame = (props) => {
     });
     const [numPlayers, setnumPlayers] = useState([]);
 
-    const startNewGame = e => {
+    const startNewGame = async (e) => {
         e.preventDefault();
-        console.log('START',newPlayer);
         let newPlayers = numPlayers.map((num, i) => ({
             id: i,
             myHistory: [],
-            myLetters: drawLetters(7),
+            myLetters: startLetters(7),
             myName: newPlayer[`name ${num}`],
             myScore: 0,
         }));
-        console.log(newPlayers);
-        props.addPlayers(newPlayers);
-        // setnewPlayer({name:''});
+        // console.log({newPlayers});
+        // console.log('startNewGame() DONE >> update letterBag',startBag)
+        props.newLetterBag(startBag);
+        return props.addPlayers(newPlayers);
     }
 
-    console.log('StartNewGame props',props.players)
+    function startLetters(num) {
+        // console.log('startLetters() startBag',startBag);
+        let myLetters=[], random_letter;
+        for (let i = 0; i < num; i++) {
+            let grabBag = Object.entries(startBag).filter(letter => letter[1]>0);
+            let random = Math.floor(Math.random() * grabBag.length);
+            random_letter = grabBag[random][0];
+            myLetters.push(random_letter);
+            --grabBag[random][1];
+            startBag[random_letter] = grabBag[random][1];
+        }
+        return myLetters;
+      }
+
+    function playerColor(e, color) {
+        e.preventDefault();
+        console.log(color);
+    }
     return ( 
         <div className="StartNewGame">
             <h1 className="logo__big">WordUp</h1>
@@ -59,6 +77,10 @@ const StartNewGame = (props) => {
                                         type="text" 
                                         value={newPlayer[`name ${num}`]} 
                                     />
+                                    {/* <button className="color" style={{backgroundColor:'slateblue'}} onClick={e => playerColor(e,'slateblue')}></button>
+                                    <button className="color" style={{backgroundColor:'orangered'}} onClick={e => playerColor(e,'orangered')}></button>
+                                    <button className="color" style={{backgroundColor:'burlywood'}} onClick={e => playerColor(e,'burlywood')}></button>
+                                    <button className="color" style={{backgroundColor:'firebrick'}} onClick={e => playerColor(e,'firebrick')}></button> */}
                                 </div>
                             )
                         })
@@ -71,4 +93,4 @@ const StartNewGame = (props) => {
     );
 }
 
-export default connect(null,{addPlayers})(StartNewGame);
+export default connect(null,{addPlayers,newLetterBag})(StartNewGame);
