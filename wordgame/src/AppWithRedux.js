@@ -28,27 +28,27 @@ class App extends React.Component {
   render() { 
     if (this.props.players.length<1) return (
       <StartNewGame 
-        getLetters={this.getLetters}
         message={this.props.message} 
         players={this.props.players} 
       />
     );
-    const {activePlayer,clickedLetter,gameBoard,message,players} = this.props;
+    const {activePlayer,clickedLetter,gameBoard,letterBag,message,players} = this.props;
     const {myHistory,myLetters,myName,myScore} = players[activePlayer];
     return ( 
       <div className="container">
         {message.length>1 && <MessageModal message={message} />}
 
         <div className="middleContainer">
-        <ScoreBoard
-            activePlayer={activePlayer}
-            myHistory={myHistory}
-            myName={myName}
-            myScore={myScore}
-            players={players}
-        />
+          <ScoreBoard
+              activePlayer={activePlayer}
+              letterBag={letterBag}
+              myHistory={myHistory}
+              myName={myName}
+              myScore={myScore}
+              players={players}
+          />
 
-            <div className="middleContainer--center">
+          <div className="middleContainer--center">
             <GameBoard 
                 boardClick={this.boardClick}
                 clickedLetter={clickedLetter}
@@ -66,7 +66,7 @@ class App extends React.Component {
             passTurn={this.passTurn}
             submitLetters={this.submitLetters}
             />
-            </div>
+          </div>
         </div>
       </div> 
     );
@@ -183,6 +183,10 @@ class App extends React.Component {
     return (this.props.dictionary.includes(word)) ? true : false;
   } // this.dictionaryCheck() END >> back to this.calculateScore();
 
+  endGame = () => {
+
+  }
+  
   findWords = (activeTiles) => {
     const tempWords = [];
     activeTiles.forEach(tile => tempWords.push(...this.lookBothWays(tile)));
@@ -192,19 +196,53 @@ class App extends React.Component {
 
   getLetters = (num) => {
     let newBag = {...this.props.letterBag};
-    console.log({newBag});
     let myLetters=[], random_letter;
     for (let i = 0; i < num; i++) {
-        let grabBag = Object.entries(newBag).filter(letter => letter[1]>0);
-        if (grabBag.length<1) return myLetters;
-        let random = Math.floor(Math.random() * grabBag.length);
-        random_letter = grabBag[random][0];
-        myLetters.push(random_letter);
-        grabBag[random][1]--;
-        newBag[random_letter] = grabBag[random][1];
+      let grabBag = Object.entries(newBag).filter(letter => letter[1] > 0);
+      console.log('grabBag',i);
+      console.log({grabBag});
+      if (grabBag.length<1) {
+        console.log('grabBag.length<1')
+        this.props.newLetterBag(newBag);
+        this.props.newMessage('letterBag is EMPTY');
+        return myLetters;
+      }
+      let random = Math.floor(Math.random() * grabBag.length);
+      random_letter = grabBag[random][0];
+      myLetters.push(random_letter);
+      grabBag[random][1]--;
+      newBag[random_letter] = grabBag[random][1];
     }
     this.props.newLetterBag(newBag);
     return myLetters;
+  }
+
+  passLetters = (num) => {
+    const {activePlayer,letterBag,players} = this.props;
+    const {myLetters} = players[activePlayer];
+    let newBag = {...letterBag};
+    let myOldLetters = [...myLetters];
+    let myNewLetters=[], random_letter;
+    for (let i = 0; i < num; i++) {
+      let grabBag = Object.entries(newBag).filter(letter => letter[1] > 0);
+      if (grabBag.length<1) {
+        console.log('grabBag.length<1')
+        this.props.newLetterBag(newBag);
+        this.props.newMessage('letterBag is EMPTY');
+        return myNewLetters;
+      }
+      let random = Math.floor(Math.random() * grabBag.length);
+      random_letter = grabBag[random][0];
+      myNewLetters.push(random_letter);
+      grabBag[random][1]--;
+      newBag[random_letter] = grabBag[random][1];
+    }
+    myOldLetters.forEach(letter => {
+      console.log('pass',letter,'back to letterBag');
+      newBag[letter]++;
+    });
+    this.props.newLetterBag(newBag);
+    return myNewLetters;
   }
 
   letterClick = (e, letter, myLettersIndex) => {
@@ -299,10 +337,10 @@ class App extends React.Component {
     let newLetters=[],randomLetters=[];
     // pass turn to next player and draw all new letters
     if (addScore === 0) {
-        newLetters = this.getLetters(7);
+        newLetters = this.passLetters(7);
         this.props.holdLetter([])
         this.props.changeMyLetters(newLetters);
-        this.props.newMessage('')
+        // this.props.newMessage('')
         return this.props.nextPlayer();
     }
     // add new letters to hand 
@@ -311,7 +349,7 @@ class App extends React.Component {
       newLetters = [...oldLetters,...randomLetters];
       this.props.holdLetter([]);
       this.props.changeMyLetters(newLetters);
-      this.props.newMessage('');
+      // this.props.newMessage('');
       this.props.addScore(addScore);
       return this.props.nextPlayer();
     }
@@ -374,6 +412,8 @@ class App extends React.Component {
 
   // this.scoreWords() START >> strictModeScoring(foundWords) >> this.calculateScore(foundWords)
   scoreWords = (foundWords) => {
+    const {activePlayer, players} = this.props;
+    const {myName} = players[activePlayer];
     const newBoard = [...this.props.gameBoard];
     let okStrict = strictModeScoring(foundWords);
     if (!okStrict) return this.props.newMessage('error: cannot build in both directions');
@@ -387,7 +427,7 @@ class App extends React.Component {
         newBoard[thisIndex].active = false;
       });
       this.props.makeBoard(newBoard);
-      this.props.newMessage(`you scored ${score} !`);
+      this.props.newMessage(`${myName} scored ${score} !`);
       this.props.addHistory(words);
       return this.nextPlayer(score);
     } else {
@@ -477,7 +517,7 @@ const mapStateToProps = state => ({
     clickedLetter: state.clickedLetter,
     dictionary: state.dictionary,
     gameBoard: state.gameBoard,
-    letterBag: state.letterBag,
+    letterBag: {...state.letterBag},
     message: state.message,
     players: state.players
 });

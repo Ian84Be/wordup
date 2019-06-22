@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {addPlayers} from '../../redux/actions'
+import {addPlayers,newLetterBag} from '../../redux/actions'
+import {letterBag} from '../../letterBag.js';
+let startBag = {...letterBag};
+
 
 const StartNewGame = (props) => {
     const [newPlayer, setnewPlayer] = useState({
@@ -16,16 +19,29 @@ const StartNewGame = (props) => {
         let newPlayers = numPlayers.map((num, i) => ({
             id: i,
             myHistory: [],
-            myLetters: [],
+            myLetters: startLetters(7),
             myName: newPlayer[`name ${num}`],
             myScore: 0,
         }));
-        await newPlayers.forEach((player) => {
-            player.myLetters = props.getLetters(7);
-        });
-        console.log({newPlayers});
+        // console.log({newPlayers});
+        // console.log('startNewGame() DONE >> update letterBag',startBag)
+        props.newLetterBag(startBag);
         return props.addPlayers(newPlayers);
     }
+
+    function startLetters(num) {
+        // console.log('startLetters() startBag',startBag);
+        let myLetters=[], random_letter;
+        for (let i = 0; i < num; i++) {
+            let grabBag = Object.entries(startBag).filter(letter => letter[1]>0);
+            let random = Math.floor(Math.random() * grabBag.length);
+            random_letter = grabBag[random][0];
+            myLetters.push(random_letter);
+            --grabBag[random][1];
+            startBag[random_letter] = grabBag[random][1];
+        }
+        return myLetters;
+      }
 
     function playerColor(e, color) {
         e.preventDefault();
@@ -77,4 +93,4 @@ const StartNewGame = (props) => {
     );
 }
 
-export default connect(null,{addPlayers})(StartNewGame);
+export default connect(null,{addPlayers,newLetterBag})(StartNewGame);
