@@ -15,6 +15,7 @@ import {
 
 import MessageModal from './Components/MessageModal/MessageModal';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
+import History from './Components/History/History.js';
 import PlayerControls from './Components/PlayerControls/PlayerControls.js';
 import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js';
 import StartNewGame from './Components/StartNewGame/StartNewGame.js';
@@ -41,10 +42,10 @@ class App extends React.Component {
         <div className="middleContainer">
           <ScoreBoard
               activePlayer={activePlayer}
-              letterBag={letterBag}
               myHistory={myHistory}
               myName={myName}
               myScore={myScore}
+              passTurn={this.passTurn}
               players={players}
           />
 
@@ -63,10 +64,19 @@ class App extends React.Component {
             letterClick={this.letterClick}
             myLetters={myLetters}
             onDragStart={this.onDragStart}
-            passTurn={this.passTurn}
+            // passTurn={this.passTurn}
             submitLetters={this.submitLetters}
             />
           </div>
+
+          <History
+            activePlayer={activePlayer}
+            letterBag={letterBag}
+            myHistory={myHistory}
+            myName={myName}
+            myScore={myScore}
+            players={players}
+          />
         </div>
       </div> 
     );
@@ -237,10 +247,7 @@ class App extends React.Component {
       grabBag[random][1]--;
       newBag[random_letter] = grabBag[random][1];
     }
-    myOldLetters.forEach(letter => {
-      console.log('pass',letter,'back to letterBag');
-      newBag[letter]++;
-    });
+    myOldLetters.forEach(letter => newBag[letter]++);
     this.props.newLetterBag(newBag);
     return myNewLetters;
   }

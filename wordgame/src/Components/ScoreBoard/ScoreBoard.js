@@ -4,7 +4,7 @@ const ScoreBoard = (props) => {
   return (
     <div className="ScoreBoard">
       <h1>WordUp</h1>
-      <div className="countDown">{Object.values(props.letterBag).reduce((a,b)=>a+b)} letters remain</div>
+      
       
       {props.players.map(player => {
         return (
@@ -21,7 +21,7 @@ const ScoreBoard = (props) => {
           </div>
         )
       })}
-
+     <button onClick={() => props.passTurn()}>Pass</button>
     </div>
   );
 }

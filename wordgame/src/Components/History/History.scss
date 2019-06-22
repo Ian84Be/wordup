@@ -1,4 +1,4 @@
-.ScoreBoard {
+.History {
     align-items: center;
     // border:1px solid white;
     display: flex;
@@ -11,15 +11,35 @@
         @include submit-button;
     }
 
-    .playerCard {
-        // border: 1px solid red;
+    h3 {
+        @include WordUp--logo();
+        font-size:$tw * .50;
+        // @include grid__center();
+    }
+
+    .countDown {
+        font-size:$tw * .30;
+        margin: $th 0;
+        text-align: center;
+        p {
+            // border-bottom: 1px solid white;
+        }
+    }
+
+    .historyCard {
+        align-items: center;
+        // border:1px solid red;
+        display: flex;
+        flex-direction: column;
         border-radius:8px;
         color: black;
         display: flex;
         flex-wrap: wrap;
         margin:$th;
         max-width: $tw*3;
-        padding:$th*4;
+        padding:$th;
+
+
 
         &.active {
             background: slateblue;
@@ -27,14 +47,18 @@
         }
 
         .name {
-            // border: 1px solid green;
+            border-bottom: 1px solid black;
             text-align: center;
-            font-size:$th*4;
+            font-size:$tw * .30;
             overflow-wrap: break-word;
             width:$tw*2;
             @media (max-width: $screen-xs-max) {
-                font-size:$th*5;
+                font-size:$tw * .40;
             }
+        }
+
+        .history li  {
+            font-size:$tw * .30;
         }
     }
 }
