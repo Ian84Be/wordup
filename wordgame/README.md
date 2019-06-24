@@ -1,68 +1,39 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Start Game
+RULES >> Choose names for 1-4 Players
+RULES >> Players start with 7 tiles each
+RULES >> Classic letterBag is 64 tiles
+RULES >> Classic GameBoard is 8x8 tiles 
 
-In the project directory, you can run:
+## Player Controls
+PASS >> Pass turn to nextPlayer and draw 7 new letters
+SUBMIT >> Submit words for scoring
+CLEAR BOARD >> Clear all activeTiles from the GameBoard
 
-### `npm start`
+## Scoring
+RULES >> All tiles played on a turn must form part of one continuous line of tiles vertical or horizontal
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+RULES >> Words built with no stacked letters score two points per tile
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+RULES >> 2 bonus for using "Qu" in a word with no stacked letters
 
-### `npm test`
+RULES >> 20 bonus points for using all seven tiles in one turn
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## End Game
+RULES >> END GAME if letterBag is empty and one player has used all of his/her tiles
 
-### `npm run build`
+RULES >> END GAME if letterBag is empty and every player passes in a single round
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+RULES >> Players lose five points for every unused tile they hold at the end of the game
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+#### NOT YET IMPLEMENTED
+RULES >> The first player must cover one or more of the four central squares
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+RULES >> Subsequent players may put tiles on the board adjacent to and/or on top of the tiles already played
+RULES >> after 1st turn > active tiles must be touching played tiles
 
-### `npm run eject`
+RULES >> No stack may be more than five tiles high
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+RULES >> At least one tile or stack must be left unchanged; a player may not cover every letter in a word on a single turn.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+// Players may not pluralize a word simply by adding an S at its end, only allowed if the S is part of another complete word that is played onto the board in the same turn. 

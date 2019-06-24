@@ -6,7 +6,7 @@ const PlayerControls = props => {
     <section className="PlayerControls">
 
       <div className="myLetters">
-        {props.myLetters.map((letter, myLettersIndex) => {
+        {props.myLetters && props.myLetters.map((letter, myLettersIndex) => {
           let clicked = (props.clickedLetter[1] === myLettersIndex) ? ' clicked' : '';
             return (
               <div 
@@ -23,7 +23,7 @@ const PlayerControls = props => {
       </div>
 
       <div className="controls">
-        {/* <button onClick={() => props.passTurn()}>Pass</button> */}
+        <button onClick={() => props.passTurn()}>Pass</button>
         <button onClick={() => props.submitLetters()}>Submit</button>
           <div className="message">{props.message}</div>
         <button onClick={() => props.clearBoard()}>Clear Board</button>

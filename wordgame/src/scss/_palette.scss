@@ -1,20 +1,38 @@
 
 $active-color:palevioletred;
 
-$tile__0-color: hsl(40,50,50);
-$tile__1-color: hsl(80,50,50);
-$tile__2-color: hsl(120,50,50);
-$tile__3-color: hsl(160,50,50);
-$tile__4-color: hsl(200,50,50);
-$tile__5-color: hsla(240,50,50,.75);
-$tile__6-color: hsla(280,50,50,.65);
-$tile__7-color: hsla(320,50,50,.55);
-$tile__8-color: hsla(360,50,50,.45);
-$tile__9-color: hsla(0,50,50,.35);
-$tile__ltr-color: hsla(44,100,88,.75);
+// $tile__0-color: hsl(40,50,50);
+// $tile__1-color: hsl(80,50,50);
+// $tile__2-color: hsl(120,50,50);
+// $tile__3-color: hsl(160,50,50);
+// $tile__4-color: hsl(200,50,50);
+// $tile__5-color: hsla(240,50,50,.75);
+// $tile__6-color: hsla(280,50,50,.65);
+// $tile__7-color: hsla(320,50,50,.55);
+// $tile__8-color: hsla(360,50,50,.45);
+// $tile__9-color: hsla(0,50,50,.35);
 
-$tile__border-color: hsla(200,50,60,.75);
-$tile--played-border: hsla(40,50,70,.35);
+$b:40;
+
+$tile__0-color: hsl($b,50,50);
+$tile__1-color: hsl($b*2,50,50);
+$tile__2-color: hsl($b*3,50,50);
+$tile__3-color: hsl($b*4,50,50);
+$tile__4-color: hsla($b*5,50,50,.75);
+$tile__5-color: hsla($b*6,50,50,.75);
+$tile__6-color: hsla($b*7,50,50,.65);
+$tile__7-color: hsla($b*8,50,50,.55);
+$tile__8-color: hsla($b*9,50,50,.45);
+$tile__9-color: hsla($b*10,50,50,.35);
+
+// $tile__ltr-color: hsla(44,100,88,.75);
+$tile__ltr-color: hsla($b*33,100,88,.75);
+
+$tile__border-color: hsla($b*10,50,60,.75);
+$tile--played-color: hsl($b*30,50,60,);
+$tile--played-border: hsla($b*20,50,70,.35);
+// $tile__border-color: hsla(200,50,60,.75);
+// $tile--played-border: hsla(40,50,70,.35);
 
 $message--bg:rgba(238, 32, 169, 0.65);
 

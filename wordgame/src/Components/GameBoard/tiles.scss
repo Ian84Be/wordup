@@ -114,16 +114,16 @@
 
     // set a default style for played tiles
     &.x {
-        background:$tile__0-color;
+        background:$tile--played-color;
         border: 1px solid $tile--played-border;
     }
 
     // translucent bg for stacks > 5
-    &.xxxxxx {
-      // background: hsla(40,50,50,.65);
-      background: hsl(40,50,50);
-      // border:0;
-    }
+    // &.xxxxxx {
+    //   // background: hsla(40,50,50,.65);
+    //   background: hsl(40,50,50);
+    //   // border:0;
+    // }
 
     &.active {
       background:white;
@@ -144,7 +144,4 @@
         color:black;
       }
     }
-
-
-
   } // .tile END
