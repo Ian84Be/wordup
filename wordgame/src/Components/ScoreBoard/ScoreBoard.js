@@ -6,7 +6,7 @@ const ScoreBoard = (props) => {
     <div className="ScoreBoard">
       <h1>WordUp</h1>
 
-      <div className="History">
+      <div className="myHistory">
         <div className="countDown">{Object.values(props.letterBag).reduce((a,b)=>a+b)}<p>letters remaining</p></div>
         {/* <h3>SCOREBOARD</h3> */}
         

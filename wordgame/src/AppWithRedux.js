@@ -9,14 +9,16 @@ import {
     holdLetter,
     loadDictionary, 
     makeBoard,
+    newErrMsg,
+    newGameHistory,
     newLetterBag,
     newMessage,
     nextPlayer
 } from './redux/actions';
 
-import MessageModal from './Components/MessageModal/MessageModal';
 import MiniScores from './Components/MiniScores/MiniScores';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
+import History from './Components/History/History.js';
 import PlayerControls from './Components/PlayerControls/PlayerControls.js';
 import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js';
 import StartNewGame from './Components/StartNewGame/StartNewGame.js';
@@ -34,11 +36,14 @@ class App extends React.Component {
         players={this.props.players} 
       />
     );
-    const {activePlayer,clickedLetter,gameBoard,letterBag,message,players} = this.props;
+    const {activePlayer,clickedLetter,errMsg,gameBoard,gameHistory,letterBag,message,players} = this.props;
     const {myHistory,myLetters,myName,myScore} = players[activePlayer];
+    let firstRound = true;
+    players.forEach(player => {
+      if (player.myScore>0) firstRound = false;
+    });
     return ( 
       <div className="container">
-        {message.length>1 && <MessageModal message={message} />}
 
         <div className="middleContainer">
         <ScoreBoard
@@ -59,6 +64,7 @@ class App extends React.Component {
             <GameBoard 
                 boardClick={this.boardClick}
                 clickedLetter={clickedLetter}
+                firstRound={firstRound}
                 gameBoard={gameBoard}
                 onDragStart={this.onDragStart}
                 onDrop={this.onDrop}
@@ -74,6 +80,19 @@ class App extends React.Component {
             submitLetters={this.submitLetters}
             />
           </div>
+
+          <History
+            activePlayer={activePlayer}
+            errMsg={errMsg}
+            gameHistory={gameHistory}
+            letterBag={letterBag}
+            message={message} 
+            myHistory={myHistory}
+            myName={myName}
+            myScore={myScore}
+            passTurn={this.passTurn}
+            players={players}
+          />
 
         </div>
       </div>
@@ -107,7 +126,7 @@ class App extends React.Component {
     if (clickedLetter.length===0 && !isActive) return;
     if (clickedLetter.length===0 && isActive) newClicked = [thisTile.stack[0], null, index];
     if (clickedLetter.length>0 && !isActive) {
-      if (clickedLetter[0] === thisTile.stack[0]) return this.props.newMessage(`this letter is already ${thisTile.stack[0]}`);
+      if (clickedLetter[0] === thisTile.stack[0]) return this.props.newErrMsg(`this letter is already ${thisTile.stack[0]}`);
       thisTile.stack.unshift(clickedLetter[0]);
       thisTile.active = true;
       if (activeIndex || activeIndex === 0) {
@@ -116,8 +135,8 @@ class App extends React.Component {
       } else myNewLetters.splice(clickedLetter[1],1);
     }
     if (clickedLetter.length>2 && isActive) {
-      if (newBoard[activeIndex].stack[0] === thisTile.stack[1]) return this.props.newMessage(`this letter is already ${thisTile.stack[1]}`);
-      if (newBoard[activeIndex].stack[1] === thisTile.stack[0]) return this.props.newMessage(`this letter is already ${thisTile.stack[0]}`);
+      if (newBoard[activeIndex].stack[0] === thisTile.stack[1]) return this.props.newErrMsg(`this letter is already ${thisTile.stack[1]}`);
+      if (newBoard[activeIndex].stack[1] === thisTile.stack[0]) return this.props.newErrMsg(`this letter is already ${thisTile.stack[0]}`);
       if (activeIndex === index) {
         thisTile.stack.shift();
         thisTile.active = false;
@@ -130,7 +149,7 @@ class App extends React.Component {
       thisTile.stack.unshift(clickedLetter[0]);
     }
     if (clickedLetter.length===2 && isActive) {
-      if (clickedLetter[0] === thisTile.stack[1]) return this.props.newMessage(`this letter is already ${thisTile.stack[1]}`);
+      if (clickedLetter[0] === thisTile.stack[1]) return this.props.newErrMsg(`this letter is already ${thisTile.stack[1]}`);
       myNewLetters.splice(clickedLetter[1],1,thisTile.stack[0]);
       thisTile.stack.shift();
       thisTile.stack.unshift(clickedLetter[0]);
@@ -226,7 +245,7 @@ class App extends React.Component {
       if (grabBag.length<1) {
         console.log('grabBag.length<1')
         this.props.newLetterBag(newBag);
-        this.props.newMessage('letterBag is EMPTY');
+        this.props.newErrMsg('letterBag is EMPTY');
         return myLetters;
       }
       let random = Math.floor(Math.random() * grabBag.length);
@@ -244,7 +263,7 @@ class App extends React.Component {
     const {myLetters} = players[activePlayer];
     // RULES >> END GAME if letterBag is empty and every player passes in a single round
     if (emptyBag) addPassCount(passCount+1);
-    if (emptyBag && players.length-1 === passCount) return newMessage('END GAME // PASSCOUNT MAX');
+    if (emptyBag && players.length-1 === passCount) return this.props.newErrMsg('END GAME // PASSCOUNT MAX');
     let newBag = {...letterBag};
     let myOldLetters = [...myLetters];
     let myNewLetters=[], random_letter;
@@ -252,7 +271,7 @@ class App extends React.Component {
       let grabBag = Object.entries(newBag).filter(letter => letter[1] > 0);
       if (grabBag.length<1) {
         this.props.newLetterBag(newBag);
-        this.props.newMessage('letterBag is EMPTY');
+        this.props.newErrMsg('letterBag is EMPTY');
         return myNewLetters;
       }
       let random = Math.floor(Math.random() * grabBag.length);
@@ -275,8 +294,8 @@ class App extends React.Component {
       if (activeIndex || activeIndex === 0) {
         const newBoard = [...gameBoard];
         const thisTile = newBoard[activeIndex];
-        if (thisTile.stack[1] === letter) return this.props.newMessage(`this letter is already ${letter}`);
-        if (thisTile.stack[0] === letter) return this.props.newMessage(`this letter is already ${letter}`);
+        if (thisTile.stack[1] === letter) return this.props.newErrMsg(`this letter is already ${letter}`);
+        if (thisTile.stack[0] === letter) return this.props.newErrMsg(`this letter is already ${letter}`);
         thisTile.stack.shift();
         let myNewLetters = [...myLetters];
         myNewLetters.splice(myLettersIndex,1,clickedLetter[0]);
@@ -285,11 +304,11 @@ class App extends React.Component {
       }
       if (clickedLetter[1] === myLettersIndex) {
         this.props.holdLetter([]);
-        return this.props.newMessage('');
+        return this.props.newErrMsg('');
       }
     }
     this.props.holdLetter([letter, myLettersIndex]);
-    return this.props.newMessage('');
+    return this.props.newErrMsg('');
   } // this.letterClick() END
 
   lookBothWays = (startTile) => {
@@ -409,10 +428,10 @@ class App extends React.Component {
     const myNewLetters = [...myLetters];
     const droppedOnTile = newBoard[droppedOnIndex];
     const droppedOnLetter = droppedOnTile.stack[0];
-    if (droppedOnLetter === incomingLetter) return this.props.newMessage(`this letter is already ${incomingLetter}`);
-    if (onActive && droppedOnTile.stack[1] === incomingLetter) return this.props.newMessage(`this letter is already ${incomingLetter}`);
+    if (droppedOnLetter === incomingLetter) return this.props.newErrMsg(`this letter is already ${incomingLetter}`);
+    if (onActive && droppedOnTile.stack[1] === incomingLetter) return this.props.newErrMsg(`this letter is already ${incomingLetter}`);
     if (incomingIndex !== '') {
-      if (onActive && droppedOnTile.stack[0] === newBoard[incomingIndex].stack[1]) return this.props.newMessage(`this letter is already ${droppedOnTile.stack[0]}`);
+      if (onActive && droppedOnTile.stack[0] === newBoard[incomingIndex].stack[1]) return this.props.newErrMsg(`this letter is already ${droppedOnTile.stack[0]}`);
       const incomingTile = newBoard[incomingIndex];
       incomingTile.stack.shift();
       if (onActive) {
@@ -434,13 +453,13 @@ class App extends React.Component {
 
   passTurn = () => {
     const activeTiles = this.props.gameBoard.filter(tile => tile.active);
-    if (activeTiles.length>0) return this.props.newMessage('cannot pass with active tiles on board');
+    if (activeTiles.length>0) return this.props.newErrMsg('cannot pass with active tiles on board');
     else return this.nextPlayer(0);
   } // this.passTurn() END >> this.nextPlayer(0);
 
   submitLetters = () => {
     const activeTiles = this.props.gameBoard.filter(tile => tile.active).sort((a,b) => a.id-b.id);
-    if (activeTiles.length<1) return this.props.newMessage('you haven\'t placed any tiles');
+    if (activeTiles.length<1) return this.props.newErrMsg('you haven\'t placed any tiles');
     else return this.findWords(activeTiles);
   } // this.submitLetters END >> this.findWords(activeTiles);
 
@@ -459,7 +478,8 @@ class App extends React.Component {
     let okStrict = strictModeScoring(foundWords);
     // TODO
     // refactor this error message to include FIRST ROUND rules
-    if (!okStrict) return this.props.newMessage('error: cannot build in both directions');
+    if (okStrict === 'central') return this.props.newErrMsg('First Player must cover at least ONE of the central squares!');
+    if (!okStrict) return this.props.newErrMsg('Error: Cannot build in both directions!');
     const activeTiles = newBoard.filter(tile => tile.active);
     let scoreInfo = this.calculateScore(foundWords);
     let score = scoreInfo[0];
@@ -477,10 +497,12 @@ class App extends React.Component {
       this.props.makeBoard(newBoard);
       this.props.newMessage(`${myName} scored ${score} !`);
       this.props.addHistory(words);
+      words.forEach(word => this.props.newGameHistory(`${myName} ${word}`));
+      // this.props.newGameHistory(`${myName} ${words}`);
       return this.nextPlayer(score);
     } else {
       let failWords = words.filter(word => word.match(/[a-z]/g));
-      return this.props.newMessage(`dictionary FAIL ( ${failWords} )`);
+      return this.props.newErrMsg(`dictionary FAIL ( ${failWords} )`);
     } 
     // TODO
     // RULES >> after 1st turn > active tiles are touching played tiles
@@ -518,7 +540,7 @@ class App extends React.Component {
         centralSquares.forEach(id => {
           if (uniqActive.has(id)) playedCentral = true;
         });
-        if (!playedCentral) return false; // RULES >> The first player must cover one or more of the four central squares
+        if (!playedCentral) return 'central'; // RULES >> The first player must cover one or more of the four central squares
       }
       let okHor, okVert;
       if (vertActive.length > 0) okVert = lineLook('vert',vertActive);
@@ -571,6 +593,7 @@ class App extends React.Component {
     this.props.changeMyLetters(myNewLetters);
     this.props.makeBoard(newBoard);
     this.props.newMessage(newMessage);
+    this.props.newErrMsg('');
   }
 } // App COMPONENT END
 
@@ -579,7 +602,9 @@ const mapStateToProps = state => ({
     clickedLetter: state.clickedLetter,
     dictionary: state.dictionary,
     emptyBag: state.emptyBag,
+    errMsg: state.errMsg,
     gameBoard: state.gameBoard,
+    gameHistory: state.gameHistory,
     letterBag: {...state.letterBag},
     message: state.message,
     passCount: state.passCount,
@@ -593,6 +618,8 @@ export default connect(mapStateToProps, {
     holdLetter, 
     loadDictionary, 
     makeBoard, 
+    newErrMsg,
+    newGameHistory,
     newLetterBag,
     newMessage,
     nextPlayer

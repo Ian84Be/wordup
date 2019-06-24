@@ -4,7 +4,9 @@ import {
     ADD_PASSCOUNT, 
     ADD_PLAYERS, 
     ADD_SCORE,
+    ERR_MSG,
     CHANGE_MYLETTERS, 
+    GAME_HISTORY,
     HOLD_LETTER,
     LOAD_DICTIONARY, 
     MAKE_BOARD, 
@@ -20,7 +22,9 @@ const initialState = {
     clickedLetter: [],
     dictionary: [],
     emptyBag: false,
+    errMsg: '',
     gameBoard: [],
+    gameHistory: [],
     letterBag: letterBag,
     message: '',
     passCount: 0,
@@ -61,6 +65,17 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 players: letterState
+            }
+        case ERR_MSG: {
+            return {
+                ...state,
+                errMsg: payload
+            }
+        }
+        case GAME_HISTORY:
+            return {
+                ...state,
+                gameHistory: [payload, ...state.gameHistory]
             }
         case HOLD_LETTER:
             return {

@@ -16,8 +16,10 @@ const GameBoard = props => {
         myClassName += 'stack ';
         myClassName += 'x'.repeat(tile.stack.length);
       } else if (tile.stack.length===0) myClassName += 'blank';
-      let centralSquares = [43, 44, 53, 54];
-      if (centralSquares.includes(tile.id) && tile.stack.length===0 ) myClassName += ' central';
+      if (props.firstRound) {
+        let centralSquares = [43, 44, 53, 54];
+        if (centralSquares.includes(tile.id) && tile.stack.length===0) myClassName += ' central';
+      }
       
         return (
           <div 
