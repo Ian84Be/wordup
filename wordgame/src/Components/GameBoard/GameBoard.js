@@ -12,8 +12,12 @@ const GameBoard = props => {
       let myClassName = 'tile ';
       if (tile.active) myClassName += 'active ';
       if (props.clickedLetter[2] === index) myClassName += 'clicked ';
-      if (tile.stack.length>0) myClassName += 'x'.repeat(tile.stack.length);
-      else if (tile.stack.length===0) myClassName += 'blank';
+      if (tile.stack.length>0) {
+        myClassName += 'stack ';
+        myClassName += 'x'.repeat(tile.stack.length);
+      } else if (tile.stack.length===0) myClassName += 'blank';
+      let centralSquares = [43, 44, 53, 54];
+      if (centralSquares.includes(tile.id) && tile.stack.length===0 ) myClassName += ' central';
       
         return (
           <div 

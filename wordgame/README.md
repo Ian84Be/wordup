@@ -11,6 +11,7 @@
 - CLEAR BOARD >> Clear all activeTiles from the GameBoard
 
 ## Scoring
+- RULES >> The first player must cover one or more of the four central squares
 - RULES >> All tiles played on a turn must form part of one continuous line of tiles vertical or horizontal
 - RULES >> Words built with no stacked letters score two points per tile
 - RULES >> 2 bonus for using "Qu" in a word with no stacked letters
@@ -22,9 +23,8 @@
 - RULES >> Players lose five points for every unused tile they hold at the end of the game
 
 ## NOT YET IMPLEMENTED
-- // The first player must cover one or more of the four central squares
-- // Subsequent players may put tiles on the board adjacent to and/or on top of the tiles already played
-- // after 1st turn > active tiles must be touching played tiles
+- // AFTER FIRST WORD players may put tiles on the board adjacent to and/or on top of the tiles already played
+- // AFTER FIRST WORD active tiles must be touching played tiles
 - // No stack may be more than five tiles high
 - // At least one tile or stack must be left unchanged; a player may not cover every letter in a word on a single turn.
 - // Players may not pluralize a word simply by adding an S at its end, only allowed if the S is part of another complete word that is played onto the board in the same turn. 

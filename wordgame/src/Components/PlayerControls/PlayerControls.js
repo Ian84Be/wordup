@@ -6,7 +6,7 @@ const PlayerControls = props => {
     <section className="PlayerControls">
 
       <div className="myLetters">
-        {props.myLetters && props.myLetters.map((letter, myLettersIndex) => {
+        {props.myLetters.length>0 && props.myLetters.map((letter, myLettersIndex) => {
           let clicked = (props.clickedLetter[1] === myLettersIndex) ? ' clicked' : '';
             return (
               <div 

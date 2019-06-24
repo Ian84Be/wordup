@@ -15,6 +15,7 @@ import {
 } from './redux/actions';
 
 import MessageModal from './Components/MessageModal/MessageModal';
+import MiniScores from './Components/MiniScores/MiniScores';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
 import PlayerControls from './Components/PlayerControls/PlayerControls.js';
 import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js';
@@ -51,6 +52,10 @@ class App extends React.Component {
           />
 
           <div className="middleContainer--center">
+            <MiniScores 
+              activePlayer={activePlayer}
+              players={players}
+            />
             <GameBoard 
                 boardClick={this.boardClick}
                 clickedLetter={clickedLetter}
@@ -452,6 +457,8 @@ class App extends React.Component {
     const newBoard = [...this.props.gameBoard];
     // RULES >> strictModeScoring >> all tiles played on a turn must form part of one continuous line of tiles vertical or horizontal
     let okStrict = strictModeScoring(foundWords);
+    // TODO
+    // refactor this error message to include FIRST ROUND rules
     if (!okStrict) return this.props.newMessage('error: cannot build in both directions');
     const activeTiles = newBoard.filter(tile => tile.active);
     let scoreInfo = this.calculateScore(foundWords);
@@ -500,6 +507,19 @@ class App extends React.Component {
       for (let ids of horActive) uniqActive.add(ids);
       // RULES >> All tiles played on a turn must form part of one continuous line of tiles vertical or horizontal
       if (uniqActive.size < activeTiles.length) return false;
+      // RULES >> The first player must cover one or more of the four central squares 8x8(43, 44, 53, 54);
+      let firstRound = true;
+      players.forEach(player => {
+        if (player.myScore>0) firstRound = false;
+      });
+      if (firstRound) {
+        let playedCentral = false;
+        let centralSquares = [43, 44, 53, 54];
+        centralSquares.forEach(id => {
+          if (uniqActive.has(id)) playedCentral = true;
+        });
+        if (!playedCentral) return false; // RULES >> The first player must cover one or more of the four central squares
+      }
       let okHor, okVert;
       if (vertActive.length > 0) okVert = lineLook('vert',vertActive);
       else okVert=0;

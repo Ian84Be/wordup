@@ -113,8 +113,11 @@
     }
 
     // set a default style for played tiles
-    &.x {
+    &.stack {
         background:$tile--played-color;
+        // border: 3px solid red;
+        // outline: 1px solid black;
+        // outline-offset: -$tw*.19;
         border: 1px solid $tile--played-border;
     }
 
@@ -130,6 +133,15 @@
       &:hover {
         cursor:pointer;
         background:$active-color;
+      }
+    }
+
+    &.blank {
+      background:$tile__0-color;
+      // border: 1px solid $tile__border-color;
+      &.central {
+        outline: 1px solid black;
+        outline-offset: -$tw*.45;
       }
     }
 
