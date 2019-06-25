@@ -29,3 +29,17 @@ const History = (props) => {
 }
  
 export default History;
+
+
+//   {/* <History
+//     activePlayer={activePlayer}
+//     errMsg={errMsg}
+//     gameHistory={gameHistory}
+//     letterBag={letterBag}
+//     message={message} 
+//     myHistory={myHistory}
+//     myName={myName}
+//     myScore={myScore}
+//     passTurn={this.passTurn}
+//     players={players}
+//   /> */}

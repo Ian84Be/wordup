@@ -4,6 +4,7 @@ import React from 'react';
 const PlayerControls = props => {
   return ( 
     <section className="PlayerControls">
+      <div className="countDown">{Object.values(props.letterBag).reduce((a,b)=>a+b)} letters remaining</div>
 
       <div className="myLetters">
         {props.myLetters.length>0 && props.myLetters.map((letter, myLettersIndex) => {
