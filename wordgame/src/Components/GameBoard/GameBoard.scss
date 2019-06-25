@@ -10,8 +10,16 @@
   grid-gap: $th $th;
   // margin-top:$tw*.55;
 
-  @media (min-width: $screen-md-min) {
-    $tw:60px;
+  @media (max-width: $screen-xs-max) {
+    $tw:36px;
+    $th:$tw/10;
+    grid-template-columns: repeat(8, $tw [GameBoard--tile]);
+    grid-template-rows: repeat(8, $tw [GameBoard--tile]);
+    grid-gap: $th $th;
+  }
+
+  @media (max-width: $screen-xs-max) {
+    $tw:36px;
     $th:$tw/10;
     grid-template-columns: repeat(8, $tw [GameBoard--tile]);
     grid-template-rows: repeat(8, $tw [GameBoard--tile]);

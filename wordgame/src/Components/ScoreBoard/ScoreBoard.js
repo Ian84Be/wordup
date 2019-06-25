@@ -51,3 +51,13 @@ const ScoreBoard = (props) => {
 }
  
 export default ScoreBoard;
+
+// {/* <ScoreBoard
+//       activePlayer={activePlayer}
+//       letterBag={letterBag}
+//       myHistory={myHistory}
+//       myName={myName}
+//       myScore={myScore}
+//       passTurn={this.passTurn}
+//       players={players}
+//   /> */}

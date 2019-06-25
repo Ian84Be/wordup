@@ -1,6 +1,6 @@
 
 // Mobile Breakpoints
-$screen-sm-min: 650px;
+$screen-sm-min: 430px;
 $screen-xs-max: ($screen-sm-min - 1);
 $screen-md-min: 900px;
 $screen-sm-max: ($screen-md-min - 1);
@@ -16,7 +16,8 @@ $screen-md-max: ($screen-lg-min - 1);
 
 // TODO
 // toggle config obj >> tile viewing angle (shift box-shadow && transform offset)
-$tile__width:6vw;
+$tile__width:6vh;
+// $tile__width:10vw;
 $tw: $tile__width;
 
 $tile__height: $tw/10;

@@ -24,7 +24,7 @@
     }
 
     .errorMessage {
-        animation: stretchOut 2s;
+        animation: stretchOut 3s;
         background: red;
         border:1px solid $tile__2-color;
         border-radius: 4px;
@@ -46,9 +46,12 @@
         0% {
             left:100%;
         }
-        30% {
+        10% {
             left:25%;
-            opacity:100;
+            opacity:1;
+        }
+        80% {
+            opacity:1;
         }
         100% {
             opacity:0;

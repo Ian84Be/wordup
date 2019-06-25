@@ -57,10 +57,10 @@ const StartNewGame = (props) => {
             <div className="middle">
                     <p>How Many Players?</p>
                 <div className="numberButtons">
-                    <button className="num" onClick={() => setnumPlayers([1])}>1</button>
-                    <button className="num" onClick={() => setnumPlayers([1,2])}>2</button>
-                    <button className="num" onClick={() => setnumPlayers([1,2,3])}>3</button>
-                    <button className="num" onClick={() => setnumPlayers([1,2,3,4])}>4</button>
+                    <button className={numPlayers.length === 1 ? 'num active' : 'num'} onClick={() => setnumPlayers([1])}>1</button>
+                    <button className={numPlayers.length === 2 ? 'num active' : 'num'} onClick={() => setnumPlayers([1,2])}>2</button>
+                    <button className={numPlayers.length === 3 ? 'num active' : 'num'} onClick={() => setnumPlayers([1,2,3])}>3</button>
+                    <button className={numPlayers.length === 4 ? 'num active' : 'num'} onClick={() => setnumPlayers([1,2,3,4])}>4</button>
                 </div>
 
                 <form onSubmit={(e) => startNewGame(e)}>

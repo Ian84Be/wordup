@@ -40,8 +40,8 @@
     width:$tw;
     height:$tw;
 
-    @media (min-width: $screen-md-min) {
-      $tw:60px;
+    @media (max-width: $screen-xs-max) {
+      $tw:36px;
       $th:$tw/10;
       width:$tw;
       height:$tw;
@@ -105,7 +105,7 @@
     min-height:$th*10;
 
     @media (min-width: $screen-md-min) {
-      $tw:60px;
+      // $tw:60px;
       $th:$tw/10;
       margin:$th;
       padding:$th;

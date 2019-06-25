@@ -12,7 +12,8 @@
         // border:1px solid red;
         color:white;
         font-family: 'Ultra', serif;
-        font-size:$tw * 3;
+        // font-size:$th * 40;
+        font-size:80px;
         text-shadow:
         0 $th     0px $tile__9-color,
         0 $th*1.5 0px $tile__9-color,
@@ -34,8 +35,6 @@
         0 $th*9.5 0px $tile__1-color,
         0 $th*10   0px $tile__0-color,
         0 $th*10.5 0px $tile__0-color,
-        // 0 $th*10   0px $tile__0-color,
-        // 0 $th*10.5 0px $tile__0-color,
         0 $th*11 10px black;
         transform: translateY(-$th*3);
         z-index:1;
@@ -47,7 +46,8 @@
         border-top:2px solid black;
         border-bottom:2px solid black;
         color: black;
-        font-size:$th*6;
+        // font-size:$th*6;
+        font-size:1rem;
         margin-top:$th*4;
         width:80vw;
         padding:4px;
@@ -81,8 +81,12 @@
     
             button.num {
                 @include submit-button;
-                width:$tw;
-                height:$tw;
+                width:50px;
+                height:50px;
+                &.active {
+                    box-shadow: 0 0;
+                    transform: translate(4px,4px);
+                }
             }
         }
 

@@ -18,9 +18,10 @@ import {
 
 import MiniScores from './Components/MiniScores/MiniScores';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
-import History from './Components/History/History.js';
+// import History from './Components/History/History.js';
+import MessageModal from './Components/MessageModal/MessageModal.js';
 import PlayerControls from './Components/PlayerControls/PlayerControls.js';
-import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js';
+// import ScoreBoard from './Components/ScoreBoard/ScoreBoard.js';
 import StartNewGame from './Components/StartNewGame/StartNewGame.js';
 
 import './App.scss';
@@ -44,19 +45,18 @@ class App extends React.Component {
     });
     return ( 
       <div className="container">
+        <h1>WordUp</h1>
 
-        <div className="middleContainer">
-        <ScoreBoard
-              activePlayer={activePlayer}
-              letterBag={letterBag}
-              myHistory={myHistory}
-              myName={myName}
-              myScore={myScore}
-              passTurn={this.passTurn}
-              players={players}
-          />
+        {errMsg.length>0 && (
+            // <div className="errorMessage">{`${props.errMsg}`}</div>
+            <MessageModal message={errMsg}/>
+        )}
+      
+        {message.length>0 && (
+            // <div className="MessageModal">{`${props.message}`}</div>
+            <MessageModal message={message}/>
+        )}
 
-          <div className="middleContainer--center">
             <MiniScores 
               activePlayer={activePlayer}
               players={players}
@@ -73,28 +73,14 @@ class App extends React.Component {
             <PlayerControls 
             clickedLetter={clickedLetter}
             clearBoard={this.clearBoard}
+            letterBag={letterBag}
             letterClick={this.letterClick}
             myLetters={myLetters}
             onDragStart={this.onDragStart}
             passTurn={this.passTurn}
             submitLetters={this.submitLetters}
             />
-          </div>
 
-          <History
-            activePlayer={activePlayer}
-            errMsg={errMsg}
-            gameHistory={gameHistory}
-            letterBag={letterBag}
-            message={message} 
-            myHistory={myHistory}
-            myName={myName}
-            myScore={myScore}
-            passTurn={this.passTurn}
-            players={players}
-          />
-
-        </div>
       </div>
     );
   } // render() END

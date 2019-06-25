@@ -4,7 +4,7 @@
 @import './scss/palette';
 @import './scss/mixins';
 @import './Components/History/History.scss';
-// @import './Components/MessageModal/MessageModal.scss';
+@import './Components/MessageModal/MessageModal.scss';
 @import './Components/MiniScores/MiniScores.scss';
 @import './Components/PlayerControls/PlayerControls.scss';
 @import './Components/GameBoard/GameBoard.scss';
@@ -28,24 +28,13 @@ h1 {
 }
 
 .container {
-  // align-items: center;
+  align-items: center;
   // border:3px solid red;
   display:flex;
   flex-direction: column;
-  height:99vh;
-  width:99vw;
+  height:100vh;
+  justify-content: center;
+  // width:100vw;
   margin: 0 auto;
 
-  .middleContainer {
-    // border:1px solid yellow;
-    display:flex;
-    // justify-content: center;
-    width: 100%;
-  }
-
-  .middleContainer--center {
-    // border:1px solid orange;
-    display:flex;
-    flex-direction: column;
-  }
 }
