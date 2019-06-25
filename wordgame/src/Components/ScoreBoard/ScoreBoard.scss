@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     // justify-content: center;
+    // margin-top:$tw*.55;
     padding:8px;
     width:$tw*4;
 
@@ -11,30 +12,104 @@
         @include submit-button;
     }
 
-    .playerCard {
-        // border: 1px solid red;
-        border-radius:8px;
-        color: black;
+    h3 {
         display: flex;
-        flex-wrap: wrap;
-        margin:$th;
-        max-width: $tw*3;
-        padding:$th*4;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        &.active {
-            background: slateblue;
-            color: white;
+    .myHistory {
+        align-items: center;
+        // border:1px solid white;
+        display: flex;
+        flex-direction: column;
+        // justify-content: center;
+        // padding:8px;
+        // width:$tw*4;
+    
+        button {
+            @include submit-button;
         }
-
-        .name {
-            // border: 1px solid green;
+    
+        h3 {
+            @include WordUp--logo();
+            font-size:$tw * .50;
+            padding-top:4px;
+        }
+    
+        .countDown {
+            font-size:$tw * .50;
+            margin: $th 0;
             text-align: center;
-            font-size:$th*4;
-            overflow-wrap: break-word;
-            width:$tw*2;
-            @media (max-width: $screen-xs-max) {
-                font-size:$th*5;
+            p {
+                font-size:$tw * .30;
+            }
+        }
+    
+        .historyCard {
+            align-items: center;
+            // border:1px solid red;
+            display: flex;
+            flex-direction: column;
+            border-radius:8px;
+            color: black;
+            display: flex;
+            flex-wrap: wrap;
+            margin:$th;
+            // max-width: $tw*3;
+            padding:$th*2;
+    
+    
+    
+            &.active {
+                background: slateblue;
+                color: white;
+            }
+    
+            .name {
+                border-bottom: 1px solid black;
+                text-align: center;
+                font-size:$tw * .50;
+                overflow-wrap: break-word;
+                // width:$tw*2;
+                @media (max-width: $screen-xs-max) {
+                    font-size:$tw * .50;
+                }
+            }
+    
+            .history {
+                margin-top:$th * .1;
+                li  {
+                    font-size:$tw * .35;
+                }
             }
         }
     }
+
+    // .playerCard {
+    //     // border: 1px solid red;
+    //     border-radius:8px;
+    //     color: black;
+    //     display: flex;
+    //     flex-wrap: wrap;
+    //     margin:$th;
+    //     max-width: $tw*3;
+    //     padding:$th*4;
+
+    //     &.active {
+    //         background: slateblue;
+    //         color: white;
+    //     }
+
+    //     .name {
+    //         // border: 1px solid green;
+    //         text-align: center;
+    //         font-size:$th*4;
+    //         overflow-wrap: break-word;
+    //         width:$tw*2;
+    //         @media (max-width: $screen-xs-max) {
+    //             font-size:$th*5;
+    //         }
+    //     }
+    // }
 }

@@ -4,7 +4,8 @@
 @import './scss/palette';
 @import './scss/mixins';
 @import './Components/History/History.scss';
-@import './Components/MessageModal/MessageModal.scss';
+// @import './Components/MessageModal/MessageModal.scss';
+@import './Components/MiniScores/MiniScores.scss';
 @import './Components/PlayerControls/PlayerControls.scss';
 @import './Components/GameBoard/GameBoard.scss';
 @import './Components/ScoreBoard/ScoreBoard.scss';
@@ -36,7 +37,7 @@ h1 {
   margin: 0 auto;
 
   .middleContainer {
-    // border:1px solid green;
+    // border:1px solid yellow;
     display:flex;
     // justify-content: center;
     width: 100%;

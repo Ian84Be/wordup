@@ -113,23 +113,34 @@
     }
 
     // set a default style for played tiles
-    &.x {
-        background:$tile__0-color;
+    &.stack {
+        background:$tile--played-color;
+        // border: 3px solid red;
+        // outline: 1px solid black;
+        // outline-offset: -$tw*.19;
         border: 1px solid $tile--played-border;
     }
 
     // translucent bg for stacks > 5
-    &.xxxxxx {
-      // background: hsla(40,50,50,.65);
-      background: hsl(40,50,50);
-      // border:0;
-    }
+    // &.xxxxxx {
+    //   // background: hsla(40,50,50,.65);
+    //   background: hsl(40,50,50);
+    //   // border:0;
+    // }
 
     &.active {
       background:white;
       &:hover {
         cursor:pointer;
         background:$active-color;
+      }
+    }
+
+    &.blank {
+      background:$tile__0-color;
+      // border: 1px solid $tile__border-color;
+      &.central {
+        background: palevioletred;
       }
     }
 
@@ -144,7 +155,4 @@
         color:black;
       }
     }
-
-
-
   } // .tile END

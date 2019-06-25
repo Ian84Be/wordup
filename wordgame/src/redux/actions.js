@@ -4,7 +4,9 @@ export const ADD_PASSCOUNT = 'ADD_PASSCOUNT';
 export const ADD_PLAYERS = 'ADD_PLAYERS';
 export const ADD_SCORE = 'ADD_SCORE';
 export const CHANGE_MYLETTERS = 'CHANGE_MYLETTERS';
+export const ERR_MSG = 'ERR_MSG';
 export const HOLD_LETTER = 'HOLD_LETTER';
+export const GAME_HISTORY = 'GAME_HISTORY';
 export const LOAD_DICTIONARY = 'LOAD_DICTIONARY';
 export const MAKE_BOARD = 'MAKE_BOARD';
 export const NEW_LETTERBAG = 'NEW_LETTERBAG';
@@ -29,6 +31,14 @@ export const addScore = (score) => {
 
 export const changeMyLetters = (letters) => {
     return ({type: CHANGE_MYLETTERS, payload: letters})
+}
+
+export const newErrMsg = (err) => {
+    return ({type: ERR_MSG, payload: err})
+}
+
+export const newGameHistory = (history) => {
+    return ({type: GAME_HISTORY, payload: history})
 }
 
 export const holdLetter = (letter) => {

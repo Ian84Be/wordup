@@ -8,7 +8,7 @@
   grid-template-columns: repeat(8, $tw [GameBoard--tile]);
   grid-template-rows: repeat(8, $tw [GameBoard--tile]);
   grid-gap: $th $th;
-  margin-top:$tw*.55;
+  // margin-top:$tw*.55;
 
   @media (min-width: $screen-md-min) {
     $tw:60px;

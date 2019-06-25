@@ -4,25 +4,25 @@ const History = (props) => {
   return (
     <div className="History">
       <h3>HISTORY</h3>
-      <div className="countDown"><p>letters remaining</p>{Object.values(props.letterBag).reduce((a,b)=>a+b)}</div>
       
+
+        {props.errMsg.length>0 && (
+            <div className="errorMessage">{`${props.errMsg}`}</div>
+        )}
       
-      {props.players.map(player => {
-        return (
-          <div key={player.id} className={player.id === props.activePlayer ? 'active historyCard' : 'historyCard'}>
+        {props.message.length>0 && (
+            <div className="MessageModal">{`${props.message}`}</div>
+        )}
 
-            <div className="name">{player.myName}: {(player.myScore === 0) ? '0' : player.myScore}</div>
-          
-            <ul className="history">{player.myHistory.map((word,i) => {
-              let thisId = i * Math.random();
-              return (
-                <li key={thisId}>{word}</li>
-              )
-            })}</ul>
-
-          </div>
-        )
-      })}
+        <div className="gameHistory__container">
+            {props.gameHistory.map((turn,i) => {
+                return (
+                <div key={i + Math.random()} className="gameHistory">
+                    {turn}
+                </div>
+                )
+            })}
+        </div>
       
     </div>
   );

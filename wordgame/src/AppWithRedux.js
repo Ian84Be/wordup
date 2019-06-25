@@ -9,12 +9,14 @@ import {
     holdLetter,
     loadDictionary, 
     makeBoard,
+    newErrMsg,
+    newGameHistory,
     newLetterBag,
     newMessage,
     nextPlayer
 } from './redux/actions';
 
-import MessageModal from './Components/MessageModal/MessageModal';
+import MiniScores from './Components/MiniScores/MiniScores';
 import GameBoard, {boardMaker} from './Components/GameBoard/GameBoard.js';
 import History from './Components/History/History.js';
 import PlayerControls from './Components/PlayerControls/PlayerControls.js';
@@ -34,15 +36,19 @@ class App extends React.Component {
         players={this.props.players} 
       />
     );
-    const {activePlayer,clickedLetter,gameBoard,letterBag,message,players} = this.props;
+    const {activePlayer,clickedLetter,errMsg,gameBoard,gameHistory,letterBag,message,players} = this.props;
     const {myHistory,myLetters,myName,myScore} = players[activePlayer];
+    let firstRound = true;
+    players.forEach(player => {
+      if (player.myScore>0) firstRound = false;
+    });
     return ( 
       <div className="container">
-        {message.length>1 && <MessageModal message={message} />}
 
         <div className="middleContainer">
-          <ScoreBoard
+        <ScoreBoard
               activePlayer={activePlayer}
+              letterBag={letterBag}
               myHistory={myHistory}
               myName={myName}
               myScore={myScore}
@@ -51,9 +57,14 @@ class App extends React.Component {
           />
 
           <div className="middleContainer--center">
+            <MiniScores 
+              activePlayer={activePlayer}
+              players={players}
+            />
             <GameBoard 
                 boardClick={this.boardClick}
                 clickedLetter={clickedLetter}
+                firstRound={firstRound}
                 gameBoard={gameBoard}
                 onDragStart={this.onDragStart}
                 onDrop={this.onDrop}
@@ -65,20 +76,26 @@ class App extends React.Component {
             letterClick={this.letterClick}
             myLetters={myLetters}
             onDragStart={this.onDragStart}
+            passTurn={this.passTurn}
             submitLetters={this.submitLetters}
             />
           </div>
 
           <History
             activePlayer={activePlayer}
+            errMsg={errMsg}
+            gameHistory={gameHistory}
             letterBag={letterBag}
+            message={message} 
             myHistory={myHistory}
             myName={myName}
             myScore={myScore}
+            passTurn={this.passTurn}
             players={players}
           />
+
         </div>
-      </div> 
+      </div>
     );
   } // render() END
     componentDidMount() {
@@ -86,13 +103,9 @@ class App extends React.Component {
     // create config object
     // DEFAULT config object >> 'wordUp rules' = setRules(build oneWay, waitTurn, 8board)
     // toggle config obj >> 'fast rules' = setRules(build bothWays, loseTurn, 6board)
-    // toggle config obj >> guarantee ONE VOWEL
     // toggle config obj >> combine Qu
     const myGrid = boardMaker(8);
     this.props.makeBoard(myGrid);
-    // const myNewLetters = drawLetters(8);
-    // const myNewLetters = ['T','Qu','E','B','S','I','N','K'];
-    // this.props.changeMyLetters(myNewLetters);
     import("./scrabbleWordList.js").then(dictionary => {
       this.props.loadDictionary(dictionary.default)
     });
@@ -113,7 +126,7 @@ class App extends React.Component {
     if (clickedLetter.length===0 && !isActive) return;
     if (clickedLetter.length===0 && isActive) newClicked = [thisTile.stack[0], null, index];
     if (clickedLetter.length>0 && !isActive) {
-      if (clickedLetter[0] === thisTile.stack[0]) return this.props.newMessage(`this letter is already ${thisTile.stack[0]}`);
+      if (clickedLetter[0] === thisTile.stack[0]) return this.props.newErrMsg(`this letter is already ${thisTile.stack[0]}`);
       thisTile.stack.unshift(clickedLetter[0]);
       thisTile.active = true;
       if (activeIndex || activeIndex === 0) {
@@ -122,8 +135,8 @@ class App extends React.Component {
       } else myNewLetters.splice(clickedLetter[1],1);
     }
     if (clickedLetter.length>2 && isActive) {
-      if (newBoard[activeIndex].stack[0] === thisTile.stack[1]) return this.props.newMessage(`this letter is already ${thisTile.stack[1]}`);
-      if (newBoard[activeIndex].stack[1] === thisTile.stack[0]) return this.props.newMessage(`this letter is already ${thisTile.stack[0]}`);
+      if (newBoard[activeIndex].stack[0] === thisTile.stack[1]) return this.props.newErrMsg(`this letter is already ${thisTile.stack[1]}`);
+      if (newBoard[activeIndex].stack[1] === thisTile.stack[0]) return this.props.newErrMsg(`this letter is already ${thisTile.stack[0]}`);
       if (activeIndex === index) {
         thisTile.stack.shift();
         thisTile.active = false;
@@ -136,7 +149,7 @@ class App extends React.Component {
       thisTile.stack.unshift(clickedLetter[0]);
     }
     if (clickedLetter.length===2 && isActive) {
-      if (clickedLetter[0] === thisTile.stack[1]) return this.props.newMessage(`this letter is already ${thisTile.stack[1]}`);
+      if (clickedLetter[0] === thisTile.stack[1]) return this.props.newErrMsg(`this letter is already ${thisTile.stack[1]}`);
       myNewLetters.splice(clickedLetter[1],1,thisTile.stack[0]);
       thisTile.stack.shift();
       thisTile.stack.unshift(clickedLetter[0]);
@@ -165,13 +178,9 @@ class App extends React.Component {
 
   calculateScore = (foundWords) => {
     // TODO
-    // Any word with no stacked letters scores two points per tile
-    // 2 bonus points are awarded for using the "Qu" tile in a one-level word
-    // 20 bonus points for using all seven tiles in one turn
     // Players may not pluralize a word simply by adding an S at its end.
     // only allowed if the S is part of another complete word that is played onto the board in the same turn. 
    
-    // check the tileSet of each foundWord, push the letter to tempWord, score the letter based on stack length
     let words=[],thisWord='',score=0;
       foundWords.forEach(tileSet => {
         let tempScore = 0;
@@ -182,11 +191,20 @@ class App extends React.Component {
           });
         thisWord = tempWord.join('').toLowerCase();
         if (this.dictionaryCheck(thisWord)) {
+          // RULES >> Any word with no stacked letters scores two points per tile
+          if (tempWord.length === tempScore) {
+            tempScore *= 2; 
+            // words.push('(FLAT BONUS)');
+            // RULES >> 2 bonus points are awarded for using the "Qu" tile in a one-level word
+            if (tempWord.includes('Qu')) {
+              tempScore += 2;
+              // words.push('(FLAT Qu BONUS)');
+            }
+          }
           score = score + tempScore;
           words.push(`${tempScore} ${tempWord.join('')}`);
           tempScore = 0;
         } else {
-          // console.log('calculateScore dictionary FAIL',thisWord);
           score = 'fail';
           words.push(thisWord);
           return [score,words];
@@ -197,14 +215,19 @@ class App extends React.Component {
 
   dictionaryCheck = (word) => {
     if (!this.props.dictionary) return this.props.newMessage(`dictionary loading... please wait...`);
-    // return (this.props.dictionary.includes(word)) ? true : false;
-    return true;
+    return (this.props.dictionary.includes(word)) ? true : false;
+    // return true;
   } // this.dictionaryCheck() END >> back to this.calculateScore();
 
   endGame = () => {
-    // Once the draw pile is exhausted, the game ends when one player has used all of his/her tiles
-    // or every player passes in a single round.
-    // Players lose five points for every unused tile they hold at the end of the game.
+    const {players} = this.props;
+    let playersFinal = [...players];
+    // RULES >> Players lose five points for every unused tile they hold at the end of the game.
+    playersFinal.forEach(player => player.myScore -= player.myLetters.length);
+    playersFinal.sort((a,b) => b.myScore - a.myScore);
+    let finalMessage = playersFinal.map(player => `${player.myName}: ${player.myScore}`);
+    finalMessage[0] += ' WINNER!';
+    this.props.newMessage(finalMessage.join(' // '));
   }
   
   findWords = (activeTiles) => {
@@ -219,12 +242,10 @@ class App extends React.Component {
     let myLetters=[], random_letter;
     for (let i = 0; i < num; i++) {
       let grabBag = Object.entries(newBag).filter(letter => letter[1] > 0);
-      // console.log('grabBag',i);
-      // console.log({grabBag});
       if (grabBag.length<1) {
         console.log('grabBag.length<1')
         this.props.newLetterBag(newBag);
-        this.props.newMessage('letterBag is EMPTY');
+        this.props.newErrMsg('letterBag is EMPTY');
         return myLetters;
       }
       let random = Math.floor(Math.random() * grabBag.length);
@@ -240,17 +261,17 @@ class App extends React.Component {
   passLetters = (num) => {
     const {activePlayer,addPassCount,emptyBag,letterBag,newMessage,passCount,players} = this.props;
     const {myLetters} = players[activePlayer];
+    // RULES >> END GAME if letterBag is empty and every player passes in a single round
     if (emptyBag) addPassCount(passCount+1);
-    if (emptyBag && players.length-1 === passCount) return newMessage('END GAME // PASSCOUNT MAX');
+    if (emptyBag && players.length-1 === passCount) return this.props.newErrMsg('END GAME // PASSCOUNT MAX');
     let newBag = {...letterBag};
     let myOldLetters = [...myLetters];
     let myNewLetters=[], random_letter;
     for (let i = 0; i < num; i++) {
       let grabBag = Object.entries(newBag).filter(letter => letter[1] > 0);
       if (grabBag.length<1) {
-        console.log('grabBag.length<1')
         this.props.newLetterBag(newBag);
-        this.props.newMessage('letterBag is EMPTY');
+        this.props.newErrMsg('letterBag is EMPTY');
         return myNewLetters;
       }
       let random = Math.floor(Math.random() * grabBag.length);
@@ -273,8 +294,8 @@ class App extends React.Component {
       if (activeIndex || activeIndex === 0) {
         const newBoard = [...gameBoard];
         const thisTile = newBoard[activeIndex];
-        if (thisTile.stack[1] === letter) return this.props.newMessage(`this letter is already ${letter}`);
-        if (thisTile.stack[0] === letter) return this.props.newMessage(`this letter is already ${letter}`);
+        if (thisTile.stack[1] === letter) return this.props.newErrMsg(`this letter is already ${letter}`);
+        if (thisTile.stack[0] === letter) return this.props.newErrMsg(`this letter is already ${letter}`);
         thisTile.stack.shift();
         let myNewLetters = [...myLetters];
         myNewLetters.splice(myLettersIndex,1,clickedLetter[0]);
@@ -283,11 +304,11 @@ class App extends React.Component {
       }
       if (clickedLetter[1] === myLettersIndex) {
         this.props.holdLetter([]);
-        return this.props.newMessage('');
+        return this.props.newErrMsg('');
       }
     }
     this.props.holdLetter([letter, myLettersIndex]);
-    return this.props.newMessage('');
+    return this.props.newErrMsg('');
   } // this.letterClick() END
 
   lookBothWays = (startTile) => {
@@ -350,11 +371,11 @@ class App extends React.Component {
   } // lookBothWays() END >> back to this.findWords()
 
   nextPlayer = (addScore) => {
-    const {activePlayer, players} = this.props;
+    const {activePlayer,emptyBag,players} = this.props;
     const {myLetters,myName} = players[activePlayer];
     const oldLetters = [...myLetters];
     let newLetters=[],randomLetters=[];
-    // pass turn to next player and draw all new letters
+    // PASS >> Pass turn to nextPlayer and draw 7 new letters
     if (addScore === 0) {
         newLetters = this.passLetters(7);
         this.props.holdLetter([])
@@ -362,14 +383,25 @@ class App extends React.Component {
         // this.props.newMessage('')
         return this.props.nextPlayer();
     }
-    else if (myLetters.length===0) return this.props.newMessage(`END GAME // ${myName} CLEAR`);
+    else if (emptyBag && myLetters.length===0) {
+      // RULES >> END GAME if letterBag is empty and one player has used all of his/her tiles
+      this.props.newMessage(`END GAME // ${myName} CLEAR`);
+      return this.endGame();
+    }
     // add new letters to hand 
-    else if (myLetters.length<7) {
+    else if (!emptyBag && myLetters.length<7) {
       randomLetters = this.getLetters(7-myLetters.length);
       newLetters = [...oldLetters,...randomLetters];
       this.props.holdLetter([]);
       this.props.changeMyLetters(newLetters);
       // this.props.newMessage('');
+      this.props.addScore(addScore);
+      return this.props.nextPlayer();
+    }
+    else if (emptyBag && myLetters.length<7) {
+      this.props.holdLetter([]);
+      // this.props.newMessage('');
+      // RULES >> END GAME if letterBag is empty and every player passes in a single round
       this.props.addPassCount(0);
       this.props.addScore(addScore);
       return this.props.nextPlayer();
@@ -396,10 +428,10 @@ class App extends React.Component {
     const myNewLetters = [...myLetters];
     const droppedOnTile = newBoard[droppedOnIndex];
     const droppedOnLetter = droppedOnTile.stack[0];
-    if (droppedOnLetter === incomingLetter) return this.props.newMessage(`this letter is already ${incomingLetter}`);
-    if (onActive && droppedOnTile.stack[1] === incomingLetter) return this.props.newMessage(`this letter is already ${incomingLetter}`);
+    if (droppedOnLetter === incomingLetter) return this.props.newErrMsg(`this letter is already ${incomingLetter}`);
+    if (onActive && droppedOnTile.stack[1] === incomingLetter) return this.props.newErrMsg(`this letter is already ${incomingLetter}`);
     if (incomingIndex !== '') {
-      if (onActive && droppedOnTile.stack[0] === newBoard[incomingIndex].stack[1]) return this.props.newMessage(`this letter is already ${droppedOnTile.stack[0]}`);
+      if (onActive && droppedOnTile.stack[0] === newBoard[incomingIndex].stack[1]) return this.props.newErrMsg(`this letter is already ${droppedOnTile.stack[0]}`);
       const incomingTile = newBoard[incomingIndex];
       incomingTile.stack.shift();
       if (onActive) {
@@ -421,35 +453,43 @@ class App extends React.Component {
 
   passTurn = () => {
     const activeTiles = this.props.gameBoard.filter(tile => tile.active);
-    if (activeTiles.length>0) return this.props.newMessage('cannot pass with active tiles on board');
+    if (activeTiles.length>0) return this.props.newErrMsg('cannot pass with active tiles on board');
     else return this.nextPlayer(0);
   } // this.passTurn() END >> this.nextPlayer(0);
 
   submitLetters = () => {
     const activeTiles = this.props.gameBoard.filter(tile => tile.active).sort((a,b) => a.id-b.id);
-    if (activeTiles.length<1) return this.props.newMessage('you haven\'t placed any tiles');
+    if (activeTiles.length<1) return this.props.newErrMsg('you haven\'t placed any tiles');
     else return this.findWords(activeTiles);
   } // this.submitLetters END >> this.findWords(activeTiles);
 
   // this.scoreWords() START >> strictModeScoring(foundWords) >> this.calculateScore(foundWords)
   scoreWords = (foundWords) => {
     // TODO 
-    // The first player must cover one or more of the four central squares
-    // Subsequent players may put tiles on the board adjacent to and/or on top of the tiles already played
-    // No stack may be more than five tiles high
-    // At least one tile or stack must be left unchanged; a player may not cover every letter in a word on a single turn.
+    // RULES >> The first player must cover one or more of the four central squares
+    // RULES >> Subsequent players may put tiles on the board adjacent to and/or on top of the tiles already played
+    // RULES >> No stack may be more than five tiles high
+    // RULES >> At least one tile or stack must be left unchanged; a player may not cover every letter in a word on a single turn.
 
-    const {activePlayer, players} = this.props;
-    const {myName} = players[activePlayer];
+    const {activePlayer,players} = this.props;
+    const {myLetters,myName} = players[activePlayer];
     const newBoard = [...this.props.gameBoard];
-    // strictModeScoring >> all tiles played on a turn must form part of one continuous line of tiles vertical or horizontal
+    // RULES >> strictModeScoring >> all tiles played on a turn must form part of one continuous line of tiles vertical or horizontal
     let okStrict = strictModeScoring(foundWords);
-    if (!okStrict) return this.props.newMessage('error: cannot build in both directions');
+    // TODO
+    // refactor this error message to include FIRST ROUND rules
+    if (okStrict === 'central') return this.props.newErrMsg('First Player must cover at least ONE of the central squares!');
+    if (!okStrict) return this.props.newErrMsg('Error: Cannot build in both directions!');
     const activeTiles = newBoard.filter(tile => tile.active);
     let scoreInfo = this.calculateScore(foundWords);
-    const score = scoreInfo[0];
+    let score = scoreInfo[0];
     const words = scoreInfo[1];
-    if (typeof(score) === 'number') {
+    if (typeof score === 'number') {
+      if (activeTiles.length===7 && myLetters.length===0) {
+        // RULES >> 20 bonus points for using all seven tiles in one turn
+        score += 20;
+        words.unshift('20 (RACK BONUS)');
+      }
       activeTiles.forEach((tile) => {
         let thisIndex = newBoard.findIndex(that => that.id === tile.id);
         newBoard[thisIndex].active = false;
@@ -457,14 +497,16 @@ class App extends React.Component {
       this.props.makeBoard(newBoard);
       this.props.newMessage(`${myName} scored ${score} !`);
       this.props.addHistory(words);
+      words.forEach(word => this.props.newGameHistory(`${myName} ${word}`));
+      // this.props.newGameHistory(`${myName} ${words}`);
       return this.nextPlayer(score);
     } else {
       let failWords = words.filter(word => word.match(/[a-z]/g));
-      return this.props.newMessage(`dictionary FAIL ( ${failWords} )`);
+      return this.props.newErrMsg(`dictionary FAIL ( ${failWords} )`);
     } 
     // TODO
-    // MAKE SURE > after 1st turn > active tiles are touching played tiles
-    // double strict scoring >> lose turn if dictionary FAIL
+    // RULES >> after 1st turn > active tiles are touching played tiles
+    // toggle config obj >> double strict scoring >> lose turn if dictionary FAIL
 
     // strictModeScoring() START 
     // >> lineLook()
@@ -485,7 +527,21 @@ class App extends React.Component {
       let uniqActive = new Set();
       for (let ids of vertActive) uniqActive.add(ids);
       for (let ids of horActive) uniqActive.add(ids);
-      if (uniqActive.size < activeTiles.length) return this.props.newMessage('error: loose tiles');
+      // RULES >> All tiles played on a turn must form part of one continuous line of tiles vertical or horizontal
+      if (uniqActive.size < activeTiles.length) return false;
+      // RULES >> The first player must cover one or more of the four central squares 8x8(43, 44, 53, 54);
+      let firstRound = true;
+      players.forEach(player => {
+        if (player.myScore>0) firstRound = false;
+      });
+      if (firstRound) {
+        let playedCentral = false;
+        let centralSquares = [43, 44, 53, 54];
+        centralSquares.forEach(id => {
+          if (uniqActive.has(id)) playedCentral = true;
+        });
+        if (!playedCentral) return 'central'; // RULES >> The first player must cover one or more of the four central squares
+      }
       let okHor, okVert;
       if (vertActive.length > 0) okVert = lineLook('vert',vertActive);
       else okVert=0;
@@ -537,6 +593,7 @@ class App extends React.Component {
     this.props.changeMyLetters(myNewLetters);
     this.props.makeBoard(newBoard);
     this.props.newMessage(newMessage);
+    this.props.newErrMsg('');
   }
 } // App COMPONENT END
 
@@ -545,7 +602,9 @@ const mapStateToProps = state => ({
     clickedLetter: state.clickedLetter,
     dictionary: state.dictionary,
     emptyBag: state.emptyBag,
+    errMsg: state.errMsg,
     gameBoard: state.gameBoard,
+    gameHistory: state.gameHistory,
     letterBag: {...state.letterBag},
     message: state.message,
     passCount: state.passCount,
@@ -559,6 +618,8 @@ export default connect(mapStateToProps, {
     holdLetter, 
     loadDictionary, 
     makeBoard, 
+    newErrMsg,
+    newGameHistory,
     newLetterBag,
     newMessage,
     nextPlayer

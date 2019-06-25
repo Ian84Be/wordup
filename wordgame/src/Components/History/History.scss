@@ -1,3 +1,6 @@
+
+// @import '../../scss/palette';
+
 .History {
     align-items: center;
     // border:1px solid white;
@@ -7,59 +10,81 @@
     padding:8px;
     width:$tw*4;
 
-    button {
-        @include submit-button;
-    }
-
     h3 {
-        @include WordUp--logo();
+        color:white;
+        font-family: 'Ultra', serif;
+        margin-bottom:$th*3;
+        text-shadow:
+        0 $th 0px $tile__2-color;
+        // 0 $th*1.5 0px $tile__2-color,
+        // 0 $th*2 0px $tile__1-color,
+        // 0 $th*2.5 0px $tile__1-color;
         font-size:$tw * .50;
-        padding-top:4px;
-        // @include grid__center();
+        padding-top:8px;
     }
 
-    .countDown {
-        font-size:$tw * .30;
-        margin: $th 0;
-        text-align: center;
-        p {
-            // border-bottom: 1px solid white;
+    .errorMessage {
+        animation: stretchOut 2s;
+        background: red;
+        border:1px solid $tile__2-color;
+        border-radius: 4px;
+        box-shadow: 0 0 10px $tile__2-color;
+        color:white;
+        margin-bottom:$th*2;
+        opacity:0;
+        padding:8px;
+        position:fixed;
+        // top:10vh;
+        left:25%;
+        text-shadow: 1px 1px 5px $tile__2-color;
+        // height:100%;
+        width:100%;
+        // width:$tw*10;
+        z-index: 1;
+    }
+    @keyframes stretchOut {
+        0% {
+            left:100%;
         }
+        30% {
+            left:25%;
+            opacity:100;
+        }
+        100% {
+            opacity:0;
+        }
+      }
+
+    .MessageModal {
+        align-self: center;
+        background: white;
+        border:1px solid $tile__2-color;
+        border-radius: 4px;
+        color:black;
+        padding:8px;
+        margin-bottom:$th;
+        border-top:0;
+        border-left:0;
+        box-shadow: $th $th $tile__1-color;
+        transform: translate(-$th,-$th);
     }
 
-    .historyCard {
-        align-items: center;
-        // border:1px solid red;
-        display: flex;
-        flex-direction: column;
-        border-radius:8px;
-        color: black;
-        display: flex;
-        flex-wrap: wrap;
-        margin:$th;
-        max-width: $tw*3;
-        padding:$th;
-
-
-
-        &.active {
-            background: slateblue;
-            color: white;
-        }
-
-        .name {
-            border-bottom: 1px solid black;
-            text-align: center;
-            font-size:$tw * .30;
-            overflow-wrap: break-word;
-            width:$tw*2;
-            @media (max-width: $screen-xs-max) {
-                font-size:$tw * .40;
-            }
-        }
-
-        .history li  {
-            font-size:$tw * .30;
+    .gameHistory__container {
+        // border: 1px solid red;
+        .gameHistory {
+            // align-items: center;
+            // border:1px solid red;
+            // border-bottom:1px solid white;
+            // border-radius:8px;
+            display: flex;
+            flex-direction: column;
+            font-size:$th*4;
+            color: black;
+            display: flex;
+            flex-wrap: wrap;
+            // margin:$th;
+            max-width: $tw*3;
+            // padding:$th;
         }
     }
 }

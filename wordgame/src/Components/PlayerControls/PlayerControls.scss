@@ -21,7 +21,7 @@
       // }
 
       .letter {
-        // margin:$th;
+        margin:$th/2;
         @include PlayerControls--letter;
       }
     }

@@ -10,25 +10,20 @@ const GameBoard = props => {
 
     {props.gameBoard.map((tile, index) => {
       let myClassName = 'tile ';
-      if (tile.active) myClassName += 'active '
+      if (tile.active) myClassName += 'active ';
+      if (props.clickedLetter[2] === index) myClassName += 'clicked ';
       if (tile.stack.length>0) {
-        let stack = '';
-        for (let i=0,j=0;i<tile.stack.length;i++) {
-          j = i;
-          while (j>-1) {
-            stack += 'x';
-            j--;
-          }
-          stack += ' ';
-        }
-        myClassName += stack;
-        // console.log('myClassName',myClassName);
+        myClassName += 'stack ';
+        myClassName += 'x'.repeat(tile.stack.length);
+      } else if (tile.stack.length===0) myClassName += 'blank';
+      if (props.firstRound) {
+        let centralSquares = [43, 44, 53, 54];
+        if (centralSquares.includes(tile.id) && tile.stack.length===0) myClassName += ' central';
       }
-      let clicked = (props.clickedLetter[2] === index) ? ' clicked' : '';
       
         return (
           <div 
-            className={myClassName+clicked}
+            className={myClassName}
             draggable
             key={tile.id} 
             onClick={e => props.boardClick(e, index, tile.active)}

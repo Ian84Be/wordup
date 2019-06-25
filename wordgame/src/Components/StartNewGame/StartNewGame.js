@@ -43,10 +43,10 @@ const StartNewGame = (props) => {
         return myLetters;
       }
 
-    function playerColor(e, color) {
-        e.preventDefault();
-        console.log(color);
-    }
+    // function playerColor(e, color) {
+    //     e.preventDefault();
+    //     console.log(color);
+    // }
     return ( 
         <div className="StartNewGame">
             <h1 className="logo__big">WordUp</h1>
