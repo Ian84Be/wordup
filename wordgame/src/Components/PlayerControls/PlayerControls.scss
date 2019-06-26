@@ -45,7 +45,8 @@
       padding: 8px;
 
       button {
-        @include submit-button;
+        @include white-button;
+        width:$tw*2;
       }
     }
   }

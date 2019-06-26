@@ -12,8 +12,9 @@
   color:white;
   font-family: 'Ultra', serif;
   font-size:$tw * .70;
-  margin-bottom:$th*3;
-  margin-top:$th*3;
+  margin:16px;
+  // margin-bottom:$th*3;
+  // margin-top:$th*3;
   text-shadow:
   0 $th 0px $tile__2-color,
   0 $th*1.5 0px $tile__2-color,
@@ -85,7 +86,7 @@
   }
 }
 
-@mixin submit-button {
+@mixin white-button {
     $tw:30px;
     border:0;
     border-radius:4px;
@@ -95,21 +96,22 @@
     font-family: 'K2D', sans-serif;
     font-size:1rem;
     font-weight:bold;
-    margin:$th;
+    margin:4px;
     outline:none;
-    padding:$th;
+    padding:4px;
     user-select: none;
-    width:$tw*2;
-    width:72px;
-    min-height:$th*10;
+    // width:$tw*2;
+    width:40px;
+    min-height:40px;
+    // min-height:$th*10;
 
     @media (min-width: $screen-md-min) {
-      $tw:30px;
-      $th:$tw/10;
-      margin:$th;
-      padding:$th;
-      width:$tw*2;
-      min-height:$th*10;
+      // $tw:30px;
+      // $th:$tw/10;
+      // margin:$th;
+      // padding:$th;
+      // width:$tw*2;
+      // min-height:$th*10;
       // font-size:$th*3;
     }
 
