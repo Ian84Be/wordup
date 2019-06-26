@@ -1,6 +1,6 @@
 
 // TODO
-// toggle config obj >> classic 64 tiles
+// DEFAULT >> toggle config obj >> classic 64 tiles
 // toggle config obj >> International Standard 100 tiles
 export const letterBag = {
     A: 5,
@@ -33,16 +33,12 @@ export const letterBag = {
   
 // const letterCount = Object.values(letterBag).reduce((a,b)=>a+b);
 
-
-
 // TODO
-// powerup S9 tile if theirScore - myScore > 40
-
 // !!! toggle config obj >> double size letterBag
 // const doubleBag = Object.values(letterBag).map(count => Math.ceil(count * 1.4));
 // console.log('doubleBag',doubleBag)
 
-// !!! toggle config obj >> guarantee ONE VOWEL
+// !!! toggle config obj >> infinite letterBag (guarantee ONE VOWEL)(powerup S9 tile if theirScore - myScore > 40)
 // const vowels = ['A','E','I','O','U'];
 // let hasVowel = 0;
 // vowels.forEach(vowel => {
