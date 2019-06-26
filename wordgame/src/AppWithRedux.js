@@ -449,6 +449,7 @@ class App extends React.Component {
   } // this.submitLetters END >> this.findWords(activeTiles);
 
   shuffleLetters = (letters) => {
+    // Fisher–Yates shuffle
     let shuffled = [...letters];
     for (let i = letters.length-1;i>0;i--) {
       let j = Math.floor(Math.random() * (i+1));

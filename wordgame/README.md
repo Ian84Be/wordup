@@ -7,12 +7,14 @@
 
 ## Player Controls
 - PASS >> Pass turn to nextPlayer and draw 7 new letters
+- SHUFFLE >> Shuffle the display of your letters
 - SUBMIT >> Submit words for scoring
 - CLEAR BOARD >> Clear all activeTiles from the GameBoard
 
 ## Scoring
 - RULES >> The first player must cover one or more of the four central squares
 - RULES >> All tiles played on a turn must form part of one continuous line of tiles vertical or horizontal
+- RULES >> Words built with stacked letters score 1 point per tile in the stack.
 - RULES >> Words built with no stacked letters score two points per tile
 - RULES >> 2 bonus for using "Qu" in a word with no stacked letters
 - RULES >> 20 bonus points for using all seven tiles in one turn

@@ -57,12 +57,11 @@
     button.start {
         align-self: center;
         @include submit-button;
-        border:1px solid yellow;
         padding:8px;
         width:$tw*4;
     }
 
-    .middle {
+    .playerForm {
         align-items: center;
         margin-top:8px;
         // border:1px solid red;
@@ -84,6 +83,7 @@
                 width:50px;
                 height:50px;
                 &.active {
+                    background:palevioletred;
                     box-shadow: 0 0;
                     transform: translate(4px,4px);
                 }
@@ -113,7 +113,7 @@
                     color:$form__input-text;
                     outline:none;
                     padding:8px;
-                    width:$tw*2;
+                    width:80px;
                     &:focus {
                         background:slateblue;
                     }
@@ -121,6 +121,38 @@
             }
         }
     }
+    h2 {
+        @include WordUp--logo();
+        align-self: center;
+    }
 
+    h3 {
+        @include WordUp--logo();
+        align-self: center;
+        font-size:1rem;
+        text-shadow:
+        0 $th 0px $tile__2-color,
+        0 $th*1.5 0px $tile__2-color;
+    }
+
+    .rules {
+        // border:1px solid yellow;
+        display: flex;
+        flex-direction: column;
+        font-size:1rem;
+        margin-bottom:16px;
+
+        p {
+            max-width:500px;
+            padding:2px;
+            text-align: center;
+
+            em {
+                // color: palevioletred;
+                font-weight:700;
+            }
+        }
+
+    }
 
 }

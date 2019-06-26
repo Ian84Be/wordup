@@ -13,6 +13,7 @@
   font-family: 'Ultra', serif;
   font-size:$tw * .70;
   margin-bottom:$th*3;
+  margin-top:$th*3;
   text-shadow:
   0 $th 0px $tile__2-color,
   0 $th*1.5 0px $tile__2-color,
@@ -85,33 +86,31 @@
 }
 
 @mixin submit-button {
+    $tw:30px;
     border:0;
     border-radius:4px;
     box-shadow:
       2px 2px $tile__2-color,
       4px 4px $tile__2-color;
     font-family: 'K2D', sans-serif;
-    font-size:$th*3;
-    @media (max-width: $screen-xs-max) {
-      font-size:$th*4;
-    }
-
+    font-size:1rem;
     font-weight:bold;
     margin:$th;
     outline:none;
     padding:$th;
     user-select: none;
     width:$tw*2;
+    width:72px;
     min-height:$th*10;
 
     @media (min-width: $screen-md-min) {
-      // $tw:60px;
+      $tw:30px;
       $th:$tw/10;
       margin:$th;
       padding:$th;
       width:$tw*2;
       min-height:$th*10;
-      font-size:$th*3;
+      // font-size:$th*3;
     }
 
     &:hover {
