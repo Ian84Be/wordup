@@ -14,6 +14,11 @@
         font-family: 'Ultra', serif;
         // font-size:$th * 40;
         font-size:80px;
+        margin-bottom:$th*7.5;
+        @media (max-width: $screen-xs-max) {
+            font-size:60px;
+            // font-size:$th * 15;
+        }
         text-shadow:
         0 $th     0px $tile__9-color,
         0 $th*1.5 0px $tile__9-color,
@@ -48,7 +53,10 @@
         color: black;
         // font-size:$th*6;
         font-size:1rem;
-        margin-top:$th*4;
+        // margin-top:$th*4;
+        // @media (max-width: $screen-xs-max) {
+        //     margin-top:$th*8;
+        // }
         width:80vw;
         padding:4px;
         z-index:0;
@@ -56,9 +64,9 @@
 
     button.start {
         align-self: center;
-        @include submit-button;
+        @include white-button;
         padding:8px;
-        width:$tw*4;
+        width:150px;
     }
 
     .playerForm {
@@ -79,7 +87,7 @@
             display:flex;
     
             button.num {
-                @include submit-button;
+                @include white-button;
                 width:50px;
                 height:50px;
                 &.active {
@@ -123,7 +131,7 @@
     }
     h2 {
         @include WordUp--logo();
-        align-self: center;
+        font-size:1.75rem;
     }
 
     h3 {
@@ -142,10 +150,14 @@
         font-size:1rem;
         margin-bottom:16px;
 
+        ul {
+            list-style: square outside;
+        }
+
         p {
-            max-width:500px;
-            padding:2px;
-            text-align: center;
+            max-width:350px;
+            padding:8px;
+            // text-align: center;
 
             em {
                 // color: palevioletred;

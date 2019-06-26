@@ -88,7 +88,7 @@ class App extends React.Component {
     // create config object
     // DEFAULT config object >> 'wordUp rules' = setRules(build oneWay, waitTurn, 8board)
     // toggle config obj >> 'fast rules' = setRules(build bothWays, loseTurn, 6board)
-    // toggle config obj >> combine Qu
+    // dictionary >> find something better? (missing modern words like zen, crunk)
     const myGrid = boardMaker(8);
     this.props.makeBoard(myGrid);
     import("./scrabbleWordList.js").then(dictionary => {
