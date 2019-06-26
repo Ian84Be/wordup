@@ -48,12 +48,10 @@ class App extends React.Component {
         <h1>WordUp</h1>
 
         {errMsg.length>0 && (
-            // <div className="errorMessage">{`${props.errMsg}`}</div>
             <MessageModal message={errMsg}/>
         )}
       
         {message.length>0 && (
-            // <div className="MessageModal">{`${props.message}`}</div>
             <MessageModal message={message}/>
         )}
 
@@ -78,6 +76,7 @@ class App extends React.Component {
             myLetters={myLetters}
             onDragStart={this.onDragStart}
             passTurn={this.passTurn}
+            shuffleLetters={this.shuffleLetters}
             submitLetters={this.submitLetters}
             />
 
@@ -448,6 +447,15 @@ class App extends React.Component {
     if (activeTiles.length<1) return this.props.newErrMsg('you haven\'t placed any tiles');
     else return this.findWords(activeTiles);
   } // this.submitLetters END >> this.findWords(activeTiles);
+
+  shuffleLetters = (letters) => {
+    let shuffled = [...letters];
+    for (let i = letters.length-1;i>0;i--) {
+      let j = Math.floor(Math.random() * (i+1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return this.props.changeMyLetters(shuffled);
+  }
 
   // this.scoreWords() START >> strictModeScoring(foundWords) >> this.calculateScore(foundWords)
   scoreWords = (foundWords) => {

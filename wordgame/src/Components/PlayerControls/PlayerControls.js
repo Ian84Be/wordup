@@ -25,7 +25,11 @@ const PlayerControls = props => {
 
       <div className="controls">
         <button onClick={() => props.passTurn()}>Pass</button>
-        <button onClick={() => props.submitLetters()}>Submit</button>
+        {props.myLetters.length===7 ? (
+          <button onClick={() => props.shuffleLetters(props.myLetters)}>Shuffle</button>
+        ) : (
+          <button onClick={() => props.submitLetters()}>Submit</button>
+        )}
           <div className="message">{props.message}</div>
         <button onClick={() => props.clearBoard()}>Clear Board</button>
       </div>
