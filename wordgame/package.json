@@ -11,7 +11,8 @@
     "redux": "^4.0.1"
 	},
 	"resolutions": {
-    "lodash": "^4.17.13"
+		"lodash": "^4.17.13",
+		"set-value" : "^2.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
