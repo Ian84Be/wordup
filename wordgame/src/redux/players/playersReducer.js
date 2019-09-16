@@ -4,21 +4,10 @@ import {
   ADD_SCORE,
   CHANGE_MYLETTERS,
   NEXT_PLAYER
-} from './actions';
-
-import { letterBag } from '../letterBag.js';
+} from './playersActions';
 
 const initialState = {
   activePlayer: 0,
-  clickedLetter: [],
-  dictionary: [],
-  emptyBag: false,
-  errMsg: '',
-  gameBoard: [],
-  gameHistory: [],
-  letterBag: letterBag,
-  message: '',
-  passCount: 0,
   players: []
 };
 

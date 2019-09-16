@@ -1,7 +1,8 @@
-import { ERR_MSG, NEW_MESSAGE } from './actions';
+import { ERR_MSG, GAME_HISTORY, NEW_MESSAGE } from './commoActions';
 
 const initialState = {
   errMsg: '',
+  gameHistory: [],
   message: ''
 };
 
@@ -14,6 +15,11 @@ const commoReducer = (state = initialState, action) => {
         errMsg: payload
       };
     }
+    case GAME_HISTORY:
+      return {
+        ...state,
+        gameHistory: [payload, ...state.gameHistory]
+      };
     case NEW_MESSAGE:
       return {
         ...state,
