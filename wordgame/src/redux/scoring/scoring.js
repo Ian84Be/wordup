@@ -1,4 +1,4 @@
-import { ADD_PASSCOUNT } from './actions';
+import { ADD_PASSCOUNT } from '../rootActions';
 
 const initialState = {
   passCount: 0

@@ -1,4 +1,4 @@
-import { ERR_MSG, GAME_HISTORY, NEW_MESSAGE } from './commoActions';
+import { ERR_MSG, GAME_HISTORY, NEW_MESSAGE } from '../rootActions';
 
 const initialState = {
   errMsg: '',

@@ -1,4 +1,4 @@
-import { LOAD_DICTIONARY, MAKE_BOARD } from './actions';
+import { LOAD_DICTIONARY, MAKE_BOARD } from '../rootActions';
 
 const initialState = {
   dictionary: [],

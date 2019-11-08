@@ -1,9 +1,9 @@
-export const HOLD_LETTER = 'HOLD_LETTER';
+import { HOLD_LETTER, NEW_LETTERBAG } from '../rootActions';
+
 export const holdLetter = letter => {
   return { type: HOLD_LETTER, payload: letter };
 };
 
-export const NEW_LETTERBAG = 'NEW_LETTERBAG';
 export const newLetterBag = letterBag => {
   return { type: NEW_LETTERBAG, payload: letterBag };
 };

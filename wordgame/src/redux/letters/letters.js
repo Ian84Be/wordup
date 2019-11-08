@@ -1,6 +1,6 @@
-import { HOLD_LETTER, NEW_LETTERBAG } from './actions';
+import { HOLD_LETTER, NEW_LETTERBAG } from '../rootActions';
 
-import { letterBag } from '../letterBag.js';
+import { letterBag } from '../../letterBag.js';
 
 const initialState = {
   clickedLetter: [],

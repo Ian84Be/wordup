@@ -4,7 +4,7 @@ import {
   ADD_SCORE,
   CHANGE_MYLETTERS,
   NEXT_PLAYER
-} from './playersActions';
+} from '../rootActions';
 
 const initialState = {
   activePlayer: 0,
