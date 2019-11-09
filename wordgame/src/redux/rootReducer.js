@@ -3,7 +3,6 @@ import commo from './commo/commo';
 import config from './config/config';
 import letters from './letters/letters';
 import players from './players/players';
-import scoring from './scoring/scoring';
 
 // const initialState = {
 //   activePlayer: 0,
@@ -23,6 +22,5 @@ export default combineReducers({
   commo,
   config,
   letters,
-  players,
-  scoring
+  players
 });
