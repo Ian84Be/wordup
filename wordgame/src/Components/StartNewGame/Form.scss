@@ -3,12 +3,20 @@
 
 section.playerForm {
   align-items: center;
+  // background: black;
   // border: 1px solid black;
   display: flex;
   flex-direction: column;
 
   header {
-    margin: 1rem;
+    @include WordUp--logo();
+    font-size: 1.75rem;
+    margin: 0.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    @media (max-width: 600px) {
+      margin-top: 1.5rem;
+    }
   }
 
   .numberButtons {
@@ -18,8 +26,9 @@ section.playerForm {
       @include white-button;
       width: 50px;
       height: 50px;
+      margin: 0.5rem;
       &.active {
-        background: palevioletred;
+        background: $tile__2-color;
         box-shadow: 0 0;
         transform: translate(4px, 4px);
       }
@@ -28,16 +37,18 @@ section.playerForm {
 
   form {
     // border: 1px solid yellow;
+    align-items: center;
     margin: 1rem;
     display: flex;
     flex-direction: column;
 
     .playerName {
-      align-self: center;
+      display: flex;
+      flex-direction: column;
       margin: 0.5rem;
 
       label {
-        margin: 8px;
+        margin-bottom: 0.5rem;
       }
 
       input[type='text'] {
@@ -46,8 +57,9 @@ section.playerForm {
         border-radius: 4px;
         color: $form__input-text;
         outline: none;
-        padding: 8px;
-        width: 80px;
+        padding: 0.75rem;
+        width: 200px;
+        font-size: 1rem;
       }
     }
 
