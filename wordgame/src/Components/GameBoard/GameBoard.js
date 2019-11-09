@@ -6,7 +6,7 @@ import { makeBoard } from '../../redux/config/configActions';
 import { newErrMsg, newMessage } from '../../redux/commo/commoActions';
 import { holdLetter } from '../../redux/letters/lettersActions';
 
-const GameBoard = props => {
+const GameBoard = () => {
   const dispatch = useDispatch();
   const gameBoard = useSelector(s => s.config.gameBoard);
   const activePlayer = useSelector(s => s.players.activePlayer);
@@ -55,9 +55,7 @@ const GameBoard = props => {
   );
 
   function onDragStart(e, index, isActive = false) {
-    if (typeof index !== 'number')
-      return e.dataTransfer.setData('letter', index);
-    else if (!isActive) return;
+    if (!isActive) return;
     else {
       const thisTile = gameBoard[index];
       e.dataTransfer.setData('incomingIndex', index || '0');
