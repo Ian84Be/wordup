@@ -18,14 +18,15 @@ import { holdLetter, newLetterBag } from '../../redux/letters/lettersActions';
 
 const PlayerControls = () => {
   const dispatch = useDispatch();
-  const gameBoard = useSelector(s => s.config.gameBoard);
-  const dictionary = useSelector(s => s.config.dictionary);
   const activePlayer = useSelector(s => s.players.activePlayer);
-  const players = useSelector(s => s.players.players);
-  const passCount = useSelector(s => s.players.passCount);
+  const dictionary = useSelector(s => s.config.dictionary);
+  const emptyBag = useSelector(s => s.letters.emptyBag);
+  const gameBoard = useSelector(s => s.config.gameBoard);
   const holdingLetter = useSelector(s => s.letters.holdingLetter);
   const letterBag = useSelector(s => s.letters.letterBag);
-  const emptyBag = useSelector(s => s.letters.emptyBag);
+  const players = useSelector(s => s.players.players);
+  const passCount = useSelector(s => s.players.passCount);
+
   let myLetters = players[activePlayer].myLetters;
 
   return (
