@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 
 const HowTo = () => {
   const [showing, setShowing] = useState(0);
-  const allCards = [card1, card2, card3, card4];
+  const allCards = [
+    { title: 'How to Play', C: card1 },
+    { title: 'Scoring', C: card2 },
+    { title: 'End Game', C: card3 },
+    { title: 'Controls', C: card4 }
+  ];
 
   const handleClick = direction => {
-    console.log('handleclick() dire', direction);
-    console.log('handleclick() showing', showing);
     if (direction === 'prev') {
       return showing - 1 >= 0
         ? setShowing(showing - 1)
@@ -21,15 +24,26 @@ const HowTo = () => {
   return (
     <section className="HowTo">
       <main>
-        {allCards.map((c, i) => {
-          if (i === showing) return c();
+        {allCards.map((card, i) => {
+          if (i === showing)
+            return (
+              <>
+                <h2>{card.title}</h2>
+                <card.C key={i} />
+              </>
+            );
           else return null;
         })}
       </main>
       <footer>
         <button onClick={() => handleClick('prev')}>{'<<'}</button>
-        {allCards.map((c, i) => {
-          return <div className={i === showing ? 'step active' : 'step'}></div>;
+        {allCards.map((_, i) => {
+          return (
+            <div
+              key={i}
+              className={i === showing ? 'step active' : 'step'}
+            ></div>
+          );
         })}
         <button onClick={() => handleClick('next')}>{'>>'}</button>
       </footer>
@@ -42,7 +56,6 @@ export default HowTo;
 function card1() {
   return (
     <div className="HowTo--card">
-      <h2>HOW - TO - PLAY</h2>
       <p>Place tiles on the board to build words!</p>
       <p>
         The first player must cover <em>one or more</em> of the four{' '}
@@ -59,7 +72,6 @@ function card1() {
 function card2() {
   return (
     <div className="HowTo--card">
-      <h3>Scoring</h3>
       <p>
         Words built with stacked letters score <br />
         <em>1 point</em> per tile in the stack.
@@ -82,7 +94,6 @@ function card2() {
 function card3() {
   return (
     <div className="HowTo--card">
-      <h3>End Game</h3>
       <p>
         The <em>game ends </em> when letterBag is empty and one player has used
         all of their tiles, or when letterBag is empty and every player passes
@@ -99,7 +110,6 @@ function card3() {
 function card4() {
   return (
     <div className="HowTo--card">
-      <h3>Player Controls</h3>
       <p>
         <em>PASS</em> >> Pass your turn and draw seven new letters
       </p>

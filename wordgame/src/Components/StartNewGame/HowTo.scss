@@ -2,18 +2,53 @@
 @import '../../scss/palette';
 
 section.HowTo {
-  align-items: center;
   // border: 1px solid white;
+  align-items: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  // justify-content: center;
   max-width: 500px;
+
+  main {
+    // border: 1px solid yellow;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+
+    h2 {
+      @include WordUp--logo();
+      font-size: 1.75rem;
+      margin: 0.5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .HowTo--card {
+      // background: hsla(11, 11, 50, 20%);
+      // border: 1px solid $tile__2-color;
+      border-radius: 4px;
+      height: 250px;
+      overflow: scroll;
+      p {
+        font-size: 1.2rem;
+        line-height: 1.4rem;
+        max-width: 450px;
+        padding: 0.5rem;
+
+        em {
+          color: $tile__2-color;
+          font-weight: 900;
+        }
+      }
+    }
+  }
 
   footer {
     // border: 1px solid red;
     align-items: center;
     display: flex;
     justify-content: space-evenly;
+    margin: 1rem 0;
     width: 100%;
 
     button {
@@ -22,54 +57,15 @@ section.HowTo {
     }
 
     .step {
-      // @include white-button();
       background: white;
-      // border-radius: 50%;
+      box-shadow: 2px 2px $tile__2-color;
       border-radius: 2px;
-      padding: 0;
-      height: 10px;
       min-height: 15px;
       width: 25px;
-      // height: 25px;
       &.active {
-        background: palevioletred;
+        background: $tile__2-color;
+        box-shadow: 2px 2px white;
       }
-    }
-  }
-}
-
-h2 {
-  @include WordUp--logo();
-  font-size: 1.75rem;
-  margin: 0.5rem;
-  text-align: center;
-}
-
-h3 {
-  @include WordUp--logo();
-  align-self: center;
-  font-size: 1rem;
-  text-shadow: 0 $th 0px $tile__2-color, 0 $th * 1.5 0px $tile__2-color;
-  margin: 0.5rem;
-}
-
-.rules {
-  // border: 1px solid yellow;
-  display: flex;
-  flex-direction: column;
-  font-size: 1rem;
-  margin-bottom: 16px;
-  height: 10%;
-  overflow: scroll;
-
-  p {
-    // max-width: 350px;
-    padding: 0.5rem;
-    // text-align: center;
-
-    em {
-      color: $tile__2-color;
-      font-weight: 700;
     }
   }
 }
