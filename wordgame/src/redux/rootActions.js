@@ -13,10 +13,8 @@ export const NEW_LETTERBAG = 'NEW_LETTERBAG';
 
 // PLAYERS
 export const ADD_HISTORY = 'ADD_HISTORY';
+export const ADD_PASSCOUNT = 'ADD_PASSCOUNT';
 export const ADD_PLAYERS = 'ADD_PLAYERS';
 export const ADD_SCORE = 'ADD_SCORE';
 export const CHANGE_MYLETTERS = 'CHANGE_MYLETTERS';
 export const NEXT_PLAYER = 'NEXT_PLAYER';
-
-// SCORING
-export const ADD_PASSCOUNT = 'ADD_PASSCOUNT';

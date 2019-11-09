@@ -3,7 +3,7 @@ import { HOLD_LETTER, NEW_LETTERBAG } from '../rootActions';
 import { letterBag } from '../../letterBag.js';
 
 const initialState = {
-  clickedLetter: [],
+  holdingLetter: [],
   emptyBag: false,
   letterBag: letterBag
 };
@@ -14,7 +14,7 @@ const lettersReducer = (state = initialState, action) => {
     case HOLD_LETTER:
       return {
         ...state,
-        clickedLetter: payload
+        holdingLetter: payload
       };
     case NEW_LETTERBAG:
       if (Object.values(payload).reduce((a, b) => a + b) === 0) {

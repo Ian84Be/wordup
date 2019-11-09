@@ -1,5 +1,6 @@
 import {
   ADD_HISTORY,
+  ADD_PASSCOUNT,
   ADD_PLAYERS,
   ADD_SCORE,
   CHANGE_MYLETTERS,
@@ -8,7 +9,8 @@ import {
 
 const initialState = {
   activePlayer: 0,
-  players: []
+  players: [],
+  passCount: 0
 };
 
 const playersReducer = (state = initialState, action) => {
@@ -28,6 +30,11 @@ const playersReducer = (state = initialState, action) => {
       return {
         ...state,
         players: scoreState
+      };
+    case ADD_PASSCOUNT:
+      return {
+        ...state,
+        passCount: payload
       };
     case ADD_PLAYERS:
       return {
