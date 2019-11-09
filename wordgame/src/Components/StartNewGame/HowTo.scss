@@ -2,8 +2,40 @@
 @import '../../scss/palette';
 
 section.HowTo {
+  align-items: center;
   // border: 1px solid white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   max-width: 500px;
+
+  footer {
+    // border: 1px solid red;
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+
+    button {
+      @include white-button();
+      font-size: 0.75rem;
+    }
+
+    .step {
+      // @include white-button();
+      background: white;
+      // border-radius: 50%;
+      border-radius: 2px;
+      padding: 0;
+      height: 10px;
+      min-height: 15px;
+      width: 25px;
+      // height: 25px;
+      &.active {
+        background: palevioletred;
+      }
+    }
+  }
 }
 
 h2 {
