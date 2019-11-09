@@ -1,19 +1,25 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-const MiniScores = (props) => {
+const MiniScores = () => {
+  const activePlayer = useSelector(s => s.players.activePlayer);
+  const players = useSelector(s => s.players.players);
   return (
     <div className="MiniScores">
-      
-      {props.players.map(player => {
+      {players.map(player => {
         return (
-          <div key={player.id} className={player.id === props.activePlayer ? 'active playerCard' : 'playerCard'}>
-          {player.myName}: {(player.myScore === 0) ? '0' : player.myScore}
+          <div
+            key={player.id}
+            className={
+              player.id === activePlayer ? 'active playerCard' : 'playerCard'
+            }
+          >
+            {player.myName}: {player.myScore === 0 ? '0' : player.myScore}
           </div>
-        )
+        );
       })}
-
     </div>
   );
-}
- 
+};
+
 export default MiniScores;
