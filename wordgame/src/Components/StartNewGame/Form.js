@@ -10,8 +10,8 @@ const Form = ({ onSubmit }) => {
   });
 
   return (
-    <div className="playerForm">
-      <p>How Many Players?</p>
+    <section className="playerForm">
+      <header>How Many Players?</header>
       <div className="numberButtons">
         <button
           className={num.length === 1 ? 'num active' : 'num'}
@@ -63,7 +63,7 @@ const Form = ({ onSubmit }) => {
         })}
         <button className="start">Start Game</button>
       </form>
-    </div>
+    </section>
   );
 };
 

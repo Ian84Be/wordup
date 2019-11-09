@@ -9,10 +9,10 @@
     "react-redux": "^7.1.0",
     "react-scripts": "3.0.1",
     "redux": "^4.0.1"
-	},
-	"resolutions": {
-		"lodash": "^4.17.13",
-		"set-value" : "^2.0.1"
+  },
+  "resolutions": {
+    "lodash": "^4.17.13",
+    "set-value": "^2.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
