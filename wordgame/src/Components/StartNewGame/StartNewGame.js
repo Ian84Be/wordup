@@ -1,31 +1,27 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import { addPlayers } from '../../redux/players/playersActions';
 import { newLetterBag } from '../../redux/letters/lettersActions';
 
 import { letterBag as startBag } from '../../letterBag.js';
 
-const StartNewGame = props => {
-  const [newPlayer, setnewPlayer] = useState({
-    'name 1': '',
-    'name 2': '',
-    'name 3': '',
-    'name 4': ''
-  });
-  const [numPlayers, setnumPlayers] = useState([]);
+import Form from './Form';
 
-  const startNewGame = e => {
+const StartNewGame = () => {
+  const dispatch = useDispatch();
+
+  const startNewGame = (e, num, newPlayers) => {
     e.preventDefault();
-    let newPlayers = numPlayers.map((num, i) => ({
+    let players = num.map((num, i) => ({
       id: i,
       myHistory: [],
       myLetters: startLetters(7),
-      myName: newPlayer[`name ${num}`],
+      myName: newPlayers[`name ${num}`],
       myScore: 0
     }));
-    props.newLetterBag(startBag);
-    return props.addPlayers(newPlayers);
+    dispatch(newLetterBag(startBag));
+    return dispatch(addPlayers(players));
   };
 
   function startLetters(num) {
@@ -42,80 +38,12 @@ const StartNewGame = props => {
     return myLetters;
   }
 
-  // function playerColor(e, color) {
-  //     e.preventDefault();
-  //     console.log(color);
-  // }
   return (
     <div className="StartNewGame">
       <h1 className="logo__big">WordUp</h1>
       <div className="headline">A 3-Dimensional Word Game</div>
 
-      <div className="playerForm">
-        <p>How Many Players?</p>
-        <div className="numberButtons">
-          <button
-            className={numPlayers.length === 1 ? 'num active' : 'num'}
-            onClick={() => setnumPlayers([1])}
-          >
-            1
-          </button>
-          <button
-            className={numPlayers.length === 2 ? 'num active' : 'num'}
-            onClick={() => setnumPlayers([1, 2])}
-          >
-            2
-          </button>
-          <button
-            className={numPlayers.length === 3 ? 'num active' : 'num'}
-            onClick={() => setnumPlayers([1, 2, 3])}
-          >
-            3
-          </button>
-          <button
-            className={numPlayers.length === 4 ? 'num active' : 'num'}
-            onClick={() => setnumPlayers([1, 2, 3, 4])}
-          >
-            4
-          </button>
-        </div>
-        <form onSubmit={e => startNewGame(e)}>
-          {numPlayers.length > 0 ? (
-            numPlayers.map(num => {
-              return (
-                <div className="playerName" key={num}>
-                  <label htmlFor={`name ${num}`}>Player {num}</label>
-                  <input
-                    required
-                    id={`name ${num}`}
-                    onChange={e =>
-                      setnewPlayer({
-                        ...newPlayer,
-                        [`name ${num}`]: e.target.value
-                      })
-                    }
-                    placeholder="name"
-                    type="text"
-                    value={newPlayer[`name ${num}`]}
-                  />
-                  {/* <button className="color" style={{backgroundColor:'slateblue'}} onClick={e => playerColor(e,'slateblue')}></button>
-                                    <button className="color" style={{backgroundColor:'orangered'}} onClick={e => playerColor(e,'orangered')}></button>
-                                    <button className="color" style={{backgroundColor:'burlywood'}} onClick={e => playerColor(e,'burlywood')}></button>
-                                    <button className="color" style={{backgroundColor:'firebrick'}} onClick={e => playerColor(e,'firebrick')}></button> */}
-                </div>
-              );
-            })
-          ) : (
-            <></>
-          )}
-          {numPlayers.length > 0 ? (
-            <button className="start">Start Game</button>
-          ) : (
-            <></>
-          )}
-        </form>
-      </div>
-
+      <Form onSubmit={startNewGame} />
       <h2>HOW - TO - PLAY</h2>
       <div className="rules">
         <ul>
@@ -194,7 +122,4 @@ const StartNewGame = props => {
   );
 };
 
-export default connect(
-  null,
-  { addPlayers, newLetterBag }
-)(StartNewGame);
+export default StartNewGame;
