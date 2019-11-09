@@ -1,0 +1,62 @@
+@import '../../scss/mixins';
+@import '../../scss/palette';
+
+section.playerForm {
+  align-items: center;
+  // border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+
+  header {
+    margin: 1rem;
+  }
+
+  .numberButtons {
+    display: flex;
+
+    button.num {
+      @include white-button;
+      width: 50px;
+      height: 50px;
+      &.active {
+        background: palevioletred;
+        box-shadow: 0 0;
+        transform: translate(4px, 4px);
+      }
+    }
+  }
+
+  form {
+    // border: 1px solid yellow;
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    .playerName {
+      align-self: center;
+      margin: 0.5rem;
+
+      label {
+        margin: 8px;
+      }
+
+      input[type='text'] {
+        background: $form__input-bg;
+        border: 1px solid $form__input-text;
+        border-radius: 4px;
+        color: $form__input-text;
+        outline: none;
+        padding: 8px;
+        width: 80px;
+      }
+    }
+
+    button.start {
+      align-self: center;
+      @include white-button;
+      margin: 1rem;
+      padding: 8px;
+      width: 150px;
+    }
+  }
+}

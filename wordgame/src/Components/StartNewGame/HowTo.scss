@@ -1,0 +1,43 @@
+@import '../../scss/mixins';
+@import '../../scss/palette';
+
+section.HowTo {
+  // border: 1px solid white;
+  max-width: 500px;
+}
+
+h2 {
+  @include WordUp--logo();
+  font-size: 1.75rem;
+  margin: 0.5rem;
+  text-align: center;
+}
+
+h3 {
+  @include WordUp--logo();
+  align-self: center;
+  font-size: 1rem;
+  text-shadow: 0 $th 0px $tile__2-color, 0 $th * 1.5 0px $tile__2-color;
+  margin: 0.5rem;
+}
+
+.rules {
+  // border: 1px solid yellow;
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  height: 10%;
+  overflow: scroll;
+
+  p {
+    // max-width: 350px;
+    padding: 0.5rem;
+    // text-align: center;
+
+    em {
+      color: $tile__2-color;
+      font-weight: 700;
+    }
+  }
+}
