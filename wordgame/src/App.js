@@ -10,9 +10,12 @@ import MessageModal from './Components/MessageModal/MessageModal.js';
 import PlayerControls from './Components/PlayerControls/PlayerControls.js';
 import StartNewGame from './Components/StartNewGame/StartNewGame.js';
 
-import './App.scss';
 import History from './Components/History/History';
 import HowToModal from './Components/HowTo/HowToModal';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle, faListAlt } from '@fortawesome/free-solid-svg-icons';
+import './App.scss';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -42,9 +45,12 @@ const App = () => {
     return (
       <div className="App">
         <header>
-          <button onClick={() => showHowTo(true)}>Help</button>
+          <FontAwesomeIcon icon={faListAlt} onClick={() => showHistory(true)} />
           <h1>WordUp</h1>
-          <button onClick={() => showHistory(true)}>History</button>
+          <FontAwesomeIcon
+            icon={faQuestionCircle}
+            onClick={() => showHowTo(true)}
+          />
         </header>
         {history && <History showHistory={showHistory} />}
         {howTo && <HowToModal showHowTo={showHowTo} />}

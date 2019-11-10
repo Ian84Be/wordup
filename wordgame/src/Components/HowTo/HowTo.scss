@@ -1,10 +1,17 @@
 @import '../../scss/mixins';
 @import '../../scss/palette';
 
-section.HowTo {
+.HowToModal--wrapper {
   // border: 1px solid white;
   background: black;
   border-radius: 4px;
+  margin-top: 4rem;
+  position: fixed;
+  top: 0;
+  z-index: 12;
+}
+
+section.HowTo {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -40,27 +47,31 @@ section.HowTo {
 
   footer {
     // border: 1px solid red;
-
     align-items: center;
     display: flex;
     justify-content: space-evenly;
     margin: 1rem 0;
     width: 100%;
 
-    button {
-      @include white-button();
-      font-size: 0.75rem;
+    svg {
+      color: white;
+      cursor: pointer;
+      margin: 0 1rem;
+      transition: color 0s linear;
+      &:hover {
+        color: $tile__2-color;
+      }
     }
 
     .step {
       background: white;
-      box-shadow: 2px 2px $tile__2-color;
       border-radius: 2px;
       min-height: 15px;
       width: 25px;
       &.active {
         background: $tile__2-color;
         box-shadow: 2px 2px white;
+        transform: translate(-2px, -2px);
       }
     }
   }

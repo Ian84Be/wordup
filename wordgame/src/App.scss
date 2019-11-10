@@ -14,7 +14,7 @@
 
 * {
   box-sizing: border-box;
-  transition: 0.5s;
+  transition: all 0.2s linear;
 }
 
 body {
@@ -26,7 +26,9 @@ body {
 h1 {
   @include WordUp--logo();
   @include grid__center();
-  margin-top: 0.5rem;
+  margin: $tw * 0.5;
+  margin-top: $tw * 0.2;
+  font-size: $tw * 0.8;
 }
 
 h2 {
@@ -45,20 +47,21 @@ h2 {
   margin: 0 auto;
 
   header {
+    // border: 1px solid red;
     align-items: center;
     display: flex;
     justify-content: center;
     width: 100%;
 
-    h1 {
-      margin: 0 2rem;
-    }
-
-    button {
-      @include white-button();
-      margin-top: 0.5rem;
-      font-size: 1rem;
-      width: 120px;
+    svg {
+      color: white;
+      cursor: pointer;
+      margin: 0 1rem;
+      transition: color 0s linear;
+      transform: scale(1.5);
+      &:hover {
+        color: $tile__2-color;
+      }
     }
   }
 }

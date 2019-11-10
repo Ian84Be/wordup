@@ -3,7 +3,8 @@
   // border: 1px solid white;
   display: flex;
   justify-content: space-evenly;
-  padding: 0.75rem;
+  padding: $tw * 0.3;
+  padding-top: 0;
   width: 100%;
   max-width: $tw * 9;
 

@@ -4,7 +4,9 @@ const HowToModal = ({ showHowTo }) => {
   return (
     <>
       <span className="Modal" onClick={() => showHowTo(false)}></span>
-      <HowTo />
+      <div className="HowToModal--wrapper">
+        <HowTo />
+      </div>
     </>
   );
 };
