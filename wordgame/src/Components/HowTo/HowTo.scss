@@ -3,11 +3,13 @@
 
 section.HowTo {
   // border: 1px solid white;
+  background: black;
+  border-radius: 4px;
   align-items: center;
   display: flex;
   flex-direction: column;
-  // justify-content: center;
   max-width: 500px;
+  z-index: 123;
 
   main {
     // border: 1px solid yellow;
@@ -15,21 +17,14 @@ section.HowTo {
     flex-direction: column;
     font-size: 1rem;
 
-    h2 {
-      @include WordUp--logo();
-      font-size: 1.75rem;
-      margin: 0.5rem;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
     .HowTo--card {
-      // background: hsla(11, 11, 50, 20%);
       // border: 1px solid $tile__2-color;
-      border-radius: 4px;
       height: 250px;
       overflow: scroll;
+      padding: 1rem;
+
       p {
+        color: white;
         font-size: 1.2rem;
         line-height: 1.4rem;
         max-width: 450px;
@@ -45,6 +40,7 @@ section.HowTo {
 
   footer {
     // border: 1px solid red;
+
     align-items: center;
     display: flex;
     justify-content: space-evenly;

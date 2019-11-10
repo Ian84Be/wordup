@@ -27,10 +27,10 @@ const HowTo = () => {
         {allCards.map((card, i) => {
           if (i === showing)
             return (
-              <>
+              <React.Fragment key={card.title}>
                 <h2>{card.title}</h2>
-                <card.C key={i} />
-              </>
+                <card.C />
+              </React.Fragment>
             );
           else return null;
         })}
