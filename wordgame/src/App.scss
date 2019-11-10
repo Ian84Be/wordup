@@ -26,6 +26,7 @@ body {
 h1 {
   @include WordUp--logo();
   @include grid__center();
+  margin-top: 0.5rem;
 }
 
 .container {

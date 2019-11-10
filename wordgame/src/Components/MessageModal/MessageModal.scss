@@ -1,21 +1,39 @@
 @import '../../scss/palette';
+@import '../../scss/mixins';
 
 .MessageModal {
-    // align-self: center;
-    background: $message--bg;
-    border:1px solid $tile__2-color;
-    border-radius: 4px;
-    box-shadow: 0 0 10px $tile__2-color;
-    color:black;
-    font-size:1rem;
-    // @media (max-width: $screen-sm-max) {
-    //     font-size:1.5rem;
-    // }
-    padding:8px;
-    position:fixed;
-    top:10vh;
-    left:70vw;
-    text-shadow: 1px 1px 5px $tile__2-color;
-    // width:100%;
-    z-index: 1;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.808);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
+  z-index: 23;
+}
+
+.MessageModal--body {
+  align-items: center;
+  background: $message--bg;
+  border: 1px solid $tile__2-color;
+  border-radius: 4px;
+  box-shadow: 0 0 10px $tile__2-color;
+  color: black;
+  display: flex;
+  font-size: 1.5rem;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 1;
+
+  p {
+    text-align: center;
+  }
+
+  button {
+    @include white-button();
+    margin-top: 2rem;
+    height: 50px;
+    width: 50%;
+  }
 }
