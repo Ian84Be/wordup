@@ -1,17 +1,16 @@
 .MiniScores {
   align-items: center;
-  // border:1px solid white;
+  // border: 1px solid white;
   display: flex;
   justify-content: space-evenly;
-  padding: 2 * $th;
-  // margin-top: 1rem;
+  padding: $tw * 0.3;
+  padding-top: 0;
   width: 100%;
   max-width: $tw * 9;
 
   .playerCard {
     align-items: center;
-    // border: 1px solid red;
-    border-radius: 8px;
+    border-radius: 4px;
     color: black;
     display: flex;
     flex-wrap: wrap;
@@ -22,12 +21,10 @@
     padding: $th * 2;
 
     &.active {
-      background: slateblue;
-      color: white;
+      background: $tile__2-color;
+      color: black;
       border-top: 0;
       border-left: 0;
-      box-shadow: $th $th $tile__1-color;
-      transform: translate(-$th, -$th);
     }
 
     @media (max-width: $screen-xs-max) {

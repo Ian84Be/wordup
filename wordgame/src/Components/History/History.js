@@ -1,45 +1,25 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-const History = (props) => {
+const History = ({ showHistory }) => {
+  const gameHistory = useSelector(s => s.commo.gameHistory);
   return (
-    <div className="History">
-      <h3>HISTORY</h3>
-      
-
-        {props.errMsg.length>0 && (
-            <div className="errorMessage">{`${props.errMsg}`}</div>
-        )}
-      
-        {props.message.length>0 && (
-            <div className="MessageModal">{`${props.message}`}</div>
-        )}
-
-        <div className="gameHistory__container">
-            {props.gameHistory.map((turn,i) => {
-                return (
-                <div key={i + Math.random()} className="gameHistory">
-                    {turn}
-                </div>
-                )
-            })}
+    <>
+      <span className="Modal" onClick={() => showHistory(false)}></span>
+      <section className="History">
+        <h2>History</h2>
+        <div className="History--line-container">
+          {gameHistory.map((turn, i) => {
+            return (
+              <div key={i + Math.random()} className="History--line">
+                {turn}
+              </div>
+            );
+          })}
         </div>
-      
-    </div>
+      </section>
+    </>
   );
-}
- 
+};
+
 export default History;
-
-
-//   {/* <History
-//     activePlayer={activePlayer}
-//     errMsg={errMsg}
-//     gameHistory={gameHistory}
-//     letterBag={letterBag}
-//     message={message} 
-//     myHistory={myHistory}
-//     myName={myName}
-//     myScore={myScore}
-//     passTurn={this.passTurn}
-//     players={players}
-//   /> */}

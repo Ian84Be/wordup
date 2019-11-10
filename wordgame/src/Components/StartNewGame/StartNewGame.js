@@ -7,7 +7,7 @@ import { newLetterBag } from '../../redux/letters/lettersActions';
 import { letterBag as startBag } from '../../letterBag.js';
 
 import Form from './Form';
-import HowTo from './HowTo';
+import HowTo from '../HowTo/HowTo';
 
 const StartNewGame = () => {
   const dispatch = useDispatch();

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { loadDictionary } from './redux/config/configActions';
@@ -10,6 +10,11 @@ import MessageModal from './Components/MessageModal/MessageModal.js';
 import PlayerControls from './Components/PlayerControls/PlayerControls.js';
 import StartNewGame from './Components/StartNewGame/StartNewGame.js';
 
+import History from './Components/History/History';
+import HowToModal from './Components/HowTo/HowToModal';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle, faListAlt } from '@fortawesome/free-solid-svg-icons';
 import './App.scss';
 
 const App = () => {
@@ -31,12 +36,24 @@ const App = () => {
   const message = useSelector(s => s.commo.message);
   const errMsg = useSelector(s => s.commo.errMsg);
 
+  const [history, showHistory] = useState(false);
+  const [howTo, showHowTo] = useState(false);
+
   if (players.length < 1) {
     return <StartNewGame />;
   } else {
     return (
-      <div className="container">
-        <h1>WordUp</h1>
+      <div className="App">
+        <header>
+          <FontAwesomeIcon icon={faListAlt} onClick={() => showHistory(true)} />
+          <h1>WordUp</h1>
+          <FontAwesomeIcon
+            icon={faQuestionCircle}
+            onClick={() => showHowTo(true)}
+          />
+        </header>
+        {history && <History showHistory={showHistory} />}
+        {howTo && <HowToModal showHowTo={showHowTo} />}
 
         {errMsg.length > 0 && <MessageModal message={errMsg} />}
         {message.length > 0 && <MessageModal message={message} />}

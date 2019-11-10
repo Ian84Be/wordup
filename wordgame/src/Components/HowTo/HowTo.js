@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faForward, faBackward } from '@fortawesome/free-solid-svg-icons';
 
 const HowTo = () => {
   const [showing, setShowing] = useState(0);
@@ -27,16 +29,20 @@ const HowTo = () => {
         {allCards.map((card, i) => {
           if (i === showing)
             return (
-              <>
+              <React.Fragment key={card.title}>
                 <h2>{card.title}</h2>
-                <card.C key={i} />
-              </>
+                <card.C />
+              </React.Fragment>
             );
           else return null;
         })}
       </main>
       <footer>
-        <button onClick={() => handleClick('prev')}>{'<<'}</button>
+        <FontAwesomeIcon
+          icon={faBackward}
+          size="2x"
+          onClick={() => handleClick('prev')}
+        />
         {allCards.map((_, i) => {
           return (
             <div
@@ -45,7 +51,11 @@ const HowTo = () => {
             ></div>
           );
         })}
-        <button onClick={() => handleClick('next')}>{'>>'}</button>
+        <FontAwesomeIcon
+          icon={faForward}
+          size="2x"
+          onClick={() => handleClick('next')}
+        />
       </footer>
     </section>
   );

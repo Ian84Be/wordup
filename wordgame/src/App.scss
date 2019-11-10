@@ -10,11 +10,11 @@
 @import './Components/ScoreBoard/ScoreBoard.scss';
 @import './Components/StartNewGame/StartNewGame.scss';
 @import './Components/StartNewGame/Form.scss';
-@import './Components/StartNewGame/HowTo.scss';
+@import './Components/HowTo/HowTo.scss';
 
 * {
   box-sizing: border-box;
-  transition: 0.5s;
+  transition: all 0.2s linear;
 }
 
 body {
@@ -26,16 +26,42 @@ body {
 h1 {
   @include WordUp--logo();
   @include grid__center();
-  margin-top: 0.5rem;
+  margin: $tw * 0.5;
+  margin-top: $tw * 0.2;
+  font-size: $tw * 0.8;
 }
 
-.container {
+h2 {
+  @include WordUp--logo();
+  font-size: 1.75rem;
+  margin: 0.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.App {
   align-items: center;
-  // border:3px solid red;
   display: flex;
   flex-direction: column;
-  // height:100vh;
   justify-content: center;
-  // width:100vw;
   margin: 0 auto;
+
+  header {
+    // border: 1px solid red;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    svg {
+      color: white;
+      cursor: pointer;
+      margin: 0 1rem;
+      transition: color 0s linear;
+      transform: scale(1.5);
+      &:hover {
+        color: $tile__2-color;
+      }
+    }
+  }
 }
