@@ -1,36 +1,37 @@
 .MiniScores {
+  align-items: center;
+  // border:1px solid white;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 2 * $th;
+  // margin-top: 1rem;
+  width: 100%;
+  max-width: $tw * 9;
+
+  .playerCard {
     align-items: center;
-    // border:1px solid white;
+    // border: 1px solid red;
+    border-radius: 8px;
+    color: black;
     display: flex;
-    justify-content: space-evenly;
-    padding-top:$th;
-    width:100%;
-    max-width:$tw*9;
+    flex-wrap: wrap;
+    font-size: $th * 6;
+    margin: $th;
+    max-width: $tw * 3;
+    overflow-wrap: break-word;
+    padding: $th * 2;
 
-    .playerCard {
-        align-items: center;
-        // border: 1px solid red;
-        border-radius:8px;
-        color: black;
-        display: flex;
-        flex-wrap: wrap;
-        font-size:$th*6;
-        margin:$th;
-        max-width: $tw*3;
-        overflow-wrap: break-word;
-        padding:$th*2;
-
-        &.active {
-            background: slateblue;
-            color: white;
-            border-top:0;
-            border-left:0;
-            box-shadow: $th $th $tile__1-color;
-            transform: translate(-$th,-$th);
-        }
-
-        @media (max-width: $screen-xs-max) {
-            font-size:$th*4;
-        }
+    &.active {
+      background: slateblue;
+      color: white;
+      border-top: 0;
+      border-left: 0;
+      box-shadow: $th $th $tile__1-color;
+      transform: translate(-$th, -$th);
     }
+
+    @media (max-width: $screen-xs-max) {
+      font-size: $th * 4;
+    }
+  }
 }

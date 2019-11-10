@@ -3,50 +3,49 @@
 @import '../ScoreBoard/ScoreBoard.scss';
 
 .PlayerControls {
-  // border:1px solid yellow; 
-  display:flex;
+  // border:1px solid yellow;
+  display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 8px;
-  // width:$tw*8;
+  padding-top: 1rem;
 
   .countDown {
     align-self: flex-end;
-    display:flex;
-    font-size:$tw * .40;
-    margin-bottom: $th*2;
+    display: flex;
+    font-size: $tw * 0.4;
+    margin-bottom: $th * 2;
     text-align: center;
     @media (max-width: $screen-xs-max) {
-      font-size:$tw * .50;
-    }
-}
-
-    .myLetters {
-      align-self: center;
-      justify-content: center;
-      // border:1px solid white;
-      background:slateblue;
-      border-radius:4px;
-      display: flex;
-      padding:8px;
-      width:$tw*8;
-
-      .letter {
-        margin:$th/2;
-        @include PlayerControls--letter;
-      }
-    }
-
-    .controls {
-      align-items: center;
-      justify-content: center;
-      // border:1px solid blue;
-      display: flex;
-      padding: 8px;
-
-      button {
-        @include white-button;
-        width:$tw*2;
-      }
+      font-size: $tw * 0.5;
     }
   }
+
+  .myLetters {
+    align-self: center;
+    justify-content: center;
+    // border:1px solid white;
+    background: slateblue;
+    border-radius: 4px;
+    display: flex;
+    padding: 8px;
+    width: $tw * 8;
+
+    .letter {
+      margin: $th/2;
+      @include PlayerControls--letter;
+    }
+  }
+
+  .controls {
+    align-items: center;
+    justify-content: center;
+    // border:1px solid blue;
+    display: flex;
+    padding: 1rem;
+
+    button {
+      @include white-button;
+      width: $tw * 2;
+    }
+  }
+}
