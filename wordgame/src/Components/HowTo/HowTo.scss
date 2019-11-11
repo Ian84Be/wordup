@@ -114,7 +114,7 @@ section.HowTo {
       margin: 0 1rem;
       transition: color 0s linear;
       &:hover {
-        color: $active-color;
+        color: $tile__3-color;
       }
     }
 
@@ -124,7 +124,7 @@ section.HowTo {
       min-height: 15px;
       width: 25px;
       &.active {
-        background: $active-color;
+        background: $tile__3-color;
         box-shadow: 2px 2px white;
         transform: translate(-2px, -2px);
       }
