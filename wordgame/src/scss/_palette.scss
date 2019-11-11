@@ -1,4 +1,4 @@
-$tile__0-color: hsl(40, 50, 50);
+// $tile__0-color: hsl(40, 50, 50);
 // $tile__1-color: hsl(80,50,50);
 // $tile__2-color: hsl(120,50,50);
 // $tile__3-color: hsl(160,50,50);
@@ -10,7 +10,8 @@ $tile__0-color: hsl(40, 50, 50);
 // $tile__9-color: hsla(0,50,50,.35);
 
 // a11y colors
-$hot-green0: #baf73c;
+$primary-bg: #708090;
+$hot-green: #baf73c;
 $hot-green1: #98fb98;
 $hot-green2: #00ff7f;
 $hot-blue: #00f8fb;
@@ -18,17 +19,50 @@ $hot-blue2: #00ffff;
 $hot-blue3: #7fffd4;
 $deep-blue: #0000b5;
 $deep-blue2: #00008b;
+$deep-green: #002a2a;
 $pink: #58007e;
 $pink2: #600060;
 $black: #000036;
 $grey: #dadfe1;
+$grey2: #c5eff7;
+$grey3: #2e343b;
+$grey5: #322a60;
 $flesh: #ffecdb;
 $alert-red: #600060;
 $lemon: #f1f227;
 $lime: #c9f227;
 $white: #ffffff;
 
-$active-color: $lemon;
+// $active-color: $lemon;
+
+$BASE-GREY: hsla(212, 12%, 21%, 1);
+
+// $b: 190;
+$b: 10;
+$tile__0-color: hsla(212, 10%, 20%, 1);
+$tile__1-color: hsla(212, 20%, 25%, 1);
+$tile__2-color: hsla(212, 30%, 30%, 1);
+$tile__3-color: hsla(212, 40%, 35%, 1);
+$tile__4-color: hsla(212, 50%, 40%, 1);
+$tile__5-color: hsla(212, 60%, 45%, 1);
+$tile__6-color: hsla(212, 70%, 50%, 1);
+$tile__7-color: hsla(212, 80%, 55%, 1);
+$tile__8-color: hsla(212, 90%, 60%, 1);
+$tile__9-color: hsla(212, 100%, 65%, 1);
+
+// $active-color: $tile__9-color;
+$active-color: $black;
+
+$logo__0-color: hsla(212, 10%, 20%, 1);
+$logo__1-color: hsla(212, 20%, 25%, 0.3);
+$logo__2-color: hsla(212, 30%, 30%, 0.3);
+$logo__3-color: hsla(212, 40%, 35%, 0.3);
+$logo__4-color: hsla(212, 50%, 40%, 0.3);
+$logo__5-color: hsla(212, 60%, 45%, 0.3);
+$logo__6-color: hsla(212, 70%, 50%, 0.3);
+$logo__7-color: hsla(212, 80%, 55%, 0.3);
+$logo__8-color: hsla(212, 90%, 60%, 0.3);
+$logo__9-color: hsla(212, 100%, 65%, 0.3);
 
 // $tile__0-color: hsl(40, 50, 50);
 // $tile__1-color: $hot-green2;
@@ -41,18 +75,18 @@ $active-color: $lemon;
 // $tile__8-color: hsla(360, 50, 50, 0.45);
 // $tile__9-color: hsla(0, 50, 50, 0.35);
 
-$b: 40;
-$tile__0-color: hsl($b, 50, 50);
-$tile__1-color: hsl($b * 2, 50, 50);
+// $b: 40;
+// $tile__0-color: $grey2;
+// $tile__1-color: $lemon;
 // $tile__2-color: hsl($b * 3, 50, 50);
-$tile__2-color: $hot-green2;
-$tile__3-color: hsl($b * 4, 50, 50);
-$tile__4-color: hsla($b * 5, 50, 50, 0.75);
-$tile__5-color: hsla($b * 6, 50, 50, 0.75);
-$tile__6-color: hsla($b * 7, 50, 50, 0.65);
-$tile__7-color: hsla($b * 8, 50, 50, 0.55);
-$tile__8-color: hsla($b * 9, 50, 50, 0.45);
-$tile__9-color: hsla($b * 11, 50, 50, 0.55);
+// $tile__2-color: $hot-blue;
+// $tile__3-color: $hot-blue2;
+// $tile__4-color: $hot-green;
+// $tile__5-color: $hot-green2;
+// $tile__6-color: $pink;
+// $tile__7-color: $pink2;
+// $tile__8-color: $grey;
+// $tile__9-color: hsla($b * 11, 50, 50, 0.55);
 
 // $tile__ltr-color: hsla(44,100,88,.75);
 $tile__ltr-color: hsla($b * 33, 100, 88, 0.75);

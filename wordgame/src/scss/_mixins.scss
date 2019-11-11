@@ -14,10 +14,10 @@
   margin: 16px;
   // prettier-ignore
   text-shadow: 
-		0 $th 0px $black, 
-		0 $th * 1.5 0px $black,
-		0 $th * 2 0px $black, 
-		0 $th * 2.5 0px $black;
+		0 $th 0px $tile__3-color, 
+		0 $th * 2.3 0px $tile__3-color,
+		0 $th * 2 0px $tile__3-color, 
+		0 $th * 1.5 0px $tile__3-color;
 }
 
 // TODO
@@ -101,11 +101,14 @@
 
   &:hover {
     background: $active-color;
+    color: white;
     // box-shadow: 2px 2px white, 4px 4px white;
     cursor: pointer;
   }
 
   &:active {
+    background: $active-color;
+    color: white;
     box-shadow: 0 0;
     transform: translate(4px, 4px);
   }
