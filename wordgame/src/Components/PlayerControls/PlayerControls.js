@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
   addHistory,
   addPassCount,
+  addPlayers,
   addScore,
   changeMyLetters,
-  changePlayer
+  changePlayer,
+  signalEndGame
 } from '../../redux/players/playersActions';
 import { makeBoard } from '../../redux/config/configActions';
 import {
@@ -15,19 +17,42 @@ import {
   newMessage
 } from '../../redux/commo/commoActions';
 import { holdLetter, newLetterBag } from '../../redux/letters/lettersActions';
+import { useLocalStorage } from '../../useLocalStorage';
 
 const PlayerControls = () => {
   const dispatch = useDispatch();
   const activePlayer = useSelector(s => s.players.activePlayer);
+  // prettier-ignore
+  const [l_activePlayer, setl_activePlayer] = useLocalStorage('activePlayer', '');
+  const setl_gameBoard = useLocalStorage('gameBoard', '')[1];
+  const [l_gameHistory, setl_gameHistory] = useLocalStorage('gameHistory', '');
+  const [l_letterBag, setl_letterBag] = useLocalStorage('letterBag', '');
+  const setl_passCount = useLocalStorage('passCount', '')[1];
+  const [l_players, setl_players] = useLocalStorage('players', '');
+
   const dictionary = useSelector(s => s.config.dictionary);
   const emptyBag = useSelector(s => s.letters.emptyBag);
+  const gameOver = useSelector(s => s.players.gameOver);
   const gameBoard = useSelector(s => s.config.gameBoard);
   const holdingLetter = useSelector(s => s.letters.holdingLetter);
   const letterBag = useSelector(s => s.letters.letterBag);
-  const players = useSelector(s => s.players.players);
   const passCount = useSelector(s => s.players.passCount);
+  const players = useSelector(s => s.players.players);
 
-  let myLetters = players[activePlayer].myLetters;
+  const [myLetters, setMyLetters] = useState([]);
+  const [myName, setMyName] = useState('');
+
+  useEffect(() => {
+    if (players.length === 0 && l_players.length > 0) {
+      setMyLetters(l_players[activePlayer].myLetters);
+      setMyName(l_players[activePlayer].myName);
+      dispatch(newLetterBag(l_letterBag));
+      dispatch(addPlayers(l_players));
+    } else {
+      setMyLetters(players[activePlayer].myLetters);
+      setMyName(players[activePlayer].myName);
+    }
+  }, [activePlayer, dispatch, l_letterBag, l_players, players]);
 
   return (
     <section className="PlayerControls">
@@ -54,19 +79,48 @@ const PlayerControls = () => {
       </div>
 
       <div className="controls">
-        <button onClick={() => passTurn()}>Pass</button>
-        {myLetters.length === 7 ? (
-          <button onClick={() => shuffleLetters(myLetters)}>Shuffle</button>
+        {gameOver ? (
+          <button onClick={() => quitGame()}>Quit</button>
         ) : (
-          <button onClick={() => submitLetters()}>Submit</button>
+          <>
+            <button onClick={() => passTurn()}>Pass</button>
+            {myLetters.length === 7 ? (
+              <button onClick={() => shuffleLetters(myLetters)}>Shuffle</button>
+            ) : (
+              <button onClick={() => submitLetters()}>Submit</button>
+            )}
+            <button onClick={() => clearBoard()}>Clear Board</button>
+          </>
         )}
-        <button onClick={() => clearBoard()}>Clear Board</button>
       </div>
     </section>
   );
 
+  function quitGame() {
+    localStorage.clear();
+    window.location.reload();
+  }
+
   function onDragStart(e, index) {
     return e.dataTransfer.setData('letter', index);
+  }
+
+  function l_changeLetters(payload) {
+    let letterState = [...players];
+    setl_players(letterState);
+  }
+
+  function l_addScore(payload) {
+    let scoreState = [...players];
+    setl_players(scoreState);
+  }
+
+  function l_nextActive() {
+    let last = l_players.length - 1;
+    let next = l_activePlayer;
+    if (l_activePlayer === last) next = 0;
+    else ++next;
+    return next;
   }
 
   function calculateScore(foundWords) {
@@ -120,7 +174,6 @@ const PlayerControls = () => {
     // RULES >> Subsequent players may put tiles on the board adjacent to and/or on top of the tiles already played
     // RULES >> No stack may be more than five tiles high
     // RULES >> At least one tile or stack must be left unchanged; a player may not cover every letter in a word on a single turn.
-    const { myLetters, myName } = players[activePlayer];
     const newBoard = [...gameBoard];
     // RULES >> strictModeScoring >> all tiles played on a turn must form part of one continuous line of tiles vertical or horizontal
     let okStrict = strictModeScoring(foundWords);
@@ -149,9 +202,12 @@ const PlayerControls = () => {
         newBoard[thisIndex].active = false;
       });
       dispatch(makeBoard(newBoard));
+      setl_gameBoard(newBoard);
       dispatch(newMessage(`${myName} scored ${score} !`));
+      let gh_words = words.map(word => `${myName} ${word}`);
+      setl_gameHistory([...l_gameHistory, ...gh_words]);
+      dispatch(newGameHistory(gh_words));
       dispatch(addHistory(words));
-      words.forEach(word => dispatch(newGameHistory(`${myName} ${word}`)));
       return nextPlayer(score);
     } else {
       let failWords = words.filter(word => word.match(/[a-z]/g));
@@ -236,6 +292,7 @@ const PlayerControls = () => {
       let j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
+    l_changeLetters(shuffled);
     return dispatch(changeMyLetters(shuffled));
   }
 
@@ -340,6 +397,7 @@ const PlayerControls = () => {
     );
     finalMessage[0] += ' WINNER!';
     dispatch(newMessage(finalMessage.join(' // ')));
+    dispatch(signalEndGame());
   }
 
   function passTurn() {
@@ -350,7 +408,6 @@ const PlayerControls = () => {
   } // this.passTurn() END >> this.nextPlayer(0);
 
   function nextPlayer(score) {
-    const { myLetters, myName } = players[activePlayer];
     const oldLetters = [...myLetters];
     let newLetters = [];
     let randomLetters = [];
@@ -359,6 +416,8 @@ const PlayerControls = () => {
       newLetters = passLetters(7);
       dispatch(holdLetter([]));
       dispatch(changeMyLetters(newLetters));
+      l_changeLetters(newLetters);
+      setl_activePlayer(l_nextActive());
       return dispatch(changePlayer());
     } else if (emptyBag && myLetters.length === 0) {
       // RULES >> END GAME if letterBag is empty and one player has used all of his/her tiles
@@ -370,14 +429,20 @@ const PlayerControls = () => {
       randomLetters = getLetters(7 - myLetters.length);
       newLetters = [...oldLetters, ...randomLetters];
       dispatch(holdLetter([]));
-      dispatch(changeMyLetters(newLetters));
       dispatch(addScore(score));
+      l_addScore(score);
+      dispatch(changeMyLetters(newLetters));
+      l_changeLetters(newLetters);
+      setl_activePlayer(l_nextActive());
       return dispatch(changePlayer());
     } else if (emptyBag && myLetters.length < 7) {
       dispatch(holdLetter([]));
       // RULES >> END GAME if letterBag is empty and every player passes in a single round
       dispatch(addPassCount(0));
+      setl_passCount(0);
       dispatch(addScore(score));
+      l_addScore(score);
+      setl_activePlayer(l_nextActive());
       return dispatch(changePlayer());
     }
   }
@@ -389,6 +454,7 @@ const PlayerControls = () => {
     for (let i = 0; i < num; i++) {
       let grabBag = Object.entries(newBag).filter(letter => letter[1] > 0);
       if (grabBag.length < 1) {
+        setl_letterBag(newBag);
         dispatch(newLetterBag(newBag));
         dispatch(newErrMsg('letterBag is EMPTY'));
         return myLetters;
@@ -399,6 +465,7 @@ const PlayerControls = () => {
       grabBag[random][1]--;
       newBag[random_letter] = grabBag[random][1];
     }
+    setl_letterBag(newBag);
     dispatch(newLetterBag(newBag));
     return myLetters;
   }
@@ -406,9 +473,14 @@ const PlayerControls = () => {
   function passLetters(num) {
     const { myLetters } = players[activePlayer];
     // RULES >> END GAME if letterBag is empty and every player passes in a single round
-    if (emptyBag) dispatch(addPassCount(passCount + 1));
-    if (emptyBag && players.length - 1 === passCount)
-      return dispatch(newErrMsg('END GAME // PASSCOUNT MAX'));
+    if (emptyBag) {
+      dispatch(addPassCount(passCount + 1));
+      setl_passCount(passCount + 1);
+    }
+    if (emptyBag && players.length - 1 === passCount) {
+      dispatch(newErrMsg('END GAME // PASSCOUNT MAX'));
+      return endGame();
+    }
     let newBag = { ...letterBag };
     let myOldLetters = [...myLetters];
     let myNewLetters = [],
@@ -416,6 +488,7 @@ const PlayerControls = () => {
     for (let i = 0; i < num; i++) {
       let grabBag = Object.entries(newBag).filter(letter => letter[1] > 0);
       if (grabBag.length < 1) {
+        setl_letterBag(newBag);
         dispatch(newLetterBag(newBag));
         dispatch(newErrMsg('letterBag is EMPTY'));
         return myNewLetters;
@@ -427,12 +500,12 @@ const PlayerControls = () => {
       newBag[random_letter] = grabBag[random][1];
     }
     myOldLetters.forEach(letter => newBag[letter]++);
+    setl_letterBag(newBag);
     dispatch(newLetterBag(newBag));
     return myNewLetters;
   }
 
   function clearBoard() {
-    const { myLetters } = players[activePlayer];
     const activeTiles = gameBoard.filter(tile => tile.active);
     if (activeTiles.length < 1) return;
     else {
@@ -478,7 +551,9 @@ const PlayerControls = () => {
 
   function updateStore(myNewLetters, newBoard, newHoldLetter = [], msg = '') {
     dispatch(changeMyLetters(myNewLetters));
+    l_changeLetters(myNewLetters);
     dispatch(makeBoard(newBoard));
+    setl_gameBoard(newBoard);
     dispatch(holdLetter(newHoldLetter));
     dispatch(newMessage(msg));
     dispatch(newErrMsg(''));

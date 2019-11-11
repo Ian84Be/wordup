@@ -4,7 +4,9 @@ import {
   ADD_PLAYERS,
   ADD_SCORE,
   CHANGE_MYLETTERS,
-  NEXT_PLAYER
+  END_GAME,
+  NEXT_PLAYER,
+  SET_ACTIVEPLAYER
 } from '../rootActions';
 
 export const addHistory = words => {
@@ -29,4 +31,11 @@ export const changeMyLetters = letters => {
 
 export const changePlayer = () => {
   return { type: NEXT_PLAYER };
+};
+export const signalEndGame = () => {
+  return { type: END_GAME };
+};
+
+export const setActivePlayer = num => {
+  return { type: SET_ACTIVEPLAYER, payload: num };
 };

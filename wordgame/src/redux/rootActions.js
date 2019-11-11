@@ -17,4 +17,6 @@ export const ADD_PASSCOUNT = 'ADD_PASSCOUNT';
 export const ADD_PLAYERS = 'ADD_PLAYERS';
 export const ADD_SCORE = 'ADD_SCORE';
 export const CHANGE_MYLETTERS = 'CHANGE_MYLETTERS';
+export const END_GAME = 'END_GAME';
 export const NEXT_PLAYER = 'NEXT_PLAYER';
+export const SET_ACTIVEPLAYER = 'SET_ACTIVEPLAYER';
