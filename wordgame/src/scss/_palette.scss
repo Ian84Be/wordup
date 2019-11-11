@@ -22,7 +22,8 @@ $lemon: #f1f227;
 $lime: #c9f227;
 $white: #ffffff;
 
-$active-color: $black;
+// $active-color: $black;
+
 $message--bg: $primary-bg;
 
 $form__input-bg: white;
@@ -42,6 +43,8 @@ $tile__7-color: hsla(212, 80%, 55%, 1);
 $tile__8-color: hsla(212, 90%, 60%, 1);
 $tile__9-color: hsla(212, 100%, 65%, 1);
 
+$active-color: $tile__3-color;
+
 $logo__0-color: hsla(212, 10%, 20%, 1);
 $logo__1-color: hsla(212, 20%, 25%, 0.3);
 $logo__2-color: hsla(212, 30%, 30%, 0.3);
@@ -55,6 +58,6 @@ $logo__9-color: hsla(212, 100%, 65%, 0.3);
 
 $tile__ltr-color: hsla($b * 33, 100, 88, 0.75);
 
-$tile__border-color: hsla($b * 10, 50, 60, 0.75);
+$tile__border-color: white;
 $tile--played-color: $lemon;
 $tile--played-border: hsla($b * 20, 50, 70, 0.35);

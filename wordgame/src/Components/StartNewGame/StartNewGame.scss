@@ -14,7 +14,7 @@
     color: white;
     font-family: 'Ultra', serif;
     font-size: 80px;
-    margin-bottom: $th * 7.5;
+    margin: $th * 7;
     @media (max-width: $screen-xs-max) {
       font-size: 60px;
     }

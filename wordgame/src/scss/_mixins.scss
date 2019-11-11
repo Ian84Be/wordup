@@ -25,11 +25,9 @@
 @mixin GameBoard--tile {
   align-items: center;
   background: $tile__4-color;
-  border: 2px solid $tile__border-color;
   border-right: 0;
   border-bottom: 0;
-  // border-radius:8px;
-  border-radius: $th * 3;
+  border-radius: 8px;
   box-shadow: $th/2.2 $th/2.2 0 0 $tile__2-color;
   color: $black;
   cursor: pointer;
