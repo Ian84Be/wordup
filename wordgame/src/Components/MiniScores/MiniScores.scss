@@ -10,8 +10,8 @@
 
   .playerCard {
     align-items: center;
-    border-radius: 4px;
-    color: black;
+    border-radius: 8px;
+    color: $black;
     display: flex;
     flex-wrap: wrap;
     font-size: $th * 6;
@@ -21,8 +21,8 @@
     padding: $th * 2;
 
     &.active {
-      background: $tile__2-color;
-      color: black;
+      background: $active-color;
+      color: white;
       border-top: 0;
       border-left: 0;
     }

@@ -11,6 +11,7 @@
 
   .countDown {
     align-self: flex-end;
+    color: $black;
     display: flex;
     font-size: $tw * 0.4;
     margin-bottom: $th * 2;
@@ -23,8 +24,6 @@
   .myLetters {
     align-self: center;
     justify-content: center;
-    // border:1px solid white;
-    background: slateblue;
     border-radius: 4px;
     display: flex;
     padding: 8px;

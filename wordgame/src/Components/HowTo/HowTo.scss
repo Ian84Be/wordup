@@ -4,7 +4,7 @@
 .HowToModal--wrapper {
   // border: 1px solid white;
   align-items: center;
-  background: black;
+  background: $primary-bg;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
@@ -14,9 +14,11 @@
   top: 0;
   z-index: 1;
   width: 90%;
+  max-width: 650px;
 
   .icon--wrapper {
     align-self: flex-end;
+    color: white;
     margin: -1rem;
     opacity: 0.5;
     z-index: 1234;
@@ -29,13 +31,13 @@
   button {
     @include white-button();
     width: 150px;
-    margin-bottom: 2rem;
+    margin: 1rem;
+    transform: translate(-2px, -2px);
   }
 }
 
 .HowToModal--warning {
   // border: 1px solid red;
-  background: $message--bg;
   align-items: center;
   border-radius: 4px;
   display: flex;
@@ -46,18 +48,22 @@
   p {
     font-size: 1.5rem;
     margin-bottom: 1rem;
+    color: $lemon;
   }
+
   .buttons {
     display: flex;
     justify-content: center;
     button {
-      // margin: 2rem;
+      margin: 2rem;
       &.YES {
-        background: $tile__2-color;
+        background: $active-color;
+        color: $lemon;
         box-shadow: 2px 2px white, 4px 4px white;
-        &:hover {
-          background: white;
-        }
+      }
+      &:hover {
+        background: $lemon;
+        color: $black;
       }
     }
   }
@@ -72,26 +78,29 @@ section.HowTo {
   width: 80%;
 
   main {
-    // border: 1px solid yellow;
     display: flex;
     flex-direction: column;
     font-size: 1rem;
 
     .HowTo--card {
-      // border: 1px solid $tile__2-color;
       height: 250px;
       overflow: scroll;
       padding: 0 1rem;
+      // text-align: center;
 
       p {
         color: white;
         font-size: 1.2rem;
         line-height: 1.4rem;
-        max-width: 450px;
+        max-width: 500px;
         padding: 0.5rem;
+        @media (max-width: 600px) {
+          font-size: 1.5rem;
+          text-align: center;
+        }
 
         em {
-          color: $tile__2-color;
+          color: $black;
           font-weight: 900;
         }
       }
@@ -102,8 +111,8 @@ section.HowTo {
     // border: 1px solid red;
     align-items: center;
     display: flex;
-    justify-content: space-evenly;
-    margin: 1rem 0;
+    justify-content: space-between;
+    margin: 2rem 0 2rem 0;
     width: 100%;
 
     svg {
@@ -112,19 +121,21 @@ section.HowTo {
       margin: 0 1rem;
       transition: color 0s linear;
       &:hover {
-        color: $tile__2-color;
+        color: $tile__3-color;
       }
     }
 
     .step {
       background: white;
-      border-radius: 2px;
+      border-radius: 50%;
       min-height: 15px;
-      width: 25px;
+      width: 15px;
+      box-shadow: 2px 2px $tile__3-color;
+      transform: translate(-2px, -2px);
       &.active {
-        background: $tile__2-color;
-        box-shadow: 2px 2px white;
-        transform: translate(-2px, -2px);
+        background: $tile__3-color;
+        box-shadow: none;
+        transform: translate(0px);
       }
     }
   }

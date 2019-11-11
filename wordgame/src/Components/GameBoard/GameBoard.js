@@ -132,6 +132,12 @@ const GameBoard = () => {
     let holdingTile;
     if (holdingActive) {
       holdingTile = newBoard[holdingIndex];
+    } else {
+      holdingTile = {
+        active: false,
+        id: holdingLetter[1],
+        stack: [holdingLetter[0]]
+      };
     }
     const holding = holdingLetter.length > 0 ? true : false;
     const holdingRaw = holdingLetter.length === 2 ? true : false;
