@@ -47,7 +47,6 @@ h2 {
   margin: 0 auto;
 
   header {
-    // border: 1px solid red;
     align-items: center;
     display: flex;
     justify-content: center;
@@ -60,7 +59,7 @@ h2 {
       transition: color 0s linear;
       transform: scale(1.5);
       &:hover {
-        color: $tile__2-color;
+        color: $active-color;
       }
     }
   }

@@ -31,7 +31,8 @@
   // border-radius:8px;
   border-radius: $th * 3;
   box-shadow: $th/2.2 $th/2.2 0 0 $tile__2-color;
-  color: black;
+  color: $black;
+  cursor: pointer;
   display: flex;
   font-family: 'K2D', sans-serif;
   font-size: $tw * 0.6;
@@ -67,20 +68,18 @@
 
 @mixin PlayerControls--letter {
   @include GameBoard--tile();
+  background: $grey;
+  cursor: pointer;
 
   &.clicked {
-    background: slateblue;
-    color: greenyellow;
+    background: $active-color;
+    color: white;
   }
 
+  &:active,
   &:hover {
-    background: white;
-    cursor: pointer;
-  }
-
-  &:active {
-    background: palevioletred;
-    color: papayawhip;
+    background: $tile__9-color;
+    color: $black;
   }
 }
 
@@ -102,7 +101,6 @@
   &:hover {
     background: $active-color;
     color: white;
-    // box-shadow: 2px 2px white, 4px 4px white;
     cursor: pointer;
   }
 

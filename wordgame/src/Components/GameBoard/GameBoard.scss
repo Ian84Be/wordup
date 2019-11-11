@@ -2,7 +2,6 @@
 
 .GameBoard {
   align-self: center;
-  // border:1px solid magenta;
   display: grid;
   grid-template-columns: repeat(8, $tw [GameBoard--tile]);
   grid-template-rows: repeat(8, $tw [GameBoard--tile]);

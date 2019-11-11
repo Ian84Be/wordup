@@ -1,14 +1,3 @@
-// $tile__0-color: hsl(40, 50, 50);
-// $tile__1-color: hsl(80,50,50);
-// $tile__2-color: hsl(120,50,50);
-// $tile__3-color: hsl(160,50,50);
-// $tile__4-color: hsl(200,50,50);
-// $tile__5-color: hsla(240,50,50,.75);
-// $tile__6-color: hsla(280,50,50,.65);
-// $tile__7-color: hsla(320,50,50,.55);
-// $tile__8-color: hsla(360,50,50,.45);
-// $tile__9-color: hsla(0,50,50,.35);
-
 // a11y colors
 $primary-bg: #708090;
 $hot-green: #baf73c;
@@ -33,11 +22,14 @@ $lemon: #f1f227;
 $lime: #c9f227;
 $white: #ffffff;
 
-// $active-color: $lemon;
+$active-color: $black;
+$message--bg: $primary-bg;
+
+$form__input-bg: white;
+$form__input-text: $black;
 
 $BASE-GREY: hsla(212, 12%, 21%, 1);
 
-// $b: 190;
 $b: 10;
 $tile__0-color: hsla(212, 10%, 20%, 1);
 $tile__1-color: hsla(212, 20%, 25%, 1);
@@ -50,9 +42,6 @@ $tile__7-color: hsla(212, 80%, 55%, 1);
 $tile__8-color: hsla(212, 90%, 60%, 1);
 $tile__9-color: hsla(212, 100%, 65%, 1);
 
-// $active-color: $tile__9-color;
-$active-color: $black;
-
 $logo__0-color: hsla(212, 10%, 20%, 1);
 $logo__1-color: hsla(212, 20%, 25%, 0.3);
 $logo__2-color: hsla(212, 30%, 30%, 0.3);
@@ -64,40 +53,8 @@ $logo__7-color: hsla(212, 80%, 55%, 0.3);
 $logo__8-color: hsla(212, 90%, 60%, 0.3);
 $logo__9-color: hsla(212, 100%, 65%, 0.3);
 
-// $tile__0-color: hsl(40, 50, 50);
-// $tile__1-color: $hot-green2;
-// $tile__2-color: $hot-green0;
-// $tile__3-color: $hot-blue;
-// $tile__4-color: $hot-blue2;
-// $tile__5-color: $hot-blue3;
-// $tile__6-color: hsla(280, 50, 50, 0.65);
-// $tile__7-color: hsla(320, 50, 50, 0.55);
-// $tile__8-color: hsla(360, 50, 50, 0.45);
-// $tile__9-color: hsla(0, 50, 50, 0.35);
-
-// $b: 40;
-// $tile__0-color: $grey2;
-// $tile__1-color: $lemon;
-// $tile__2-color: hsl($b * 3, 50, 50);
-// $tile__2-color: $hot-blue;
-// $tile__3-color: $hot-blue2;
-// $tile__4-color: $hot-green;
-// $tile__5-color: $hot-green2;
-// $tile__6-color: $pink;
-// $tile__7-color: $pink2;
-// $tile__8-color: $grey;
-// $tile__9-color: hsla($b * 11, 50, 50, 0.55);
-
-// $tile__ltr-color: hsla(44,100,88,.75);
 $tile__ltr-color: hsla($b * 33, 100, 88, 0.75);
 
 $tile__border-color: hsla($b * 10, 50, 60, 0.75);
-$tile--played-color: hsl($b * 30, 50, 60);
+$tile--played-color: $lemon;
 $tile--played-border: hsla($b * 20, 50, 70, 0.35);
-// $tile__border-color: hsla(200,50,60,.75);
-// $tile--played-border: hsla(40,50,70,.35);
-
-$message--bg: rgba(238, 32, 169, 0.65);
-
-$form__input-bg: white;
-$form__input-text: black;
