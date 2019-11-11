@@ -66,7 +66,7 @@
 
 @mixin PlayerControls--letter {
   @include GameBoard--tile();
-  background: $grey;
+  background: $lemon;
   cursor: pointer;
 
   &.clicked {
