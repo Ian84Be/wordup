@@ -6,7 +6,7 @@ import players from './players/players';
 
 // const initialState = {
 //   activePlayer: 0,
-//   clickedLetter: [],
+//   holdingLetter: [],
 //   dictionary: [],
 //   emptyBag: false,
 //   errMsg: '',

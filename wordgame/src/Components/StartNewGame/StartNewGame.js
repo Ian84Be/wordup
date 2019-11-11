@@ -9,8 +9,13 @@ import { letterBag as startBag } from '../../letterBag.js';
 import Form from './Form';
 import HowTo from '../HowTo/HowTo';
 
+import { useLocalStorage } from '../../useLocalStorage';
+
 const StartNewGame = () => {
   const dispatch = useDispatch();
+  const setl_players = useLocalStorage('players', '')[1];
+  const setl_letterBag = useLocalStorage('letterBag', '')[1];
+  const setl_activePlayer = useLocalStorage('activePlayer', '')[1];
 
   const startNewGame = (e, num, newPlayers) => {
     e.preventDefault();
@@ -21,8 +26,12 @@ const StartNewGame = () => {
       myName: newPlayers[`name ${num}`],
       myScore: 0
     }));
+    setl_activePlayer(0);
+    setl_letterBag(startBag);
+    setl_players(players);
     dispatch(newLetterBag(startBag));
-    return dispatch(addPlayers(players));
+    dispatch(addPlayers(players));
+    return;
   };
 
   function startLetters(num) {

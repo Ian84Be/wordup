@@ -3,12 +3,62 @@
 
 .HowToModal--wrapper {
   // border: 1px solid white;
+  align-items: center;
   background: black;
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   margin-top: 4rem;
   position: fixed;
   top: 0;
-  z-index: 12;
+  z-index: 1;
+
+  .icon--wrapper {
+    align-self: flex-end;
+    margin: -1rem;
+    opacity: 0.5;
+    z-index: 1234;
+    &:hover {
+      cursor: pointer;
+      opacity: 1;
+    }
+  }
+
+  button {
+    @include white-button();
+    width: 150px;
+    margin-bottom: 2rem;
+  }
+}
+
+.HowToModal--warning {
+  // border: 1px solid red;
+  background: $message--bg;
+  align-items: center;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  p {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
+    button {
+      // margin: 2rem;
+      &.YES {
+        background: $tile__2-color;
+        box-shadow: 2px 2px white, 4px 4px white;
+        &:hover {
+          background: white;
+        }
+      }
+    }
+  }
 }
 
 section.HowTo {

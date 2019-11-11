@@ -4,13 +4,16 @@ import {
   ADD_PLAYERS,
   ADD_SCORE,
   CHANGE_MYLETTERS,
-  NEXT_PLAYER
+  END_GAME,
+  NEXT_PLAYER,
+  SET_ACTIVEPLAYER
 } from '../rootActions';
 
 const initialState = {
   activePlayer: 0,
   players: [],
-  passCount: 0
+  passCount: 0,
+  gameOver: false
 };
 
 const playersReducer = (state = initialState, action) => {
@@ -48,6 +51,11 @@ const playersReducer = (state = initialState, action) => {
         ...state,
         players: letterState
       };
+    case END_GAME:
+      return {
+        ...state,
+        gameOver: true
+      };
     case NEXT_PLAYER:
       let last = players.length - 1;
       let next = activePlayer;
@@ -56,6 +64,11 @@ const playersReducer = (state = initialState, action) => {
       return {
         ...state,
         activePlayer: next
+      };
+    case SET_ACTIVEPLAYER:
+      return {
+        ...state,
+        activePlayer: payload
       };
     default:
       return state;

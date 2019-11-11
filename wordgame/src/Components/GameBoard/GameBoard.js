@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocalStorage } from '../../useLocalStorage';
 
 import { changeMyLetters } from '../../redux/players/playersActions';
 import { makeBoard } from '../../redux/config/configActions';
@@ -7,16 +8,28 @@ import { newErrMsg, newMessage } from '../../redux/commo/commoActions';
 import { holdLetter } from '../../redux/letters/lettersActions';
 
 const GameBoard = () => {
+  const setl_gameBoard = useLocalStorage('gameBoard', '')[1];
+  const [l_players, setl_players] = useLocalStorage('players', '');
+
   const dispatch = useDispatch();
   const gameBoard = useSelector(s => s.config.gameBoard);
   const activePlayer = useSelector(s => s.players.activePlayer);
   const players = useSelector(s => s.players.players);
   const holdingLetter = useSelector(s => s.letters.holdingLetter);
 
-  let firstRound = true;
-  players.forEach(p => {
-    if (p.myScore > 0) firstRound = false;
-  });
+  const [firstRound, setFirstRound] = useState(true);
+
+  useEffect(() => {
+    if (players.length > 0) {
+      players.forEach(p => {
+        if (p.myScore > 0) setFirstRound(false);
+      });
+    } else {
+      l_players.forEach(p => {
+        if (p.myScore > 0) setFirstRound(false);
+      });
+    }
+  }, [firstRound, l_players, players]);
 
   return (
     <section className={'GameBoard'}>
@@ -204,8 +217,16 @@ const GameBoard = () => {
     return updateStore(myLetterSet, newBoard, newClicked);
   } // handleClick() END
 
+  function l_changeLetters(payload) {
+    let letterState = [...players];
+    letterState[activePlayer].myLetters = payload;
+    setl_players(letterState);
+  }
+
   function updateStore(myNewLetters, newBoard, newHoldLetter = [], msg = '') {
     dispatch(changeMyLetters(myNewLetters));
+    l_changeLetters(myNewLetters);
+    setl_gameBoard(newBoard);
     dispatch(makeBoard(newBoard));
     dispatch(holdLetter(newHoldLetter));
     dispatch(newMessage(msg));

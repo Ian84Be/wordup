@@ -18,7 +18,7 @@ const commoReducer = (state = initialState, action) => {
     case GAME_HISTORY:
       return {
         ...state,
-        gameHistory: [payload, ...state.gameHistory]
+        gameHistory: [...state.gameHistory, ...payload]
       };
     case NEW_MESSAGE:
       return {
