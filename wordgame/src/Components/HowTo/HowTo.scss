@@ -91,7 +91,7 @@ section.HowTo {
         padding: 0.5rem;
 
         em {
-          color: $tile__2-color;
+          color: $active-color;
           font-weight: 900;
         }
       }
@@ -112,7 +112,7 @@ section.HowTo {
       margin: 0 1rem;
       transition: color 0s linear;
       &:hover {
-        color: $tile__2-color;
+        color: $active-color;
       }
     }
 
@@ -122,7 +122,7 @@ section.HowTo {
       min-height: 15px;
       width: 25px;
       &.active {
-        background: $tile__2-color;
+        background: $active-color;
         box-shadow: 2px 2px white;
         transform: translate(-2px, -2px);
       }

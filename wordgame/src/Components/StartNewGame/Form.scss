@@ -28,7 +28,8 @@ section.playerForm {
       height: 50px;
       margin: 0.5rem;
       &.active {
-        background: $tile__2-color;
+        background: $grey;
+        color: $black;
         box-shadow: 0 0;
         transform: translate(4px, 4px);
       }

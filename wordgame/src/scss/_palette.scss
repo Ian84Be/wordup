@@ -1,4 +1,4 @@
-// $tile__0-color: hsl(40,50,50);
+$tile__0-color: hsl(40, 50, 50);
 // $tile__1-color: hsl(80,50,50);
 // $tile__2-color: hsl(120,50,50);
 // $tile__3-color: hsl(160,50,50);
@@ -9,11 +9,43 @@
 // $tile__8-color: hsla(360,50,50,.45);
 // $tile__9-color: hsla(0,50,50,.35);
 
-$b: 40;
+// a11y colors
+$hot-green0: #baf73c;
+$hot-green1: #98fb98;
+$hot-green2: #00ff7f;
+$hot-blue: #00f8fb;
+$hot-blue2: #00ffff;
+$hot-blue3: #7fffd4;
+$deep-blue: #0000b5;
+$deep-blue2: #00008b;
+$pink: #58007e;
+$pink2: #600060;
+$black: #000036;
+$grey: #dadfe1;
+$flesh: #ffecdb;
+$alert-red: #600060;
+$lemon: #f1f227;
+$lime: #c9f227;
+$white: #ffffff;
 
+$active-color: $lemon;
+
+// $tile__0-color: hsl(40, 50, 50);
+// $tile__1-color: $hot-green2;
+// $tile__2-color: $hot-green0;
+// $tile__3-color: $hot-blue;
+// $tile__4-color: $hot-blue2;
+// $tile__5-color: $hot-blue3;
+// $tile__6-color: hsla(280, 50, 50, 0.65);
+// $tile__7-color: hsla(320, 50, 50, 0.55);
+// $tile__8-color: hsla(360, 50, 50, 0.45);
+// $tile__9-color: hsla(0, 50, 50, 0.35);
+
+$b: 40;
 $tile__0-color: hsl($b, 50, 50);
 $tile__1-color: hsl($b * 2, 50, 50);
-$tile__2-color: hsl($b * 3, 50, 50);
+// $tile__2-color: hsl($b * 3, 50, 50);
+$tile__2-color: $hot-green2;
 $tile__3-color: hsl($b * 4, 50, 50);
 $tile__4-color: hsla($b * 5, 50, 50, 0.75);
 $tile__5-color: hsla($b * 6, 50, 50, 0.75);
@@ -35,6 +67,3 @@ $message--bg: rgba(238, 32, 169, 0.65);
 
 $form__input-bg: white;
 $form__input-text: black;
-
-// $active-color:palevioletred;
-$active-color: $tile__2-color;
